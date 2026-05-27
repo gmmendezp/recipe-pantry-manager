@@ -1,6 +1,23 @@
 import { createFileRoute, Link } from '@tanstack/react-router';
 
-export const Route = createFileRoute('/login')({ component: LoginPage });
+export const Route = createFileRoute('/login')({
+  component: LoginPage,
+  validateSearch: (search) => ({
+    redirect: sanitizeRedirect(search.redirect),
+  }),
+});
+
+function sanitizeRedirect(value: unknown) {
+  if (
+    typeof value !== 'string' ||
+    !value.startsWith('/') ||
+    value.startsWith('//')
+  ) {
+    return '/dashboard';
+  }
+
+  return value;
+}
 
 function LoginPage() {
   return (

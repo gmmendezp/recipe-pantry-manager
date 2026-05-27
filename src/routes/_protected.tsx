@@ -1,6 +1,25 @@
-import { createFileRoute, Link, Outlet } from '@tanstack/react-router';
+import {
+  createFileRoute,
+  Link,
+  Outlet,
+  redirect,
+} from '@tanstack/react-router';
+
+import { getCurrentUserForRoute } from '../lib/auth/functions';
 
 export const Route = createFileRoute('/_protected')({
+  beforeLoad: async ({ location }) => {
+    const user = await getCurrentUserForRoute();
+
+    if (!user) {
+      throw redirect({
+        search: {
+          redirect: location.href,
+        },
+        to: '/login',
+      });
+    }
+  },
   component: ProtectedLayout,
 });
 

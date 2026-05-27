@@ -1,0 +1,13 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1779890668582,
+      "tag": "0000_vengeful_the_liberteens",
+      "breakpoints": true
+    }
+  ]
+}
