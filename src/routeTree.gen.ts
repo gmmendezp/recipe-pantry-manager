@@ -11,12 +11,12 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SignupRouteImport } from './routes/signup'
 import { Route as LoginRouteImport } from './routes/login'
-import { Route as ProtectedRouteImport } from './routes/_protected'
+import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as ProtectedDashboardRouteImport } from './routes/_protected/dashboard'
-import { Route as ProtectedRecipesIndexRouteImport } from './routes/_protected/recipes/index'
-import { Route as ProtectedPantryIndexRouteImport } from './routes/_protected/pantry/index'
-import { Route as ProtectedGroceryListsIndexRouteImport } from './routes/_protected/grocery-lists/index'
+import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
+import { Route as AuthenticatedRecipesIndexRouteImport } from './routes/_authenticated/recipes/index'
+import { Route as AuthenticatedPantryIndexRouteImport } from './routes/_authenticated/pantry/index'
+import { Route as AuthenticatedGroceryListsIndexRouteImport } from './routes/_authenticated/grocery-lists/index'
 
 const SignupRoute = SignupRouteImport.update({
   id: '/signup',
@@ -28,8 +28,8 @@ const LoginRoute = LoginRouteImport.update({
   path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ProtectedRoute = ProtectedRouteImport.update({
-  id: '/_protected',
+const AuthenticatedRoute = AuthenticatedRouteImport.update({
+  id: '/_authenticated',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -37,56 +37,58 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ProtectedDashboardRoute = ProtectedDashboardRouteImport.update({
+const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
-  getParentRoute: () => ProtectedRoute,
+  getParentRoute: () => AuthenticatedRoute,
 } as any)
-const ProtectedRecipesIndexRoute = ProtectedRecipesIndexRouteImport.update({
-  id: '/recipes/',
-  path: '/recipes/',
-  getParentRoute: () => ProtectedRoute,
-} as any)
-const ProtectedPantryIndexRoute = ProtectedPantryIndexRouteImport.update({
-  id: '/pantry/',
-  path: '/pantry/',
-  getParentRoute: () => ProtectedRoute,
-} as any)
-const ProtectedGroceryListsIndexRoute =
-  ProtectedGroceryListsIndexRouteImport.update({
+const AuthenticatedRecipesIndexRoute =
+  AuthenticatedRecipesIndexRouteImport.update({
+    id: '/recipes/',
+    path: '/recipes/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedPantryIndexRoute =
+  AuthenticatedPantryIndexRouteImport.update({
+    id: '/pantry/',
+    path: '/pantry/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedGroceryListsIndexRoute =
+  AuthenticatedGroceryListsIndexRouteImport.update({
     id: '/grocery-lists/',
     path: '/grocery-lists/',
-    getParentRoute: () => ProtectedRoute,
+    getParentRoute: () => AuthenticatedRoute,
   } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
   '/signup': typeof SignupRoute
-  '/dashboard': typeof ProtectedDashboardRoute
-  '/grocery-lists/': typeof ProtectedGroceryListsIndexRoute
-  '/pantry/': typeof ProtectedPantryIndexRoute
-  '/recipes/': typeof ProtectedRecipesIndexRoute
+  '/dashboard': typeof AuthenticatedDashboardRoute
+  '/grocery-lists/': typeof AuthenticatedGroceryListsIndexRoute
+  '/pantry/': typeof AuthenticatedPantryIndexRoute
+  '/recipes/': typeof AuthenticatedRecipesIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
   '/signup': typeof SignupRoute
-  '/dashboard': typeof ProtectedDashboardRoute
-  '/grocery-lists': typeof ProtectedGroceryListsIndexRoute
-  '/pantry': typeof ProtectedPantryIndexRoute
-  '/recipes': typeof ProtectedRecipesIndexRoute
+  '/dashboard': typeof AuthenticatedDashboardRoute
+  '/grocery-lists': typeof AuthenticatedGroceryListsIndexRoute
+  '/pantry': typeof AuthenticatedPantryIndexRoute
+  '/recipes': typeof AuthenticatedRecipesIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/_protected': typeof ProtectedRouteWithChildren
+  '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/login': typeof LoginRoute
   '/signup': typeof SignupRoute
-  '/_protected/dashboard': typeof ProtectedDashboardRoute
-  '/_protected/grocery-lists/': typeof ProtectedGroceryListsIndexRoute
-  '/_protected/pantry/': typeof ProtectedPantryIndexRoute
-  '/_protected/recipes/': typeof ProtectedRecipesIndexRoute
+  '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/_authenticated/grocery-lists/': typeof AuthenticatedGroceryListsIndexRoute
+  '/_authenticated/pantry/': typeof AuthenticatedPantryIndexRoute
+  '/_authenticated/recipes/': typeof AuthenticatedRecipesIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -110,18 +112,18 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
-    | '/_protected'
+    | '/_authenticated'
     | '/login'
     | '/signup'
-    | '/_protected/dashboard'
-    | '/_protected/grocery-lists/'
-    | '/_protected/pantry/'
-    | '/_protected/recipes/'
+    | '/_authenticated/dashboard'
+    | '/_authenticated/grocery-lists/'
+    | '/_authenticated/pantry/'
+    | '/_authenticated/recipes/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  ProtectedRoute: typeof ProtectedRouteWithChildren
+  AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
   LoginRoute: typeof LoginRoute
   SignupRoute: typeof SignupRoute
 }
@@ -142,11 +144,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_protected': {
-      id: '/_protected'
+    '/_authenticated': {
+      id: '/_authenticated'
       path: ''
       fullPath: '/'
-      preLoaderRoute: typeof ProtectedRouteImport
+      preLoaderRoute: typeof AuthenticatedRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -156,58 +158,58 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_protected/dashboard': {
-      id: '/_protected/dashboard'
+    '/_authenticated/dashboard': {
+      id: '/_authenticated/dashboard'
       path: '/dashboard'
       fullPath: '/dashboard'
-      preLoaderRoute: typeof ProtectedDashboardRouteImport
-      parentRoute: typeof ProtectedRoute
+      preLoaderRoute: typeof AuthenticatedDashboardRouteImport
+      parentRoute: typeof AuthenticatedRoute
     }
-    '/_protected/recipes/': {
-      id: '/_protected/recipes/'
+    '/_authenticated/recipes/': {
+      id: '/_authenticated/recipes/'
       path: '/recipes'
       fullPath: '/recipes/'
-      preLoaderRoute: typeof ProtectedRecipesIndexRouteImport
-      parentRoute: typeof ProtectedRoute
+      preLoaderRoute: typeof AuthenticatedRecipesIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
     }
-    '/_protected/pantry/': {
-      id: '/_protected/pantry/'
+    '/_authenticated/pantry/': {
+      id: '/_authenticated/pantry/'
       path: '/pantry'
       fullPath: '/pantry/'
-      preLoaderRoute: typeof ProtectedPantryIndexRouteImport
-      parentRoute: typeof ProtectedRoute
+      preLoaderRoute: typeof AuthenticatedPantryIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
     }
-    '/_protected/grocery-lists/': {
-      id: '/_protected/grocery-lists/'
+    '/_authenticated/grocery-lists/': {
+      id: '/_authenticated/grocery-lists/'
       path: '/grocery-lists'
       fullPath: '/grocery-lists/'
-      preLoaderRoute: typeof ProtectedGroceryListsIndexRouteImport
-      parentRoute: typeof ProtectedRoute
+      preLoaderRoute: typeof AuthenticatedGroceryListsIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
     }
   }
 }
 
-interface ProtectedRouteChildren {
-  ProtectedDashboardRoute: typeof ProtectedDashboardRoute
-  ProtectedGroceryListsIndexRoute: typeof ProtectedGroceryListsIndexRoute
-  ProtectedPantryIndexRoute: typeof ProtectedPantryIndexRoute
-  ProtectedRecipesIndexRoute: typeof ProtectedRecipesIndexRoute
+interface AuthenticatedRouteChildren {
+  AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+  AuthenticatedGroceryListsIndexRoute: typeof AuthenticatedGroceryListsIndexRoute
+  AuthenticatedPantryIndexRoute: typeof AuthenticatedPantryIndexRoute
+  AuthenticatedRecipesIndexRoute: typeof AuthenticatedRecipesIndexRoute
 }
 
-const ProtectedRouteChildren: ProtectedRouteChildren = {
-  ProtectedDashboardRoute: ProtectedDashboardRoute,
-  ProtectedGroceryListsIndexRoute: ProtectedGroceryListsIndexRoute,
-  ProtectedPantryIndexRoute: ProtectedPantryIndexRoute,
-  ProtectedRecipesIndexRoute: ProtectedRecipesIndexRoute,
+const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
+  AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+  AuthenticatedGroceryListsIndexRoute: AuthenticatedGroceryListsIndexRoute,
+  AuthenticatedPantryIndexRoute: AuthenticatedPantryIndexRoute,
+  AuthenticatedRecipesIndexRoute: AuthenticatedRecipesIndexRoute,
 }
 
-const ProtectedRouteWithChildren = ProtectedRoute._addFileChildren(
-  ProtectedRouteChildren,
+const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
+  AuthenticatedRouteChildren,
 )
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  ProtectedRoute: ProtectedRouteWithChildren,
+  AuthenticatedRoute: AuthenticatedRouteWithChildren,
   LoginRoute: LoginRoute,
   SignupRoute: SignupRoute,
 }
