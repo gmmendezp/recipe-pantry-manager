@@ -40,8 +40,8 @@ function ConfirmEmailPage() {
   const { confirmationError } = Route.useRouteContext();
 
   return (
-    <main className="min-h-screen bg-stone-50 px-6 py-16 text-stone-950">
-      <section className="mx-auto flex max-w-md flex-col gap-8 rounded-3xl border border-stone-200 bg-white p-8 shadow-sm">
+    <main className="min-h-screen bg-background px-6 py-16 text-foreground">
+      <section className="mx-auto flex max-w-md flex-col gap-8 rounded-3xl border border-border bg-paper p-8 shadow-sm">
         <div className="space-y-3">
           <p className="font-medium text-red-700 text-sm uppercase tracking-[0.25em]">
             Confirmation failed
@@ -49,7 +49,7 @@ function ConfirmEmailPage() {
           <h1 className="font-bold text-4xl tracking-tight">
             We could not confirm that link
           </h1>
-          <p className="text-stone-600">
+          <p className="text-muted">
             The confirmation link may be expired, already used, or missing the
             details Supabase needs to verify your account.
           </p>
@@ -58,10 +58,10 @@ function ConfirmEmailPage() {
           {confirmationError}
         </p>
         <div className="flex items-center justify-between gap-4 text-sm">
-          <Link className="font-semibold text-emerald-700" to="/signup">
+          <Link className="font-semibold text-primary" to="/signup">
             Create account
           </Link>
-          <Link className="text-stone-500" to="/login">
+          <Link className="text-muted" to="/login">
             Go to login
           </Link>
         </div>

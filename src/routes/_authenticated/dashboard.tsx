@@ -19,14 +19,14 @@ function DashboardPage() {
   return (
     <div className="space-y-8">
       {confirmed ? <EmailConfirmedBanner /> : null}
-      <section className="rounded-3xl bg-emerald-800 p-8 text-white">
-        <p className="font-medium text-emerald-100 text-sm uppercase tracking-[0.25em]">
+      <section className="rounded-3xl bg-primary p-8 text-paper">
+        <p className="font-medium text-primary-soft text-sm uppercase tracking-[0.25em]">
           Dashboard
         </p>
         <h1 className="mt-4 max-w-2xl font-bold text-4xl tracking-tight">
           Build your recipe-to-grocery workflow here.
         </h1>
-        <p className="mt-4 max-w-2xl text-emerald-50">
+        <p className="mt-4 max-w-2xl text-primary-soft">
           The next phases will connect these cards to Supabase data. For now,
           the app shell is ready for recipes, pantry items, and grocery lists.
         </p>
@@ -34,10 +34,10 @@ function DashboardPage() {
       <section className="grid gap-4 sm:grid-cols-3">
         {stats.map((stat) => (
           <div
-            className="rounded-2xl border border-stone-200 bg-white p-6 shadow-sm"
+            className="rounded-2xl border border-border bg-paper p-6 shadow-sm"
             key={stat.label}
           >
-            <p className="text-stone-500 text-sm">{stat.label}</p>
+            <p className="text-muted text-sm">{stat.label}</p>
             <p className="mt-2 font-bold text-3xl">{stat.value}</p>
           </div>
         ))}
@@ -65,9 +65,9 @@ function DashboardPage() {
 
 function EmailConfirmedBanner() {
   return (
-    <section className="rounded-2xl border border-emerald-200 bg-emerald-50 px-5 py-4 text-emerald-900">
+    <section className="rounded-2xl border border-border bg-primary-soft px-5 py-4 text-primary-soft-foreground">
       <p className="font-semibold">Email confirmed</p>
-      <p className="mt-1 text-emerald-800 text-sm">
+      <p className="mt-1 text-primary-soft-foreground text-sm">
         Welcome to Recipe Pantry Manager. Your account is ready to use.
       </p>
     </section>
@@ -85,11 +85,11 @@ function QuickAction({
 }) {
   return (
     <Link
-      className="rounded-2xl border border-stone-200 bg-white p-6 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
+      className="rounded-2xl border border-border bg-paper p-6 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
       to={to}
     >
       <h2 className="font-semibold text-xl">{label}</h2>
-      <p className="mt-2 text-stone-600">{description}</p>
+      <p className="mt-2 text-muted">{description}</p>
     </Link>
   );
 }

@@ -55,8 +55,8 @@ function AuthenticatedLayout() {
   }
 
   return (
-    <div className="min-h-screen bg-stone-50 text-stone-950">
-      <header className="border-stone-200 border-b bg-white">
+    <div className="min-h-screen bg-background text-foreground">
+      <header className="border-border border-b bg-paper">
         <div className="mx-auto flex max-w-6xl flex-col gap-4 px-6 py-5 sm:flex-row sm:items-center sm:justify-between">
           <Link className="font-bold text-xl tracking-tight" to="/dashboard">
             Recipe Pantry Manager
@@ -66,9 +66,9 @@ function AuthenticatedLayout() {
               {navItems.map((item) => (
                 <Link
                   activeProps={{
-                    className: 'bg-emerald-700 text-white',
+                    className: 'bg-primary text-paper',
                   }}
-                  className="rounded-full px-4 py-2 font-medium text-sm text-stone-700 transition hover:bg-stone-100"
+                  className="rounded-full px-4 py-2 font-medium text-muted text-sm transition hover:bg-primary-soft hover:text-primary-hover"
                   key={item.to}
                   to={item.to}
                 >
@@ -76,7 +76,7 @@ function AuthenticatedLayout() {
                 </Link>
               ))}
               <button
-                className="rounded-full border border-stone-300 px-4 py-2 font-medium text-sm text-stone-700 transition hover:border-stone-950 disabled:cursor-not-allowed disabled:border-stone-200 disabled:text-stone-400"
+                className="rounded-full border border-border px-4 py-2 font-medium text-muted text-sm transition hover:border-foreground disabled:cursor-not-allowed disabled:border-border disabled:text-muted/60"
                 disabled={isLoggingOut}
                 onClick={handleLogout}
                 type="button"

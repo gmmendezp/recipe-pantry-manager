@@ -42,24 +42,24 @@ function LoginPage() {
   }
 
   return (
-    <main className="min-h-screen bg-stone-50 px-6 py-16 text-stone-950">
-      <section className="mx-auto flex max-w-md flex-col gap-8 rounded-3xl border border-stone-200 bg-white p-8 shadow-sm">
+    <main className="min-h-screen bg-background px-6 py-16 text-foreground">
+      <section className="mx-auto flex max-w-md flex-col gap-8 rounded-3xl border border-border bg-paper p-8 shadow-sm">
         <div className="space-y-3">
-          <p className="font-medium text-emerald-700 text-sm uppercase tracking-[0.25em]">
+          <p className="font-medium text-accent text-sm uppercase tracking-[0.25em]">
             Welcome back
           </p>
           <h1 className="font-bold text-4xl tracking-tight">Log in</h1>
-          <p className="text-stone-600">
+          <p className="text-muted">
             Enter your email and password to continue planning recipes, pantry
             items, and grocery lists.
           </p>
         </div>
         <form className="space-y-5" onSubmit={handleSubmit}>
           <label className="block space-y-2">
-            <span className="font-medium text-sm text-stone-700">Email</span>
+            <span className="font-medium text-foreground text-sm">Email</span>
             <input
               autoComplete="email"
-              className="w-full rounded-2xl border border-stone-300 bg-white px-4 py-3 outline-none transition focus:border-emerald-700 focus:ring-2 focus:ring-emerald-100"
+              className="w-full rounded-2xl border border-border bg-paper px-4 py-3 outline-none transition focus:border-primary focus:ring-2 focus:ring-primary-soft"
               onChange={(event) => setEmail(event.target.value)}
               required
               type="email"
@@ -67,10 +67,12 @@ function LoginPage() {
             />
           </label>
           <label className="block space-y-2">
-            <span className="font-medium text-sm text-stone-700">Password</span>
+            <span className="font-medium text-foreground text-sm">
+              Password
+            </span>
             <input
               autoComplete="current-password"
-              className="w-full rounded-2xl border border-stone-300 bg-white px-4 py-3 outline-none transition focus:border-emerald-700 focus:ring-2 focus:ring-emerald-100"
+              className="w-full rounded-2xl border border-border bg-paper px-4 py-3 outline-none transition focus:border-primary focus:ring-2 focus:ring-primary-soft"
               minLength={8}
               onChange={(event) => setPassword(event.target.value)}
               required
@@ -84,7 +86,7 @@ function LoginPage() {
             </p>
           ) : null}
           <button
-            className="w-full rounded-full bg-emerald-700 px-5 py-3 font-semibold text-white transition hover:bg-emerald-800 disabled:cursor-not-allowed disabled:bg-stone-300"
+            className="w-full rounded-full bg-primary px-5 py-3 font-semibold text-paper transition hover:bg-primary-hover disabled:cursor-not-allowed disabled:bg-border"
             disabled={isSubmitting}
             type="submit"
           >
@@ -92,10 +94,10 @@ function LoginPage() {
           </button>
         </form>
         <div className="flex items-center justify-between gap-4 text-sm">
-          <Link className="font-semibold text-emerald-700" to="/signup">
+          <Link className="font-semibold text-primary" to="/signup">
             Create account
           </Link>
-          <Link className="text-stone-500" to="/">
+          <Link className="text-muted" to="/">
             Back home
           </Link>
         </div>
