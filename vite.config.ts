@@ -7,6 +7,9 @@ import { defineConfig } from 'vite';
 
 const config = defineConfig({
   resolve: { tsconfigPaths: true },
+  server: {
+    strictPort: true,
+  },
   plugins: [devtools(), netlify(), tailwindcss(), tanstackStart(), viteReact()],
 });
 

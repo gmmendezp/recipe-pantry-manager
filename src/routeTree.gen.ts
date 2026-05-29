@@ -11,6 +11,8 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SignupRouteImport } from './routes/signup'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as ConfirmRouteImport } from './routes/confirm'
+import { Route as CheckEmailRouteImport } from './routes/check-email'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
@@ -26,6 +28,16 @@ const SignupRoute = SignupRouteImport.update({
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ConfirmRoute = ConfirmRouteImport.update({
+  id: '/confirm',
+  path: '/confirm',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CheckEmailRoute = CheckEmailRouteImport.update({
+  id: '/check-email',
+  path: '/check-email',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthenticatedRoute = AuthenticatedRouteImport.update({
@@ -63,6 +75,8 @@ const AuthenticatedGroceryListsIndexRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/check-email': typeof CheckEmailRoute
+  '/confirm': typeof ConfirmRoute
   '/login': typeof LoginRoute
   '/signup': typeof SignupRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
@@ -72,6 +86,8 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/check-email': typeof CheckEmailRoute
+  '/confirm': typeof ConfirmRoute
   '/login': typeof LoginRoute
   '/signup': typeof SignupRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
@@ -83,6 +99,8 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteWithChildren
+  '/check-email': typeof CheckEmailRoute
+  '/confirm': typeof ConfirmRoute
   '/login': typeof LoginRoute
   '/signup': typeof SignupRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
@@ -94,6 +112,8 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/check-email'
+    | '/confirm'
     | '/login'
     | '/signup'
     | '/dashboard'
@@ -103,6 +123,8 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/check-email'
+    | '/confirm'
     | '/login'
     | '/signup'
     | '/dashboard'
@@ -113,6 +135,8 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/_authenticated'
+    | '/check-email'
+    | '/confirm'
     | '/login'
     | '/signup'
     | '/_authenticated/dashboard'
@@ -124,6 +148,8 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
+  CheckEmailRoute: typeof CheckEmailRoute
+  ConfirmRoute: typeof ConfirmRoute
   LoginRoute: typeof LoginRoute
   SignupRoute: typeof SignupRoute
 }
@@ -142,6 +168,20 @@ declare module '@tanstack/react-router' {
       path: '/login'
       fullPath: '/login'
       preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/confirm': {
+      id: '/confirm'
+      path: '/confirm'
+      fullPath: '/confirm'
+      preLoaderRoute: typeof ConfirmRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/check-email': {
+      id: '/check-email'
+      path: '/check-email'
+      fullPath: '/check-email'
+      preLoaderRoute: typeof CheckEmailRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated': {
@@ -210,6 +250,8 @@ const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRoute: AuthenticatedRouteWithChildren,
+  CheckEmailRoute: CheckEmailRoute,
+  ConfirmRoute: ConfirmRoute,
   LoginRoute: LoginRoute,
   SignupRoute: SignupRoute,
 }

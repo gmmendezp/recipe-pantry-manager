@@ -71,9 +71,9 @@ function LoginPage() {
             <input
               autoComplete="current-password"
               className="w-full rounded-2xl border border-stone-300 bg-white px-4 py-3 outline-none transition focus:border-emerald-700 focus:ring-2 focus:ring-emerald-100"
+              minLength={8}
               onChange={(event) => setPassword(event.target.value)}
               required
-              minLength={8}
               type="password"
               value={password}
             />

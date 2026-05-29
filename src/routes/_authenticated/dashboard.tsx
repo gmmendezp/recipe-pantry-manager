@@ -2,6 +2,9 @@ import { createFileRoute, Link } from '@tanstack/react-router';
 
 export const Route = createFileRoute('/_authenticated/dashboard')({
   component: DashboardPage,
+  validateSearch: (search): { confirmed?: boolean } => ({
+    confirmed: search.confirmed === true || search.confirmed === 'true',
+  }),
 });
 
 const stats = [
@@ -11,8 +14,11 @@ const stats = [
 ] as const;
 
 function DashboardPage() {
+  const { confirmed } = Route.useSearch();
+
   return (
     <div className="space-y-8">
+      {confirmed ? <EmailConfirmedBanner /> : null}
       <section className="rounded-3xl bg-emerald-800 p-8 text-white">
         <p className="font-medium text-emerald-100 text-sm uppercase tracking-[0.25em]">
           Dashboard
@@ -54,6 +60,17 @@ function DashboardPage() {
         />
       </section>
     </div>
+  );
+}
+
+function EmailConfirmedBanner() {
+  return (
+    <section className="rounded-2xl border border-emerald-200 bg-emerald-50 px-5 py-4 text-emerald-900">
+      <p className="font-semibold">Email confirmed</p>
+      <p className="mt-1 text-emerald-800 text-sm">
+        Welcome to Recipe Pantry Manager. Your account is ready to use.
+      </p>
+    </section>
   );
 }
 

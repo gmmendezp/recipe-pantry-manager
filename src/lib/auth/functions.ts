@@ -1,13 +1,15 @@
+import type { EmailOtpType } from '@supabase/supabase-js';
 import { createServerFn } from '@tanstack/react-start';
+import { getRequestUrl } from '@tanstack/react-start/server';
 import { z } from 'zod';
 
 import { createSupabaseServerClient } from '../supabase/server';
+import {
+  authCredentialsSchema,
+  emailConfirmationSchema,
+  signupCredentialsSchema,
+} from './schemas';
 import { getCurrentUser } from './server';
-
-const authCredentialsSchema = z.object({
-  email: z.email(),
-  password: z.string().min(8, 'Password must be at least 8 characters.'),
-});
 
 function getSafeAuthError(error: unknown) {
   if (error instanceof z.ZodError) {
@@ -44,12 +46,16 @@ export const loginWithPassword = createServerFn({ method: 'POST' })
   });
 
 export const signupWithPassword = createServerFn({ method: 'POST' })
-  .inputValidator(authCredentialsSchema)
+  .inputValidator(signupCredentialsSchema)
   .handler(async ({ data }) => {
     const supabase = createSupabaseServerClient();
+    const requestUrl = getRequestUrl({ xForwardedHost: true });
 
     const { data: authData, error } = await supabase.auth.signUp({
       email: data.email,
+      options: {
+        emailRedirectTo: new URL('/confirm', requestUrl).toString(),
+      },
       password: data.password,
     });
 
@@ -66,6 +72,27 @@ export const signupWithPassword = createServerFn({ method: 'POST' })
           }
         : null,
     };
+  });
+
+export const confirmEmail = createServerFn({ method: 'POST' })
+  .inputValidator(emailConfirmationSchema)
+  .handler(async ({ data }) => {
+    if (!data.token_hash || !data.type) {
+      throw new Error('Confirmation link is missing required information.');
+    }
+
+    const supabase = createSupabaseServerClient();
+
+    const { data: authData, error } = await supabase.auth.verifyOtp({
+      token_hash: data.token_hash,
+      type: data.type as EmailOtpType,
+    });
+
+    if (error) {
+      throw new Error(getSafeAuthError(error));
+    }
+
+    return { hasSession: Boolean(authData.session) };
   });
 
 export const logout = createServerFn({ method: 'POST' }).handler(async () => {
