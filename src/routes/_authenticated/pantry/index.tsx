@@ -1,5 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router';
 
+import { PageHeader } from '../../../components/layout/page-header';
+
 export const Route = createFileRoute('/_authenticated/pantry/')({
   component: PantryPage,
 });
@@ -7,17 +9,12 @@ export const Route = createFileRoute('/_authenticated/pantry/')({
 function PantryPage() {
   return (
     <div className="space-y-8">
-      <header className="space-y-3">
-        <p className="font-medium text-accent text-sm uppercase tracking-[0.25em]">
-          Pantry mode
-        </p>
-        <h1 className="font-bold text-4xl tracking-tight">Pantry</h1>
-        <p className="max-w-2xl text-muted">
-          Track ingredients already at home so generated grocery lists can
-          separate what you need from what you have.
-        </p>
-      </header>
-      <section className="rounded-3xl border border-border border-dashed bg-paper p-8 text-center">
+      <PageHeader
+        description="Track ingredients already at home so generated grocery lists can separate what you need from what you have."
+        eyebrow="Pantry mode"
+        title="Pantry"
+      />
+      <section className="rounded-2xl border border-border border-dashed bg-paper p-8 text-center">
         <h2 className="font-semibold text-2xl">No pantry items yet</h2>
         <p className="mx-auto mt-3 max-w-xl text-muted">
           The pantry CRUD flow and ingredient normalization helper will plug in

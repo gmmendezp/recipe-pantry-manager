@@ -19,7 +19,7 @@ function DashboardPage() {
   return (
     <div className="space-y-8">
       {confirmed ? <EmailConfirmedBanner /> : null}
-      <section className="rounded-3xl bg-primary p-8 text-paper">
+      <section className="rounded-2xl bg-primary p-8 text-paper">
         <p className="font-medium text-primary-soft text-sm uppercase tracking-[0.25em]">
           Dashboard
         </p>
@@ -34,7 +34,7 @@ function DashboardPage() {
       <section className="grid gap-4 sm:grid-cols-3">
         {stats.map((stat) => (
           <div
-            className="rounded-2xl border border-border bg-paper p-6 shadow-sm"
+            className="rounded-xl border border-border bg-paper p-6 shadow-sm"
             key={stat.label}
           >
             <p className="text-muted text-sm">{stat.label}</p>
@@ -65,7 +65,7 @@ function DashboardPage() {
 
 function EmailConfirmedBanner() {
   return (
-    <section className="rounded-2xl border border-border bg-primary-soft px-5 py-4 text-primary-soft-foreground">
+    <section className="rounded-xl border border-border bg-primary-soft px-5 py-4 text-primary-soft-foreground">
       <p className="font-semibold">Email confirmed</p>
       <p className="mt-1 text-primary-soft-foreground text-sm">
         Welcome to Recipe Pantry Manager. Your account is ready to use.
@@ -85,7 +85,7 @@ function QuickAction({
 }) {
   return (
     <Link
-      className="rounded-2xl border border-border bg-paper p-6 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
+      className="rounded-xl border border-border bg-paper p-6 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
       to={to}
     >
       <h2 className="font-semibold text-xl">{label}</h2>

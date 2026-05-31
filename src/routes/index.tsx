@@ -1,5 +1,6 @@
-import { createFileRoute, Link } from '@tanstack/react-router';
+import { createFileRoute } from '@tanstack/react-router';
 
+import { LinkButton } from '../components/ui/button';
 import { Route as RootRoute } from './__root';
 
 export const Route = createFileRoute('/')({ component: Home });
@@ -24,26 +25,13 @@ function Home() {
         </section>
         <div className="flex flex-wrap gap-3">
           {user ? (
-            <Link
-              className="rounded-full bg-primary px-5 py-3 font-semibold text-paper transition hover:bg-primary-hover"
-              to="/dashboard"
-            >
-              Go to dashboard
-            </Link>
+            <LinkButton to="/dashboard">Go to dashboard</LinkButton>
           ) : (
             <>
-              <Link
-                className="rounded-full bg-primary px-5 py-3 font-semibold text-paper transition hover:bg-primary-hover"
-                to="/signup"
-              >
-                Create account
-              </Link>
-              <Link
-                className="rounded-full border border-border px-5 py-3 font-semibold transition hover:border-foreground"
-                to="/login"
-              >
+              <LinkButton to="/signup">Create account</LinkButton>
+              <LinkButton to="/login" variant="secondary">
                 Log in
-              </Link>
+              </LinkButton>
             </>
           )}
         </div>

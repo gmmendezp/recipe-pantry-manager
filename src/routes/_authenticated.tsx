@@ -76,7 +76,7 @@ function AuthenticatedLayout() {
                 </Link>
               ))}
               <button
-                className="rounded-full border border-border px-4 py-2 font-medium text-muted text-sm transition hover:border-foreground disabled:cursor-not-allowed disabled:border-border disabled:text-muted/60"
+                className="rounded-full border border-border px-4 py-2 font-medium text-muted text-sm transition hover:border-foreground disabled:cursor-not-allowed disabled:border-border disabled:text-muted/60 cursor-pointer"
                 disabled={isLoggingOut}
                 onClick={handleLogout}
                 type="button"

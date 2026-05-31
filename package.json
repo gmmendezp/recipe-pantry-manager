@@ -1,7 +1,7 @@
 {
 	"name": "recipe-pantry-manager",
 	"private": true,
-	"packageManager": "pnpm@10.33.4",
+	"packageManager": "pnpm@11.5.0",
 	"type": "module",
 	"imports": {
 		"#/*": "./src/*"
@@ -22,43 +22,39 @@
 	"dependencies": {
 		"@supabase/ssr": "^0.10.3",
 		"@supabase/supabase-js": "^2.106.2",
-		"@tailwindcss/vite": "^4.1.18",
+		"@tailwindcss/vite": "^4.3.0",
 		"@tanstack/react-devtools": "latest",
+		"@tanstack/react-form": "^1.33.0",
 		"@tanstack/react-router": "latest",
 		"@tanstack/react-router-devtools": "latest",
 		"@tanstack/react-router-ssr-query": "latest",
 		"@tanstack/react-start": "latest",
-		"@tanstack/router-plugin": "^1.132.0",
+		"@tanstack/router-plugin": "^1.168.13",
+		"clsx": "^2.1.1",
 		"drizzle-orm": "^0.45.2",
 		"lucide-react": "^0.545.0",
 		"postgres": "^3.4.9",
-		"react": "^19.2.0",
-		"react-dom": "^19.2.0",
-		"tailwindcss": "^4.1.18",
+		"react": "^19.2.6",
+		"react-dom": "^19.2.6",
+		"tailwindcss": "^4.3.0",
 		"zod": "^4.4.3"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "2.4.5",
-		"@netlify/vite-plugin-tanstack-start": "^1.2.15",
-		"@tailwindcss/typography": "^0.5.16",
+		"@netlify/vite-plugin-tanstack-start": "^1.3.15",
+		"@tailwindcss/typography": "^0.5.19",
 		"@tanstack/devtools-vite": "latest",
 		"@testing-library/dom": "^10.4.1",
-		"@testing-library/react": "^16.3.0",
-		"@types/node": "^22.10.2",
-		"@types/react": "^19.2.0",
-		"@types/react-dom": "^19.2.0",
-		"@vitejs/plugin-react": "^6.0.1",
+		"@testing-library/react": "^16.3.2",
+		"@types/node": "^22.19.19",
+		"@types/react": "^19.2.15",
+		"@types/react-dom": "^19.2.3",
+		"@vitejs/plugin-react": "^6.0.2",
 		"drizzle-kit": "^0.31.10",
 		"husky": "^9.1.7",
 		"jsdom": "^28.1.0",
-		"typescript": "^6.0.2",
-		"vite": "^8.0.0",
-		"vitest": "^4.1.5"
-	},
-	"pnpm": {
-		"onlyBuiltDependencies": [
-			"esbuild",
-			"lightningcss"
-		]
+		"typescript": "^6.0.3",
+		"vite": "^8.0.14",
+		"vitest": "^4.1.7"
 	}
 }
