@@ -1,6 +1,7 @@
-import { Link } from '@tanstack/react-router';
+import { createLink } from '@tanstack/react-router';
 import { clsx } from 'clsx';
-import type { ButtonHTMLAttributes, ComponentProps } from 'react';
+import type { AnchorHTMLAttributes, ButtonHTMLAttributes } from 'react';
+import { forwardRef } from 'react';
 
 type ButtonVariant =
   | 'danger'
@@ -9,7 +10,7 @@ type ButtonVariant =
   | 'inverseOutline'
   | 'primary'
   | 'secondary';
-type ButtonSize = 'md' | 'sm';
+type ButtonSize = 'md' | 'sm' | 'xs';
 
 type ButtonStyleProps = {
   fullWidth?: boolean;
@@ -18,7 +19,8 @@ type ButtonStyleProps = {
 };
 
 type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & ButtonStyleProps;
-type LinkButtonProps = ComponentProps<typeof Link> & ButtonStyleProps;
+type LinkButtonProps = AnchorHTMLAttributes<HTMLAnchorElement> &
+  ButtonStyleProps;
 
 const baseClass =
   'inline-flex items-center justify-center rounded-full font-semibold transition disabled:cursor-not-allowed';
@@ -39,6 +41,7 @@ const variantClasses: Record<ButtonVariant, string> = {
 const sizeClasses: Record<ButtonSize, string> = {
   md: 'px-5 py-3',
   sm: 'px-4 py-2 text-sm',
+  xs: 'px-3 py-1.5 text-sm',
 };
 
 function getButtonClassName({
@@ -71,17 +74,19 @@ export function Button({
   );
 }
 
-export function LinkButton({
-  className,
-  fullWidth,
-  size,
-  variant,
-  ...props
-}: LinkButtonProps) {
-  return (
-    <Link
-      className={getButtonClassName({ className, fullWidth, size, variant })}
-      {...props}
-    />
-  );
-}
+const StyledLinkButton = forwardRef<HTMLAnchorElement, LinkButtonProps>(
+  function StyledLinkButton(
+    { className, fullWidth, size, variant, ...props },
+    ref,
+  ) {
+    return (
+      <a
+        className={getButtonClassName({ className, fullWidth, size, variant })}
+        ref={ref}
+        {...props}
+      />
+    );
+  },
+);
+
+export const LinkButton = createLink(StyledLinkButton);

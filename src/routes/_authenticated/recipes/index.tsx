@@ -1,9 +1,17 @@
 import { createFileRoute, Link } from '@tanstack/react-router';
+import { useState } from 'react';
 
 import { PageHeader } from '../../../components/layout/page-header';
 import { Badge } from '../../../components/ui/badge';
 import { LinkButton } from '../../../components/ui/button';
 import { EmptyState } from '../../../components/ui/empty-state';
+import {
+  TableShell,
+  tableCellClass,
+  tableHeaderCellClass,
+  tableRowClass,
+} from '../../../components/ui/table-shell';
+import { type ViewMode, ViewToggle } from '../../../components/ui/view-toggle';
 import { listRecipes } from '../../../features/recipes/recipes.functions';
 import type { RecipeListItem } from '../../../features/recipes/recipes.schema';
 
@@ -16,6 +24,7 @@ export const Route = createFileRoute('/_authenticated/recipes/')({
 
 function RecipesPage() {
   const { recipes } = Route.useLoaderData();
+  const [desktopView, setDesktopView] = useState<ViewMode>('cards');
 
   return (
     <div className="space-y-8">
@@ -25,13 +34,30 @@ function RecipesPage() {
           eyebrow="Recipe collection"
           title="Recipes"
         />
-        <LinkButton className="text-center" to="/recipes/new">
-          New recipe
-        </LinkButton>
+        <div className="flex flex-nowrap gap-3 sm:justify-end">
+          <ViewToggle onChange={setDesktopView} value={desktopView} />
+          <LinkButton
+            className="text-center whitespace-nowrap"
+            to="/recipes/new"
+          >
+            New recipe
+          </LinkButton>
+        </div>
       </div>
 
       {recipes.length > 0 ? (
-        <RecipeGrid recipes={recipes} />
+        <>
+          <div className="md:hidden">
+            <RecipeCards recipes={recipes} />
+          </div>
+          <div className="hidden md:block">
+            {desktopView === 'cards' ? (
+              <RecipeCards recipes={recipes} />
+            ) : (
+              <RecipeTable recipes={recipes} />
+            )}
+          </div>
+        </>
       ) : (
         <EmptyState
           action={<LinkButton to="/recipes/new">Create recipe</LinkButton>}
@@ -45,7 +71,7 @@ function RecipesPage() {
   );
 }
 
-function RecipeGrid({ recipes }: { recipes: RecipeListItem[] }) {
+function RecipeCards({ recipes }: { recipes: RecipeListItem[] }) {
   return (
     <section className="grid gap-4 md:grid-cols-2">
       {recipes.map((recipe) => (
@@ -71,4 +97,74 @@ function RecipeGrid({ recipes }: { recipes: RecipeListItem[] }) {
       ))}
     </section>
   );
+}
+
+function RecipeTable({ recipes }: { recipes: RecipeListItem[] }) {
+  return (
+    <TableShell>
+      <thead className="bg-primary-soft/50">
+        <tr>
+          <th className={tableHeaderCellClass} scope="col">
+            Recipe
+          </th>
+          <th className={tableHeaderCellClass} scope="col">
+            Time
+          </th>
+          <th className={tableHeaderCellClass} scope="col">
+            Servings
+          </th>
+          <th className={tableHeaderCellClass} scope="col">
+            <span className="sr-only">Actions</span>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        {recipes.map((recipe) => (
+          <tr className={tableRowClass} key={recipe.id}>
+            <td className={tableCellClass}>
+              <p className="font-semibold text-foreground">{recipe.title}</p>
+              {recipe.description ? (
+                <p className="mt-1 line-clamp-2 max-w-xl text-muted text-sm">
+                  {recipe.description}
+                </p>
+              ) : null}
+            </td>
+            <td className={tableCellClass}>{formatRecipeTime(recipe)}</td>
+            <td className={tableCellClass}>{recipe.servings ?? '-'}</td>
+            <td className={`${tableCellClass} text-right`}>
+              <div className="flex justify-end gap-2">
+                <LinkButton
+                  params={{ recipeId: recipe.id }}
+                  size="xs"
+                  to="/recipes/$recipeId"
+                  variant="secondary"
+                >
+                  View
+                </LinkButton>
+                <LinkButton
+                  params={{ recipeId: recipe.id }}
+                  size="xs"
+                  to="/recipes/$recipeId/edit"
+                  variant="secondary"
+                >
+                  Edit
+                </LinkButton>
+              </div>
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </TableShell>
+  );
+}
+
+function formatRecipeTime(recipe: RecipeListItem) {
+  if (recipe.totalTime) return `${recipe.totalTime} min total`;
+
+  const parts = [
+    recipe.prepTime ? `Prep ${recipe.prepTime} min` : null,
+    recipe.cookTime ? `Cook ${recipe.cookTime} min` : null,
+  ].filter(Boolean);
+
+  return parts.join(' · ') || '-';
 }

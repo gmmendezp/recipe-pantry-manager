@@ -6,38 +6,44 @@ import { Badge } from '../../../components/ui/badge';
 import { Button, LinkButton } from '../../../components/ui/button';
 import { FormError } from '../../../components/ui/form-error';
 import { Panel } from '../../../components/ui/panel';
-import { MissingRecipe } from '../../../features/recipes/components/missing-recipe';
+import { MissingPantryItem } from '../../../features/pantry/components/missing-pantry-item';
 import {
-  deleteRecipe,
-  getRecipe,
-} from '../../../features/recipes/recipes.functions';
+  deletePantryItem,
+  getPantryItem,
+} from '../../../features/pantry/pantry.functions';
 import {
-  type RecipeDetail,
-  recipeIdSchema,
-} from '../../../features/recipes/recipes.schema';
+  type PantryItemDetail,
+  pantryItemIdSchema,
+} from '../../../features/pantry/pantry.schema';
 
-export const Route = createFileRoute('/_authenticated/recipes/$recipeId')({
-  component: RecipeDetailPage,
+export const Route = createFileRoute('/_authenticated/pantry/$pantryItemId')({
+  component: PantryItemDetailPage,
   loader: async ({ params }) => {
-    const result = recipeIdSchema.safeParse({ recipeId: params.recipeId });
+    const result = pantryItemIdSchema.safeParse({
+      pantryItemId: params.pantryItemId,
+    });
 
-    if (!result.success) return { recipe: null };
+    if (!result.success) return { pantryItem: null };
 
     return {
-      recipe: await getRecipe({ data: result.data }),
+      pantryItem: await getPantryItem({ data: result.data }),
     };
   },
 });
 
-function RecipeDetailPage() {
-  const { recipe } = Route.useLoaderData();
+function PantryItemDetailPage() {
+  const { pantryItem } = Route.useLoaderData();
 
-  if (!recipe) return <MissingRecipe />;
+  if (!pantryItem) return <MissingPantryItem />;
 
-  return <RecipeDetailView recipe={recipe} />;
+  return <PantryItemDetailView pantryItem={pantryItem} />;
 }
 
-function RecipeDetailView({ recipe }: { recipe: RecipeDetail }) {
+function PantryItemDetailView({
+  pantryItem,
+}: {
+  pantryItem: PantryItemDetail;
+}) {
   const navigate = Route.useNavigate();
   const [deleteError, setDeleteError] = useState<string | null>(null);
   const [isConfirmingDelete, setIsConfirmingDelete] = useState(false);
@@ -48,13 +54,13 @@ function RecipeDetailView({ recipe }: { recipe: RecipeDetail }) {
     setIsDeleting(true);
 
     try {
-      await deleteRecipe({ data: { recipeId: recipe.id } });
-      await navigate({ to: '/recipes' });
+      await deletePantryItem({ data: { pantryItemId: pantryItem.id } });
+      await navigate({ to: '/pantry' });
     } catch (error) {
       setDeleteError(
         error instanceof Error
           ? error.message
-          : 'Unable to delete this recipe. Please try again.',
+          : 'Unable to delete this pantry item. Please try again.',
       );
     } finally {
       setIsDeleting(false);
@@ -63,26 +69,26 @@ function RecipeDetailView({ recipe }: { recipe: RecipeDetail }) {
 
   return (
     <div className="space-y-8">
-      <LinkButton to="/recipes" variant="secondary">
+      <LinkButton to="/pantry" variant="secondary">
         <ArrowLeft className="mr-2 h-4 w-4" aria-hidden="true" />
-        Back to recipes
+        Back to pantry
       </LinkButton>
 
       <header className="space-y-5 rounded-2xl bg-primary p-8 text-paper">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
           <div>
             <p className="font-medium text-primary-soft text-sm uppercase tracking-[0.25em]">
-              Recipe
+              Pantry item
             </p>
             <h1 className="mt-3 font-bold text-4xl tracking-tight">
-              {recipe.title}
+              {pantryItem.name}
             </h1>
           </div>
           <div className="flex flex-wrap gap-2">
             <LinkButton
-              params={{ recipeId: recipe.id }}
+              params={{ pantryItemId: pantryItem.id }}
               size="sm"
-              to="/recipes/$recipeId/edit"
+              to="/pantry/$pantryItemId/edit"
               variant="inverse"
             >
               Edit
@@ -101,17 +107,14 @@ function RecipeDetailView({ recipe }: { recipe: RecipeDetail }) {
             </Button>
           </div>
         </div>
-        {recipe.description ? (
-          <p className="max-w-2xl text-primary-soft">{recipe.description}</p>
-        ) : null}
-        <RecipeMeta recipe={recipe} />
+        <PantryItemMeta pantryItem={pantryItem} />
       </header>
 
       {isConfirmingDelete ? (
         <section className="rounded-xl border border-red-200 bg-red-50 p-5 text-red-900 shadow-sm">
-          <h2 className="font-semibold text-xl">Delete this recipe?</h2>
+          <h2 className="font-semibold text-xl">Delete this pantry item?</h2>
           <p className="mt-2 text-red-800 text-sm">
-            This permanently removes the recipe, ingredients, and instructions.
+            This permanently removes the item from your pantry.
           </p>
           <div className="mt-4 flex flex-wrap gap-2">
             <Button
@@ -131,7 +134,7 @@ function RecipeDetailView({ recipe }: { recipe: RecipeDetail }) {
               type="button"
               variant="danger"
             >
-              {isDeleting ? 'Deleting...' : 'Delete recipe'}
+              {isDeleting ? 'Deleting...' : 'Delete pantry item'}
             </Button>
           </div>
         </section>
@@ -139,50 +142,29 @@ function RecipeDetailView({ recipe }: { recipe: RecipeDetail }) {
 
       {deleteError ? <FormError>{deleteError}</FormError> : null}
 
-      <section className="grid gap-6 lg:grid-cols-[1fr_1.2fr]">
-        <Panel>
-          <h2 className="font-semibold text-2xl">Ingredients</h2>
-          <ul className="mt-5 space-y-3">
-            {recipe.ingredients.map((ingredient) => (
-              <li
-                className="rounded-xl border border-border p-4"
-                key={ingredient.id}
-              >
-                <p className="font-semibold">{ingredient.name}</p>
-                <p className="mt-1 text-muted text-sm">
-                  {[ingredient.quantity, ingredient.unit, ingredient.category]
-                    .filter(Boolean)
-                    .join(' · ') || 'No quantity specified'}
-                </p>
-              </li>
-            ))}
-          </ul>
-        </Panel>
-
-        <Panel>
-          <h2 className="font-semibold text-2xl">Instructions</h2>
-          <ol className="mt-5 space-y-4">
-            {recipe.steps.map((step) => (
-              <li className="flex gap-4" key={step.id}>
-                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary-soft font-bold text-primary-soft-foreground text-sm">
-                  {step.stepNumber}
-                </span>
-                <p className="pt-1 text-muted">{step.instruction}</p>
-              </li>
-            ))}
-          </ol>
-        </Panel>
-      </section>
+      <Panel>
+        <h2 className="font-semibold text-2xl">Details</h2>
+        <dl className="mt-5 grid gap-4 sm:grid-cols-2">
+          <DetailItem label="Quantity">
+            {[pantryItem.quantity, pantryItem.unit].filter(Boolean).join(' ') ||
+              'No quantity specified'}
+          </DetailItem>
+          <DetailItem label="Category">
+            {pantryItem.category ?? 'No category'}
+          </DetailItem>
+          <DetailItem label="Notes" wide>
+            {pantryItem.notes ?? 'No notes'}
+          </DetailItem>
+        </dl>
+      </Panel>
     </div>
   );
 }
 
-function RecipeMeta({ recipe }: { recipe: RecipeDetail }) {
+function PantryItemMeta({ pantryItem }: { pantryItem: PantryItemDetail }) {
   const meta = [
-    recipe.prepTime ? `Prep ${recipe.prepTime} min` : null,
-    recipe.cookTime ? `Cook ${recipe.cookTime} min` : null,
-    recipe.totalTime ? `Total ${recipe.totalTime} min` : null,
-    recipe.servings ? `${recipe.servings} servings` : null,
+    pantryItem.category,
+    [pantryItem.quantity, pantryItem.unit].filter(Boolean).join(' ') || null,
   ].filter(Boolean);
 
   if (meta.length === 0) return null;
@@ -194,6 +176,23 @@ function RecipeMeta({ recipe }: { recipe: RecipeDetail }) {
           {item}
         </Badge>
       ))}
+    </div>
+  );
+}
+
+function DetailItem({
+  children,
+  label,
+  wide = false,
+}: {
+  children: string;
+  label: string;
+  wide?: boolean;
+}) {
+  return (
+    <div className={wide ? 'sm:col-span-2' : undefined}>
+      <dt className="font-medium text-muted text-sm">{label}</dt>
+      <dd className="mt-1 font-semibold text-lg">{children}</dd>
     </div>
   );
 }

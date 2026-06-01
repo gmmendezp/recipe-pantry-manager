@@ -328,9 +328,15 @@ export function RecipeForm({
             </Button>
           )}
         </form.Subscribe>
-        <LinkButton params={cancelParams} to={cancelTo} variant="secondary">
-          Cancel
-        </LinkButton>
+        {cancelTo === '/recipes/$recipeId' && cancelParams ? (
+          <LinkButton params={cancelParams} to={cancelTo} variant="secondary">
+            Cancel
+          </LinkButton>
+        ) : (
+          <LinkButton to="/recipes" variant="secondary">
+            Cancel
+          </LinkButton>
+        )}
       </div>
     </form>
   );

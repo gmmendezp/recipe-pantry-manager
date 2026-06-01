@@ -1,6 +1,8 @@
 import { createFileRoute } from '@tanstack/react-router';
+import { ArrowLeft } from 'lucide-react';
 
 import { PageHeader } from '../../../components/layout/page-header';
+import { LinkButton } from '../../../components/ui/button';
 import { MissingRecipe } from '../../../features/recipes/components/missing-recipe';
 import { RecipeForm } from '../../../features/recipes/components/recipe-form';
 import {
@@ -35,6 +37,15 @@ function EditRecipePage() {
 
   return (
     <div className="space-y-8">
+      <LinkButton
+        params={{ recipeId: recipe.id }}
+        to="/recipes/$recipeId"
+        variant="secondary"
+      >
+        <ArrowLeft className="mr-2 h-4 w-4" aria-hidden="true" />
+        Back to recipe
+      </LinkButton>
+
       <PageHeader
         description="Update recipe details, ingredients, and instructions."
         eyebrow="Recipe collection"
