@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from '@tanstack/react-router';
+import { Pencil } from 'lucide-react';
 import { useState } from 'react';
 
 import { PageHeader } from '../../../components/layout/page-header';
@@ -75,25 +76,50 @@ function RecipeCards({ recipes }: { recipes: RecipeListItem[] }) {
   return (
     <section className="grid gap-4 md:grid-cols-2">
       {recipes.map((recipe) => (
-        <Link
-          className="rounded-2xl border border-border bg-paper p-6 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
+        <article
+          className="flex h-full flex-col rounded-xl border border-border bg-paper p-5 shadow-sm"
           key={recipe.id}
-          params={{ recipeId: recipe.id }}
-          to="/recipes/$recipeId"
         >
           <div className="flex items-start justify-between gap-4">
-            <h2 className="font-semibold text-2xl">{recipe.title}</h2>
-            {recipe.totalTime ? <Badge>{recipe.totalTime} min</Badge> : null}
+            <h2 className="min-w-0 flex-1 break-words font-semibold text-xl">
+              <Link
+                className="hover:underline"
+                params={{ recipeId: recipe.id }}
+                to="/recipes/$recipeId"
+              >
+                {recipe.title}
+              </Link>
+            </h2>
+            {recipe.totalTime ? (
+              <Badge className="shrink-0 whitespace-nowrap">
+                {recipe.totalTime} min
+              </Badge>
+            ) : null}
           </div>
           {recipe.description ? (
-            <p className="mt-3 line-clamp-2 text-muted">{recipe.description}</p>
+            <p className="mt-2 line-clamp-2 text-muted text-sm">
+              {recipe.description}
+            </p>
           ) : null}
-          <div className="mt-5 flex flex-wrap gap-2 text-muted text-sm">
-            {recipe.prepTime ? <span>Prep {recipe.prepTime} min</span> : null}
-            {recipe.cookTime ? <span>Cook {recipe.cookTime} min</span> : null}
-            {recipe.servings ? <span>{recipe.servings} servings</span> : null}
+          <div className="mt-auto flex items-end justify-between gap-3 pt-3">
+            <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-muted text-sm">
+              {formatRecipeMeta(recipe).map((item, index) => (
+                <span className="flex items-center gap-2" key={item}>
+                  {index > 0 ? <span aria-hidden="true">·</span> : null}
+                  {item}
+                </span>
+              ))}
+            </div>
+            <Link
+              aria-label={`Edit ${recipe.title}`}
+              className="shrink-0 rounded-full p-2 text-muted transition hover:bg-primary-soft hover:text-primary-hover"
+              params={{ recipeId: recipe.id }}
+              to="/recipes/$recipeId/edit"
+            >
+              <Pencil aria-hidden="true" className="h-4 w-4" />
+            </Link>
           </div>
-        </Link>
+        </article>
       ))}
     </section>
   );
@@ -122,7 +148,13 @@ function RecipeTable({ recipes }: { recipes: RecipeListItem[] }) {
         {recipes.map((recipe) => (
           <tr className={tableRowClass} key={recipe.id}>
             <td className={tableCellClass}>
-              <p className="font-semibold text-foreground">{recipe.title}</p>
+              <Link
+                className="font-semibold text-foreground hover:underline"
+                params={{ recipeId: recipe.id }}
+                to="/recipes/$recipeId"
+              >
+                {recipe.title}
+              </Link>
               {recipe.description ? (
                 <p className="mt-1 line-clamp-2 max-w-xl text-muted text-sm">
                   {recipe.description}
@@ -133,22 +165,14 @@ function RecipeTable({ recipes }: { recipes: RecipeListItem[] }) {
             <td className={tableCellClass}>{recipe.servings ?? '-'}</td>
             <td className={`${tableCellClass} text-right`}>
               <div className="flex justify-end gap-2">
-                <LinkButton
+                <Link
+                  aria-label={`Edit ${recipe.title}`}
+                  className="inline-flex rounded-full p-2 text-muted transition hover:text-primary-hover"
                   params={{ recipeId: recipe.id }}
-                  size="xs"
-                  to="/recipes/$recipeId"
-                  variant="secondary"
-                >
-                  View
-                </LinkButton>
-                <LinkButton
-                  params={{ recipeId: recipe.id }}
-                  size="xs"
                   to="/recipes/$recipeId/edit"
-                  variant="secondary"
                 >
-                  Edit
-                </LinkButton>
+                  <Pencil aria-hidden="true" className="h-4 w-4" />
+                </Link>
               </div>
             </td>
           </tr>
@@ -156,6 +180,14 @@ function RecipeTable({ recipes }: { recipes: RecipeListItem[] }) {
       </tbody>
     </TableShell>
   );
+}
+
+function formatRecipeMeta(recipe: RecipeListItem) {
+  return [
+    recipe.prepTime ? `Prep ${recipe.prepTime} min` : null,
+    recipe.cookTime ? `Cook ${recipe.cookTime} min` : null,
+    recipe.servings ? `${recipe.servings} servings` : null,
+  ].filter((item): item is string => Boolean(item));
 }
 
 function formatRecipeTime(recipe: RecipeListItem) {

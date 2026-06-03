@@ -76,15 +76,15 @@ function PantryItemDetailView({
 
       <header className="space-y-5 rounded-2xl bg-primary p-8 text-paper">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-          <div>
+          <div className="min-w-0 flex-1">
             <p className="font-medium text-primary-soft text-sm uppercase tracking-[0.25em]">
               Pantry item
             </p>
-            <h1 className="mt-3 font-bold text-4xl tracking-tight">
+            <h1 className="mt-3 break-words font-bold text-4xl tracking-tight">
               {pantryItem.name}
             </h1>
           </div>
-          <div className="flex flex-wrap gap-2">
+          <div className="flex shrink-0 flex-wrap gap-2">
             <LinkButton
               params={{ pantryItemId: pantryItem.id }}
               size="sm"

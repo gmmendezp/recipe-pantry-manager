@@ -70,15 +70,15 @@ function RecipeDetailView({ recipe }: { recipe: RecipeDetail }) {
 
       <header className="space-y-5 rounded-2xl bg-primary p-8 text-paper">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-          <div>
+          <div className="min-w-0 flex-1">
             <p className="font-medium text-primary-soft text-sm uppercase tracking-[0.25em]">
               Recipe
             </p>
-            <h1 className="mt-3 font-bold text-4xl tracking-tight">
+            <h1 className="mt-3 break-words font-bold text-4xl tracking-tight">
               {recipe.title}
             </h1>
           </div>
-          <div className="flex flex-wrap gap-2">
+          <div className="flex shrink-0 flex-wrap gap-2">
             <LinkButton
               params={{ recipeId: recipe.id }}
               size="sm"
@@ -142,14 +142,14 @@ function RecipeDetailView({ recipe }: { recipe: RecipeDetail }) {
       <section className="grid gap-6 lg:grid-cols-[1fr_1.2fr]">
         <Panel>
           <h2 className="font-semibold text-2xl">Ingredients</h2>
-          <ul className="mt-5 space-y-3">
+          <ul className="mt-5 divide-y divide-border">
             {recipe.ingredients.map((ingredient) => (
               <li
-                className="rounded-xl border border-border p-4"
+                className="flex flex-col gap-1 py-4 first:pt-0 last:pb-0 sm:flex-row sm:items-center sm:justify-between sm:gap-4"
                 key={ingredient.id}
               >
                 <p className="font-semibold">{ingredient.name}</p>
-                <p className="mt-1 text-muted text-sm">
+                <p className="text-muted text-sm sm:text-right">
                   {[ingredient.quantity, ingredient.unit, ingredient.category]
                     .filter(Boolean)
                     .join(' · ') || 'No quantity specified'}
@@ -161,9 +161,12 @@ function RecipeDetailView({ recipe }: { recipe: RecipeDetail }) {
 
         <Panel>
           <h2 className="font-semibold text-2xl">Instructions</h2>
-          <ol className="mt-5 space-y-4">
+          <ol className="mt-5 divide-y divide-border">
             {recipe.steps.map((step) => (
-              <li className="flex gap-4" key={step.id}>
+              <li
+                className="flex gap-4 py-4 first:pt-0 last:pb-0"
+                key={step.id}
+              >
                 <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary-soft font-bold text-primary-soft-foreground text-sm">
                   {step.stepNumber}
                 </span>

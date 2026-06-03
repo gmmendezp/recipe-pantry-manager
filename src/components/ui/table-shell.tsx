@@ -8,7 +8,7 @@ export const tableHeaderCellClass =
   'px-5 py-3 font-semibold text-muted text-sm';
 export const tableCellClass = 'px-5 py-3 align-middle';
 export const tableRowClass =
-  'border-border border-t transition hover:bg-primary-soft/40';
+  'border-border border-t transition hover:bg-primary-soft';
 
 export function TableShell({ children }: TableShellProps) {
   return (
