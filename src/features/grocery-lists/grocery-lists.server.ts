@@ -1,6 +1,7 @@
 import { and, asc, desc, eq, inArray } from 'drizzle-orm';
 
 import { requireUser } from '../../lib/auth/server';
+import { toIsoString } from '../../lib/date';
 import { db } from '../../lib/db/client';
 import {
   groceryListItems,
@@ -16,10 +17,6 @@ import type {
   GroceryListSummary,
   ParsedGenerateGroceryListInput,
 } from './grocery-lists.schema';
-
-function toIsoString(value: Date) {
-  return value.toISOString();
-}
 
 function toGroceryListItem(
   item: typeof groceryListItems.$inferSelect,

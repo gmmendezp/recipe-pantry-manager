@@ -1,6 +1,7 @@
 import { and, desc, eq } from 'drizzle-orm';
 
 import { requireUser } from '../../lib/auth/server';
+import { toIsoString } from '../../lib/date';
 import { db } from '../../lib/db/client';
 import { pantryItems } from '../../lib/db/schema';
 import type {
@@ -8,10 +9,6 @@ import type {
   PantryListItem,
   ParsedPantryItemInput,
 } from './pantry.schema';
-
-function toIsoString(value: Date) {
-  return value.toISOString();
-}
 
 function toPantryListItem(
   pantryItem: typeof pantryItems.$inferSelect,

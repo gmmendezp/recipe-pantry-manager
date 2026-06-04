@@ -20,6 +20,8 @@ import type { GroceryListSummary } from '../../../features/grocery-lists/grocery
 import { listRecipes } from '../../../features/recipes/recipes.functions';
 import type { RecipeListItem } from '../../../features/recipes/recipes.schema';
 import { getAuthErrorMessage } from '../../../lib/auth/errors';
+import { formatShortDate } from '../../../lib/date';
+import { formatCount } from '../../../lib/format';
 
 export const Route = createFileRoute('/_authenticated/grocery-lists/')({
   component: GroceryListsPage,
@@ -213,19 +215,14 @@ function SavedLists({
               </Link>
             </td>
             <td className={tableCellClass}>
-              {list.itemCount} {list.itemCount === 1 ? 'item' : 'items'}
+              {formatCount(list.itemCount, 'item')}
             </td>
-            <td className={tableCellClass}>{formatListDate(list.updatedAt)}</td>
+            <td className={tableCellClass}>
+              {formatShortDate(list.updatedAt)}
+            </td>
           </tr>
         ))}
       </tbody>
     </TableShell>
   );
-}
-
-function formatListDate(value: string) {
-  return new Intl.DateTimeFormat('en-US', {
-    day: 'numeric',
-    month: 'short',
-  }).format(new Date(value));
 }

@@ -1,6 +1,7 @@
 import { and, asc, desc, eq } from 'drizzle-orm';
 
 import { requireUser } from '../../lib/auth/server';
+import { toIsoString } from '../../lib/date';
 import { db } from '../../lib/db/client';
 import { recipeIngredients, recipeSteps, recipes } from '../../lib/db/schema';
 import type {
@@ -8,10 +9,6 @@ import type {
   RecipeDetail,
   RecipeListItem,
 } from './recipes.schema';
-
-function toIsoString(value: Date) {
-  return value.toISOString();
-}
 
 function calculateTotalTime(input: ParsedRecipeInput) {
   if (input.prepTime === null || input.cookTime === null) return null;

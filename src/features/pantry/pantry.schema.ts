@@ -1,9 +1,6 @@
 import { z } from 'zod';
 
-const optionalTextSchema = z
-  .string()
-  .trim()
-  .transform((value) => value || null);
+import { optionalTextSchema } from '../../lib/validation/schemas';
 
 export const pantryItemInputSchema = z.object({
   category: optionalTextSchema,

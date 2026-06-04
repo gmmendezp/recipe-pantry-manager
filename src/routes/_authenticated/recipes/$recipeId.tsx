@@ -2,8 +2,10 @@ import { createFileRoute } from '@tanstack/react-router';
 import { ArrowLeft } from 'lucide-react';
 import { useState } from 'react';
 
+import { DetailHero } from '../../../components/layout/detail-hero';
 import { Badge } from '../../../components/ui/badge';
 import { Button, LinkButton } from '../../../components/ui/button';
+import { DeleteConfirmation } from '../../../components/ui/delete-confirmation';
 import { FormError } from '../../../components/ui/form-error';
 import { Panel } from '../../../components/ui/panel';
 import { MissingRecipe } from '../../../features/recipes/components/missing-recipe';
@@ -15,6 +17,7 @@ import {
   type RecipeDetail,
   recipeIdSchema,
 } from '../../../features/recipes/recipes.schema';
+import { formatDelimitedMeta } from '../../../lib/format';
 
 export const Route = createFileRoute('/_authenticated/recipes/$recipeId')({
   component: RecipeDetailPage,
@@ -68,17 +71,9 @@ function RecipeDetailView({ recipe }: { recipe: RecipeDetail }) {
         Back to recipes
       </LinkButton>
 
-      <header className="space-y-5 rounded-2xl bg-primary p-8 text-paper">
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-          <div className="min-w-0 flex-1">
-            <p className="font-medium text-primary-soft text-sm uppercase tracking-[0.25em]">
-              Recipe
-            </p>
-            <h1 className="mt-3 break-words font-bold text-4xl tracking-tight">
-              {recipe.title}
-            </h1>
-          </div>
-          <div className="flex shrink-0 flex-wrap gap-2">
+      <DetailHero
+        actions={
+          <>
             <LinkButton
               params={{ recipeId: recipe.id }}
               size="sm"
@@ -99,42 +94,23 @@ function RecipeDetailView({ recipe }: { recipe: RecipeDetail }) {
             >
               Delete
             </Button>
-          </div>
-        </div>
-        {recipe.description ? (
-          <p className="max-w-2xl text-primary-soft">{recipe.description}</p>
-        ) : null}
-        <RecipeMeta recipe={recipe} />
-      </header>
+          </>
+        }
+        description={recipe.description}
+        eyebrow="Recipe"
+        meta={<RecipeMeta recipe={recipe} />}
+        title={recipe.title}
+      />
 
       {isConfirmingDelete ? (
-        <section className="rounded-xl border border-red-200 bg-red-50 p-5 text-red-900 shadow-sm">
-          <h2 className="font-semibold text-xl">Delete this recipe?</h2>
-          <p className="mt-2 text-red-800 text-sm">
-            This permanently removes the recipe, ingredients, and instructions.
-          </p>
-          <div className="mt-4 flex flex-wrap gap-2">
-            <Button
-              className="border-red-300 text-red-900 hover:border-red-900 disabled:opacity-60"
-              disabled={isDeleting}
-              onClick={() => setIsConfirmingDelete(false)}
-              size="sm"
-              type="button"
-              variant="secondary"
-            >
-              Cancel
-            </Button>
-            <Button
-              disabled={isDeleting}
-              onClick={handleDelete}
-              size="sm"
-              type="button"
-              variant="danger"
-            >
-              {isDeleting ? 'Deleting...' : 'Delete recipe'}
-            </Button>
-          </div>
-        </section>
+        <DeleteConfirmation
+          confirmLabel="Delete recipe"
+          description="This permanently removes the recipe, ingredients, and instructions."
+          isDeleting={isDeleting}
+          onCancel={() => setIsConfirmingDelete(false)}
+          onConfirm={handleDelete}
+          title="Delete this recipe?"
+        />
       ) : null}
 
       {deleteError ? <FormError>{deleteError}</FormError> : null}
@@ -150,9 +126,10 @@ function RecipeDetailView({ recipe }: { recipe: RecipeDetail }) {
               >
                 <p className="font-semibold">{ingredient.name}</p>
                 <p className="text-muted text-sm sm:text-right">
-                  {[ingredient.quantity, ingredient.unit, ingredient.category]
-                    .filter(Boolean)
-                    .join(' · ') || 'No quantity specified'}
+                  {formatDelimitedMeta(
+                    [ingredient.quantity, ingredient.unit, ingredient.category],
+                    'No quantity specified',
+                  )}
                 </p>
               </li>
             ))}

@@ -1,20 +1,9 @@
 import { z } from 'zod';
 
-const optionalTextSchema = z
-  .string()
-  .trim()
-  .transform((value) => value || null);
-
-const optionalPositiveIntegerSchema = z
-  .union([z.string(), z.number(), z.null(), z.undefined()])
-  .transform((value) => {
-    if (value === null || value === undefined || value === '') return null;
-
-    const parsed = typeof value === 'number' ? value : Number(value);
-
-    return Number.isNaN(parsed) ? value : parsed;
-  })
-  .pipe(z.number().int().positive().nullable());
+import {
+  optionalPositiveIntegerSchema,
+  optionalTextSchema,
+} from '../../lib/validation/schemas';
 
 export const recipeIngredientInputSchema = z.object({
   category: optionalTextSchema,

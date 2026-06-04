@@ -12,6 +12,7 @@ import {
 } from '../../../components/ui/table-shell';
 import { listPantryItems } from '../../../features/pantry/pantry.functions';
 import type { PantryListItem } from '../../../features/pantry/pantry.schema';
+import { formatQuantity } from '../../../lib/format';
 
 export const Route = createFileRoute('/_authenticated/pantry/')({
   component: PantryPage,
@@ -92,7 +93,9 @@ function PantryTable({ pantryItems }: { pantryItems: PantryListItem[] }) {
                 </p>
               ) : null}
             </td>
-            <td className={tableCellClass}>{formatQuantity(pantryItem)}</td>
+            <td className={tableCellClass}>
+              {formatQuantity(pantryItem.quantity, pantryItem.unit)}
+            </td>
             <td className={tableCellClass}>{pantryItem.category ?? '-'}</td>
             <td className={`${tableCellClass} text-right`}>
               <div className="flex justify-end gap-2">
@@ -110,11 +113,5 @@ function PantryTable({ pantryItems }: { pantryItems: PantryListItem[] }) {
         ))}
       </tbody>
     </TableShell>
-  );
-}
-
-function formatQuantity(pantryItem: PantryListItem) {
-  return (
-    [pantryItem.quantity, pantryItem.unit].filter(Boolean).join(' ') || '-'
   );
 }

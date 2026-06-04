@@ -1,20 +1,25 @@
 import { createFileRoute, Link } from '@tanstack/react-router';
 
+import { getDashboardStats } from '../../features/dashboard/dashboard.functions';
+
 export const Route = createFileRoute('/_authenticated/dashboard')({
   component: DashboardPage,
+  loader: async () => ({
+    stats: await getDashboardStats(),
+  }),
   validateSearch: (search): { confirmed?: boolean } => ({
     confirmed: search.confirmed === true || search.confirmed === 'true',
   }),
 });
 
-const stats = [
-  { label: 'Saved recipes', value: '0' },
-  { label: 'Pantry items', value: '0' },
-  { label: 'Grocery lists', value: '0' },
-] as const;
-
 function DashboardPage() {
+  const { stats } = Route.useLoaderData();
   const { confirmed } = Route.useSearch();
+  const statCards = [
+    { label: 'Saved recipes', value: stats.recipeCount },
+    { label: 'Pantry items', value: stats.pantryItemCount },
+    { label: 'Grocery lists', value: stats.groceryListCount },
+  ] as const;
 
   return (
     <div className="space-y-8">
@@ -27,18 +32,20 @@ function DashboardPage() {
           Build your recipe-to-grocery workflow here.
         </h1>
         <p className="mt-4 max-w-2xl text-primary-soft">
-          The next phases will connect these cards to Supabase data. For now,
-          the app shell is ready for recipes, pantry items, and grocery lists.
+          Review your saved recipes, pantry coverage, and shopping lists from
+          one place.
         </p>
       </section>
       <section className="grid gap-4 sm:grid-cols-3">
-        {stats.map((stat) => (
+        {statCards.map((stat) => (
           <div
             className="rounded-xl border border-border bg-paper p-6 shadow-sm"
             key={stat.label}
           >
             <p className="text-muted text-sm">{stat.label}</p>
-            <p className="mt-2 font-bold text-3xl">{stat.value}</p>
+            <p className="mt-2 font-bold text-3xl">
+              {stat.value.toLocaleString()}
+            </p>
           </div>
         ))}
       </section>

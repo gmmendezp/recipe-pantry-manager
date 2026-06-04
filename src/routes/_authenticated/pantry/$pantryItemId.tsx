@@ -2,8 +2,10 @@ import { createFileRoute } from '@tanstack/react-router';
 import { ArrowLeft } from 'lucide-react';
 import { useState } from 'react';
 
+import { DetailHero } from '../../../components/layout/detail-hero';
 import { Badge } from '../../../components/ui/badge';
 import { Button, LinkButton } from '../../../components/ui/button';
+import { DeleteConfirmation } from '../../../components/ui/delete-confirmation';
 import { FormError } from '../../../components/ui/form-error';
 import { Panel } from '../../../components/ui/panel';
 import { MissingPantryItem } from '../../../features/pantry/components/missing-pantry-item';
@@ -15,6 +17,7 @@ import {
   type PantryItemDetail,
   pantryItemIdSchema,
 } from '../../../features/pantry/pantry.schema';
+import { formatQuantity } from '../../../lib/format';
 
 export const Route = createFileRoute('/_authenticated/pantry/$pantryItemId')({
   component: PantryItemDetailPage,
@@ -74,17 +77,9 @@ function PantryItemDetailView({
         Back to pantry
       </LinkButton>
 
-      <header className="space-y-5 rounded-2xl bg-primary p-8 text-paper">
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-          <div className="min-w-0 flex-1">
-            <p className="font-medium text-primary-soft text-sm uppercase tracking-[0.25em]">
-              Pantry item
-            </p>
-            <h1 className="mt-3 break-words font-bold text-4xl tracking-tight">
-              {pantryItem.name}
-            </h1>
-          </div>
-          <div className="flex shrink-0 flex-wrap gap-2">
+      <DetailHero
+        actions={
+          <>
             <LinkButton
               params={{ pantryItemId: pantryItem.id }}
               size="sm"
@@ -105,39 +100,22 @@ function PantryItemDetailView({
             >
               Delete
             </Button>
-          </div>
-        </div>
-        <PantryItemMeta pantryItem={pantryItem} />
-      </header>
+          </>
+        }
+        eyebrow="Pantry item"
+        meta={<PantryItemMeta pantryItem={pantryItem} />}
+        title={pantryItem.name}
+      />
 
       {isConfirmingDelete ? (
-        <section className="rounded-xl border border-red-200 bg-red-50 p-5 text-red-900 shadow-sm">
-          <h2 className="font-semibold text-xl">Delete this pantry item?</h2>
-          <p className="mt-2 text-red-800 text-sm">
-            This permanently removes the item from your pantry.
-          </p>
-          <div className="mt-4 flex flex-wrap gap-2">
-            <Button
-              className="border-red-300 text-red-900 hover:border-red-900 disabled:opacity-60"
-              disabled={isDeleting}
-              onClick={() => setIsConfirmingDelete(false)}
-              size="sm"
-              type="button"
-              variant="secondary"
-            >
-              Cancel
-            </Button>
-            <Button
-              disabled={isDeleting}
-              onClick={handleDelete}
-              size="sm"
-              type="button"
-              variant="danger"
-            >
-              {isDeleting ? 'Deleting...' : 'Delete pantry item'}
-            </Button>
-          </div>
-        </section>
+        <DeleteConfirmation
+          confirmLabel="Delete pantry item"
+          description="This permanently removes the item from your pantry."
+          isDeleting={isDeleting}
+          onCancel={() => setIsConfirmingDelete(false)}
+          onConfirm={handleDelete}
+          title="Delete this pantry item?"
+        />
       ) : null}
 
       {deleteError ? <FormError>{deleteError}</FormError> : null}
@@ -146,8 +124,11 @@ function PantryItemDetailView({
         <h2 className="font-semibold text-2xl">Details</h2>
         <dl className="mt-5 grid gap-4 sm:grid-cols-2">
           <DetailItem label="Quantity">
-            {[pantryItem.quantity, pantryItem.unit].filter(Boolean).join(' ') ||
-              'No quantity specified'}
+            {formatQuantity(
+              pantryItem.quantity,
+              pantryItem.unit,
+              'No quantity specified',
+            )}
           </DetailItem>
           <DetailItem label="Category">
             {pantryItem.category ?? 'No category'}
@@ -164,7 +145,7 @@ function PantryItemDetailView({
 function PantryItemMeta({ pantryItem }: { pantryItem: PantryItemDetail }) {
   const meta = [
     pantryItem.category,
-    [pantryItem.quantity, pantryItem.unit].filter(Boolean).join(' ') || null,
+    formatQuantity(pantryItem.quantity, pantryItem.unit, ''),
   ].filter(Boolean);
 
   if (meta.length === 0) return null;
