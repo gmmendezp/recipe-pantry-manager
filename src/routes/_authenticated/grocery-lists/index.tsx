@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { PageHeader } from '../../../components/layout/page-header';
 import { Button, LinkButton } from '../../../components/ui/button';
 import { EmptyState } from '../../../components/ui/empty-state';
+import { FilterBar } from '../../../components/ui/filter-bar';
 import { FormError } from '../../../components/ui/form-error';
 import { Panel } from '../../../components/ui/panel';
 import {
@@ -19,6 +20,7 @@ import {
 import type { GroceryListSummary } from '../../../features/grocery-lists/grocery-lists.schema';
 import { listRecipes } from '../../../features/recipes/recipes.functions';
 import type { RecipeListItem } from '../../../features/recipes/recipes.schema';
+import { useFilteredList } from '../../../hooks/use-filtered-list';
 import { getAuthErrorMessage } from '../../../lib/auth/errors';
 import { formatShortDate } from '../../../lib/date';
 import { formatCount } from '../../../lib/format';
@@ -34,6 +36,11 @@ export const Route = createFileRoute('/_authenticated/grocery-lists/')({
 function GroceryListsPage() {
   const { groceryLists, recipes } = Route.useLoaderData();
   const [isGeneratePanelOpen, setIsGeneratePanelOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const filteredGroceryLists = useFilteredList(groceryLists, {
+    searchFields: (list) => [list.title],
+    searchQuery,
+  });
 
   return (
     <div className="space-y-8">
@@ -53,8 +60,17 @@ function GroceryListsPage() {
         </Button>
       </div>
       {isGeneratePanelOpen ? <GenerateListPanel recipes={recipes} /> : null}
+      {groceryLists.length > 0 ? (
+        <FilterBar
+          onSearchChange={setSearchQuery}
+          searchLabel="Search grocery lists"
+          searchPlaceholder="Search by list title"
+          searchValue={searchQuery}
+        />
+      ) : null}
       <SavedLists
-        groceryLists={groceryLists}
+        groceryLists={filteredGroceryLists}
+        hasSavedLists={groceryLists.length > 0}
         onGenerate={() => setIsGeneratePanelOpen(true)}
       />
     </div>
@@ -167,12 +183,22 @@ function GenerateListPanel({ recipes }: { recipes: RecipeListItem[] }) {
 
 function SavedLists({
   groceryLists,
+  hasSavedLists,
   onGenerate,
 }: {
   groceryLists: GroceryListSummary[];
+  hasSavedLists: boolean;
   onGenerate: () => void;
 }) {
   if (groceryLists.length === 0) {
+    if (hasSavedLists) {
+      return (
+        <EmptyState title="No grocery lists match your search">
+          Try a different list title.
+        </EmptyState>
+      );
+    }
+
     return (
       <EmptyState
         action={

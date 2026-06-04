@@ -1,20 +1,16 @@
-import { createFileRoute, Link } from '@tanstack/react-router';
-import { Pencil } from 'lucide-react';
+import { createFileRoute } from '@tanstack/react-router';
 import { useState } from 'react';
 
 import { PageHeader } from '../../../components/layout/page-header';
-import { Badge } from '../../../components/ui/badge';
 import { LinkButton } from '../../../components/ui/button';
 import { EmptyState } from '../../../components/ui/empty-state';
-import {
-  TableShell,
-  tableCellClass,
-  tableHeaderCellClass,
-  tableRowClass,
-} from '../../../components/ui/table-shell';
+import { FilterBar, FilterSelect } from '../../../components/ui/filter-bar';
 import { type ViewMode, ViewToggle } from '../../../components/ui/view-toggle';
+import { RecipeCards } from '../../../features/recipes/components/recipe-cards';
+import { RecipeTable } from '../../../features/recipes/components/recipe-table';
 import { listRecipes } from '../../../features/recipes/recipes.functions';
 import type { RecipeListItem } from '../../../features/recipes/recipes.schema';
+import { useFilteredList } from '../../../hooks/use-filtered-list';
 
 export const Route = createFileRoute('/_authenticated/recipes/')({
   component: RecipesPage,
@@ -26,6 +22,13 @@ export const Route = createFileRoute('/_authenticated/recipes/')({
 function RecipesPage() {
   const { recipes } = Route.useLoaderData();
   const [desktopView, setDesktopView] = useState<ViewMode>('cards');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [timeFilter, setTimeFilter] = useState<RecipeTimeFilter>('all');
+  const filteredRecipes = useFilteredList(recipes, {
+    filters: [(recipe) => matchesRecipeTimeFilter(recipe, timeFilter)],
+    searchFields: (recipe) => [recipe.title, recipe.description],
+    searchQuery,
+  });
 
   return (
     <div className="space-y-8">
@@ -47,18 +50,40 @@ function RecipesPage() {
       </div>
 
       {recipes.length > 0 ? (
-        <>
-          <div className="md:hidden">
-            <RecipeCards recipes={recipes} />
-          </div>
-          <div className="hidden md:block">
-            {desktopView === 'cards' ? (
-              <RecipeCards recipes={recipes} />
-            ) : (
-              <RecipeTable recipes={recipes} />
-            )}
-          </div>
-        </>
+        <FilterBar
+          onSearchChange={setSearchQuery}
+          searchLabel="Search recipes"
+          searchPlaceholder="Search by title or description"
+          searchValue={searchQuery}
+        >
+          <FilterSelect
+            label="Time"
+            onChange={setTimeFilter}
+            options={recipeTimeFilterOptions}
+            value={timeFilter}
+          />
+        </FilterBar>
+      ) : null}
+
+      {recipes.length > 0 ? (
+        filteredRecipes.length > 0 ? (
+          <>
+            <div className="md:hidden">
+              <RecipeCards recipes={filteredRecipes} />
+            </div>
+            <div className="hidden md:block">
+              {desktopView === 'cards' ? (
+                <RecipeCards recipes={filteredRecipes} />
+              ) : (
+                <RecipeTable recipes={filteredRecipes} />
+              )}
+            </div>
+          </>
+        ) : (
+          <EmptyState title="No recipes match your filters">
+            Try a different search or time filter.
+          </EmptyState>
+        )
       ) : (
         <EmptyState
           action={<LinkButton to="/recipes/new">Create recipe</LinkButton>}
@@ -72,131 +97,37 @@ function RecipesPage() {
   );
 }
 
-function RecipeCards({ recipes }: { recipes: RecipeListItem[] }) {
-  return (
-    <section className="grid gap-4 md:grid-cols-2">
-      {recipes.map((recipe) => (
-        <article
-          className="flex h-full flex-col rounded-xl border border-border bg-paper p-5 shadow-sm"
-          key={recipe.id}
-        >
-          <div className="flex items-start justify-between gap-4">
-            <h2 className="min-w-0 flex-1 break-words font-semibold text-xl">
-              <Link
-                className="hover:underline"
-                params={{ recipeId: recipe.id }}
-                to="/recipes/$recipeId"
-              >
-                {recipe.title}
-              </Link>
-            </h2>
-            {recipe.totalTime ? (
-              <Badge className="shrink-0 whitespace-nowrap">
-                {recipe.totalTime} min
-              </Badge>
-            ) : null}
-          </div>
-          {recipe.description ? (
-            <p className="mt-2 line-clamp-2 text-muted text-sm">
-              {recipe.description}
-            </p>
-          ) : null}
-          <div className="mt-auto flex items-end justify-between gap-3 pt-3">
-            <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-muted text-sm">
-              {formatRecipeMeta(recipe).map((item, index) => (
-                <span className="flex items-center gap-2" key={item}>
-                  {index > 0 ? <span aria-hidden="true">·</span> : null}
-                  {item}
-                </span>
-              ))}
-            </div>
-            <Link
-              aria-label={`Edit ${recipe.title}`}
-              className="shrink-0 rounded-full p-2 text-muted transition hover:bg-primary-soft hover:text-primary-hover"
-              params={{ recipeId: recipe.id }}
-              to="/recipes/$recipeId/edit"
-            >
-              <Pencil aria-hidden="true" className="h-4 w-4" />
-            </Link>
-          </div>
-        </article>
-      ))}
-    </section>
-  );
+type RecipeTimeFilter = '30-60' | '60-plus' | 'all' | 'under-30';
+
+const recipeTimeFilterOptions: Array<{
+  label: string;
+  value: RecipeTimeFilter;
+}> = [
+  { label: 'Any time', value: 'all' },
+  { label: 'Under 30 min', value: 'under-30' },
+  { label: '30-60 min', value: '30-60' },
+  { label: '60+ min', value: '60-plus' },
+];
+
+function getRecipeTime(recipe: RecipeListItem) {
+  if (recipe.totalTime) return recipe.totalTime;
+  if (recipe.prepTime && recipe.cookTime)
+    return recipe.prepTime + recipe.cookTime;
+
+  return recipe.prepTime ?? recipe.cookTime;
 }
 
-function RecipeTable({ recipes }: { recipes: RecipeListItem[] }) {
-  return (
-    <TableShell>
-      <thead className="bg-primary-soft/50">
-        <tr>
-          <th className={tableHeaderCellClass} scope="col">
-            Recipe
-          </th>
-          <th className={tableHeaderCellClass} scope="col">
-            Time
-          </th>
-          <th className={tableHeaderCellClass} scope="col">
-            Servings
-          </th>
-          <th className={tableHeaderCellClass} scope="col">
-            <span className="sr-only">Actions</span>
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        {recipes.map((recipe) => (
-          <tr className={tableRowClass} key={recipe.id}>
-            <td className={tableCellClass}>
-              <Link
-                className="font-semibold text-foreground hover:underline"
-                params={{ recipeId: recipe.id }}
-                to="/recipes/$recipeId"
-              >
-                {recipe.title}
-              </Link>
-              {recipe.description ? (
-                <p className="mt-1 line-clamp-2 max-w-xl text-muted text-sm">
-                  {recipe.description}
-                </p>
-              ) : null}
-            </td>
-            <td className={tableCellClass}>{formatRecipeTime(recipe)}</td>
-            <td className={tableCellClass}>{recipe.servings ?? '-'}</td>
-            <td className={`${tableCellClass} text-right`}>
-              <div className="flex justify-end gap-2">
-                <Link
-                  aria-label={`Edit ${recipe.title}`}
-                  className="inline-flex rounded-full p-2 text-muted transition hover:text-primary-hover"
-                  params={{ recipeId: recipe.id }}
-                  to="/recipes/$recipeId/edit"
-                >
-                  <Pencil aria-hidden="true" className="h-4 w-4" />
-                </Link>
-              </div>
-            </td>
-          </tr>
-        ))}
-      </tbody>
-    </TableShell>
-  );
-}
+function matchesRecipeTimeFilter(
+  recipe: RecipeListItem,
+  filter: RecipeTimeFilter,
+) {
+  if (filter === 'all') return true;
 
-function formatRecipeMeta(recipe: RecipeListItem) {
-  return [
-    recipe.prepTime ? `Prep ${recipe.prepTime} min` : null,
-    recipe.cookTime ? `Cook ${recipe.cookTime} min` : null,
-    recipe.servings ? `${recipe.servings} servings` : null,
-  ].filter((item): item is string => Boolean(item));
-}
+  const time = getRecipeTime(recipe);
 
-function formatRecipeTime(recipe: RecipeListItem) {
-  if (recipe.totalTime) return `${recipe.totalTime} min total`;
+  if (!time) return false;
+  if (filter === 'under-30') return time < 30;
+  if (filter === '30-60') return time >= 30 && time <= 60;
 
-  const parts = [
-    recipe.prepTime ? `Prep ${recipe.prepTime} min` : null,
-    recipe.cookTime ? `Cook ${recipe.cookTime} min` : null,
-  ].filter(Boolean);
-
-  return parts.join(' · ') || '-';
+  return time > 60;
 }

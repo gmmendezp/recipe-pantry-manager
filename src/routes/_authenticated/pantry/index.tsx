@@ -1,18 +1,14 @@
-import { createFileRoute, Link } from '@tanstack/react-router';
-import { Pencil } from 'lucide-react';
+import { createFileRoute } from '@tanstack/react-router';
+import { useState } from 'react';
 
 import { PageHeader } from '../../../components/layout/page-header';
 import { LinkButton } from '../../../components/ui/button';
 import { EmptyState } from '../../../components/ui/empty-state';
-import {
-  TableShell,
-  tableCellClass,
-  tableHeaderCellClass,
-  tableRowClass,
-} from '../../../components/ui/table-shell';
+import { FilterBar, FilterSelect } from '../../../components/ui/filter-bar';
+import { PantryTable } from '../../../features/pantry/components/pantry-table';
 import { listPantryItems } from '../../../features/pantry/pantry.functions';
 import type { PantryListItem } from '../../../features/pantry/pantry.schema';
-import { formatQuantity } from '../../../lib/format';
+import { useFilteredList } from '../../../hooks/use-filtered-list';
 
 export const Route = createFileRoute('/_authenticated/pantry/')({
   component: PantryPage,
@@ -23,6 +19,21 @@ export const Route = createFileRoute('/_authenticated/pantry/')({
 
 function PantryPage() {
   const { pantryItems } = Route.useLoaderData();
+  const [categoryFilter, setCategoryFilter] = useState('all');
+  const [searchQuery, setSearchQuery] = useState('');
+  const categoryOptions = getCategoryOptions(pantryItems);
+  const filteredPantryItems = useFilteredList(pantryItems, {
+    filters: [
+      (pantryItem) =>
+        categoryFilter === 'all' || pantryItem.category === categoryFilter,
+    ],
+    searchFields: (pantryItem) => [
+      pantryItem.name,
+      pantryItem.category,
+      pantryItem.notes,
+    ],
+    searchQuery,
+  });
 
   return (
     <div className="space-y-8">
@@ -43,7 +54,29 @@ function PantryPage() {
       </div>
 
       {pantryItems.length > 0 ? (
-        <PantryTable pantryItems={pantryItems} />
+        <FilterBar
+          onSearchChange={setSearchQuery}
+          searchLabel="Search pantry"
+          searchPlaceholder="Search by item, category, or notes"
+          searchValue={searchQuery}
+        >
+          <FilterSelect
+            label="Category"
+            onChange={setCategoryFilter}
+            options={categoryOptions}
+            value={categoryFilter}
+          />
+        </FilterBar>
+      ) : null}
+
+      {pantryItems.length > 0 ? (
+        filteredPantryItems.length > 0 ? (
+          <PantryTable pantryItems={filteredPantryItems} />
+        ) : (
+          <EmptyState title="No pantry items match your filters">
+            Try a different search or category filter.
+          </EmptyState>
+        )
       ) : (
         <EmptyState
           action={<LinkButton to="/pantry/new">Create pantry item</LinkButton>}
@@ -57,61 +90,17 @@ function PantryPage() {
   );
 }
 
-function PantryTable({ pantryItems }: { pantryItems: PantryListItem[] }) {
-  return (
-    <TableShell>
-      <thead className="bg-primary-soft/50">
-        <tr>
-          <th className={tableHeaderCellClass} scope="col">
-            Item
-          </th>
-          <th className={tableHeaderCellClass} scope="col">
-            Quantity
-          </th>
-          <th className={tableHeaderCellClass} scope="col">
-            Category
-          </th>
-          <th className={tableHeaderCellClass} scope="col">
-            <span className="sr-only">Actions</span>
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        {pantryItems.map((pantryItem) => (
-          <tr className={tableRowClass} key={pantryItem.id}>
-            <td className={tableCellClass}>
-              <Link
-                className="font-semibold text-foreground hover:underline"
-                params={{ pantryItemId: pantryItem.id }}
-                to="/pantry/$pantryItemId"
-              >
-                {pantryItem.name}
-              </Link>
-              {pantryItem.notes ? (
-                <p className="mt-1 line-clamp-2 max-w-xl text-muted text-sm">
-                  {pantryItem.notes}
-                </p>
-              ) : null}
-            </td>
-            <td className={tableCellClass}>
-              {formatQuantity(pantryItem.quantity, pantryItem.unit)}
-            </td>
-            <td className={tableCellClass}>{pantryItem.category ?? '-'}</td>
-            <td className={`${tableCellClass} text-right`}>
-              <div className="flex justify-end gap-2">
-                <Link
-                  aria-label={`Edit ${pantryItem.name}`}
-                  className="inline-flex rounded-full p-2 text-muted transition hover:text-primary-hover"
-                  params={{ pantryItemId: pantryItem.id }}
-                  to="/pantry/$pantryItemId/edit"
-                >
-                  <Pencil aria-hidden="true" className="h-4 w-4" />
-                </Link>
-              </div>
-            </td>
-          </tr>
-        ))}
-      </tbody>
-    </TableShell>
-  );
+function getCategoryOptions(pantryItems: PantryListItem[]) {
+  const categories = Array.from(
+    new Set(
+      pantryItems
+        .map((pantryItem) => pantryItem.category)
+        .filter((category): category is string => Boolean(category)),
+    ),
+  ).sort((first, second) => first.localeCompare(second));
+
+  return [
+    { label: 'All', value: 'all' },
+    ...categories.map((category) => ({ label: category, value: category })),
+  ];
 }
