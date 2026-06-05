@@ -98,6 +98,16 @@ function RecipeDetailView({ recipe }: { recipe: RecipeDetail }) {
         }
         description={recipe.description}
         eyebrow="Recipe"
+        footer={<RecipeSourceLink recipe={recipe} />}
+        media={
+          recipe.imageUrl ? (
+            <img
+              alt=""
+              className="h-full w-full object-cover"
+              src={recipe.imageUrl}
+            />
+          ) : null
+        }
         meta={<RecipeMeta recipe={recipe} />}
         title={recipe.title}
       />
@@ -128,7 +138,7 @@ function RecipeDetailView({ recipe }: { recipe: RecipeDetail }) {
                 <p className="text-muted text-sm sm:text-right">
                   {formatDelimitedMeta(
                     [ingredient.quantity, ingredient.unit, ingredient.category],
-                    'No quantity specified',
+                    '',
                   )}
                 </p>
               </li>
@@ -154,6 +164,24 @@ function RecipeDetailView({ recipe }: { recipe: RecipeDetail }) {
         </Panel>
       </section>
     </div>
+  );
+}
+
+function RecipeSourceLink({ recipe }: { recipe: RecipeDetail }) {
+  if (!recipe.sourceUrl) return null;
+
+  return (
+    <p className="text-primary-soft text-sm">
+      Source:{' '}
+      <a
+        className="font-semibold text-paper transition hover:text-primary-soft"
+        href={recipe.sourceUrl}
+        rel="noreferrer"
+        target="_blank"
+      >
+        Original recipe
+      </a>
+    </p>
   );
 }
 

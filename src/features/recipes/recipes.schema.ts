@@ -20,13 +20,19 @@ export const recipeStepInputSchema = z.object({
 export const recipeInputSchema = z.object({
   cookTime: optionalPositiveIntegerSchema,
   description: optionalTextSchema,
+  imageUrl: optionalTextSchema,
   ingredients: z
     .array(recipeIngredientInputSchema)
     .min(1, 'Add at least one ingredient.'),
   prepTime: optionalPositiveIntegerSchema,
   servings: optionalPositiveIntegerSchema,
+  sourceUrl: optionalTextSchema,
   steps: z.array(recipeStepInputSchema).min(1, 'Add at least one step.'),
   title: z.string().trim().min(1, 'Recipe title is required.'),
+});
+
+export const importRecipeInputSchema = z.object({
+  url: z.url('Enter a valid recipe URL.'),
 });
 
 export const recipeIdSchema = z.object({
@@ -43,6 +49,7 @@ export type ParsedRecipeInput = z.output<typeof recipeInputSchema>;
 export type RecipeFormValues = {
   cookTime: string;
   description: string;
+  imageUrl: string;
   ingredients: Array<{
     category: string;
     clientId: string;
@@ -53,6 +60,7 @@ export type RecipeFormValues = {
   }>;
   prepTime: string;
   servings: string;
+  sourceUrl: string;
   steps: Array<{
     clientId: string;
     instruction: string;
@@ -65,8 +73,10 @@ export type RecipeListItem = {
   createdAt: string;
   description: string | null;
   id: string;
+  imageUrl: string | null;
   prepTime: number | null;
   servings: number | null;
+  sourceUrl: string | null;
   title: string;
   totalTime: number | null;
   updatedAt: string;
@@ -115,9 +125,11 @@ export function createEmptyRecipeFormValues(): RecipeFormValues {
   return {
     cookTime: '',
     description: '',
+    imageUrl: '',
     ingredients: [createEmptyIngredient()],
     prepTime: '',
     servings: '',
+    sourceUrl: '',
     steps: [createEmptyStep()],
     title: '',
   };
@@ -129,6 +141,7 @@ export function recipeDetailToFormValues(
   return {
     cookTime: recipe.cookTime?.toString() ?? '',
     description: recipe.description ?? '',
+    imageUrl: recipe.imageUrl ?? '',
     ingredients:
       recipe.ingredients.length > 0
         ? recipe.ingredients.map((ingredient) => ({
@@ -142,6 +155,7 @@ export function recipeDetailToFormValues(
         : [createEmptyIngredient()],
     prepTime: recipe.prepTime?.toString() ?? '',
     servings: recipe.servings?.toString() ?? '',
+    sourceUrl: recipe.sourceUrl ?? '',
     steps:
       recipe.steps.length > 0
         ? recipe.steps.map((step) => ({

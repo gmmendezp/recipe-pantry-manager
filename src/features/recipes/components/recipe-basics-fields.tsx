@@ -46,6 +46,38 @@ export function RecipeBasicsFields({ form }: RecipeBasicsFieldsProps) {
           </form.Field>
         </div>
 
+        <div className="md:col-span-2">
+          <form.Field name="imageUrl">
+            {(field) => (
+              <TextField
+                label="Image URL"
+                name={field.name}
+                onBlur={field.handleBlur}
+                onChange={field.handleChange}
+                placeholder="https://example.com/recipe-image.jpg"
+                type="url"
+                value={field.state.value}
+              />
+            )}
+          </form.Field>
+        </div>
+
+        <div className="md:col-span-2">
+          <form.Field name="sourceUrl">
+            {(field) => (
+              <TextField
+                label="Source URL"
+                name={field.name}
+                onBlur={field.handleBlur}
+                onChange={field.handleChange}
+                placeholder="https://example.com/recipe"
+                type="url"
+                value={field.state.value}
+              />
+            )}
+          </form.Field>
+        </div>
+
         <form.Field
           name="prepTime"
           validators={{

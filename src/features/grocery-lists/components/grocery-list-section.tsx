@@ -69,10 +69,7 @@ function GroceryListItemMeta({ item }: { item: GroceryListItem }) {
 }
 
 function formatItemMeta(item: GroceryListItem) {
-  return formatDelimitedMeta(
-    [item.quantity, item.unit, item.category],
-    'No quantity specified',
-  );
+  return formatDelimitedMeta([item.quantity, item.unit, item.category], '');
 }
 
 function formatAmount(quantity: string | null, unit: string | null) {

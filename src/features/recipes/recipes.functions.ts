@@ -1,6 +1,8 @@
 import { createServerFn } from '@tanstack/react-start';
 
+import { importRecipeFromUrl } from './importer/recipe-import.server';
 import {
+  importRecipeInputSchema,
   recipeIdSchema,
   recipeInputSchema,
   updateRecipeInputSchema,
@@ -24,6 +26,10 @@ export const getRecipe = createServerFn({ method: 'GET' })
 export const createRecipe = createServerFn({ method: 'POST' })
   .inputValidator(recipeInputSchema)
   .handler(async ({ data }) => createRecipeForUser(data));
+
+export const importRecipe = createServerFn({ method: 'POST' })
+  .inputValidator(importRecipeInputSchema)
+  .handler(async ({ data }) => importRecipeFromUrl(data.url));
 
 export const updateRecipe = createServerFn({ method: 'POST' })
   .inputValidator(updateRecipeInputSchema)

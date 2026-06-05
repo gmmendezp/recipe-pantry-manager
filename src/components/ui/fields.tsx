@@ -8,7 +8,7 @@ type TextFieldProps = {
   onBlur: () => void;
   onChange: (value: string) => void;
   required?: boolean;
-  type?: 'number' | 'text';
+  type?: 'number' | 'text' | 'url';
   value: string;
 } & Omit<InputHTMLAttributes<HTMLInputElement>, 'onBlur' | 'onChange'>;
 

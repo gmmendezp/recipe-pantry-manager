@@ -46,6 +46,13 @@ function RecipesPage() {
           <ViewToggle onChange={setDesktopView} value={desktopView} />
           <LinkButton
             className="text-center whitespace-nowrap"
+            to="/recipes/import"
+            variant="secondary"
+          >
+            Import recipe
+          </LinkButton>
+          <LinkButton
+            className="text-center whitespace-nowrap"
             to="/recipes/new"
           >
             New recipe

@@ -20,6 +20,7 @@ import { Route as AuthenticatedRecipesIndexRouteImport } from './routes/_authent
 import { Route as AuthenticatedPantryIndexRouteImport } from './routes/_authenticated/pantry/index'
 import { Route as AuthenticatedGroceryListsIndexRouteImport } from './routes/_authenticated/grocery-lists/index'
 import { Route as AuthenticatedRecipesNewRouteImport } from './routes/_authenticated/recipes/new'
+import { Route as AuthenticatedRecipesImportRouteImport } from './routes/_authenticated/recipes/import'
 import { Route as AuthenticatedRecipesRecipeIdRouteImport } from './routes/_authenticated/recipes/$recipeId'
 import { Route as AuthenticatedPantryNewRouteImport } from './routes/_authenticated/pantry/new'
 import { Route as AuthenticatedPantryPantryItemIdRouteImport } from './routes/_authenticated/pantry/$pantryItemId'
@@ -84,6 +85,12 @@ const AuthenticatedRecipesNewRoute = AuthenticatedRecipesNewRouteImport.update({
   path: '/recipes/new',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedRecipesImportRoute =
+  AuthenticatedRecipesImportRouteImport.update({
+    id: '/recipes/import',
+    path: '/recipes/import',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedRecipesRecipeIdRoute =
   AuthenticatedRecipesRecipeIdRouteImport.update({
     id: '/recipes/$recipeId',
@@ -131,6 +138,7 @@ export interface FileRoutesByFullPath {
   '/pantry/$pantryItemId': typeof AuthenticatedPantryPantryItemIdRoute
   '/pantry/new': typeof AuthenticatedPantryNewRoute
   '/recipes/$recipeId': typeof AuthenticatedRecipesRecipeIdRoute
+  '/recipes/import': typeof AuthenticatedRecipesImportRoute
   '/recipes/new': typeof AuthenticatedRecipesNewRoute
   '/grocery-lists/': typeof AuthenticatedGroceryListsIndexRoute
   '/pantry/': typeof AuthenticatedPantryIndexRoute
@@ -149,6 +157,7 @@ export interface FileRoutesByTo {
   '/pantry/$pantryItemId': typeof AuthenticatedPantryPantryItemIdRoute
   '/pantry/new': typeof AuthenticatedPantryNewRoute
   '/recipes/$recipeId': typeof AuthenticatedRecipesRecipeIdRoute
+  '/recipes/import': typeof AuthenticatedRecipesImportRoute
   '/recipes/new': typeof AuthenticatedRecipesNewRoute
   '/grocery-lists': typeof AuthenticatedGroceryListsIndexRoute
   '/pantry': typeof AuthenticatedPantryIndexRoute
@@ -169,6 +178,7 @@ export interface FileRoutesById {
   '/_authenticated/pantry/$pantryItemId': typeof AuthenticatedPantryPantryItemIdRoute
   '/_authenticated/pantry/new': typeof AuthenticatedPantryNewRoute
   '/_authenticated/recipes/$recipeId': typeof AuthenticatedRecipesRecipeIdRoute
+  '/_authenticated/recipes/import': typeof AuthenticatedRecipesImportRoute
   '/_authenticated/recipes/new': typeof AuthenticatedRecipesNewRoute
   '/_authenticated/grocery-lists/': typeof AuthenticatedGroceryListsIndexRoute
   '/_authenticated/pantry/': typeof AuthenticatedPantryIndexRoute
@@ -189,6 +199,7 @@ export interface FileRouteTypes {
     | '/pantry/$pantryItemId'
     | '/pantry/new'
     | '/recipes/$recipeId'
+    | '/recipes/import'
     | '/recipes/new'
     | '/grocery-lists/'
     | '/pantry/'
@@ -207,6 +218,7 @@ export interface FileRouteTypes {
     | '/pantry/$pantryItemId'
     | '/pantry/new'
     | '/recipes/$recipeId'
+    | '/recipes/import'
     | '/recipes/new'
     | '/grocery-lists'
     | '/pantry'
@@ -226,6 +238,7 @@ export interface FileRouteTypes {
     | '/_authenticated/pantry/$pantryItemId'
     | '/_authenticated/pantry/new'
     | '/_authenticated/recipes/$recipeId'
+    | '/_authenticated/recipes/import'
     | '/_authenticated/recipes/new'
     | '/_authenticated/grocery-lists/'
     | '/_authenticated/pantry/'
@@ -322,6 +335,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedRecipesNewRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/recipes/import': {
+      id: '/_authenticated/recipes/import'
+      path: '/recipes/import'
+      fullPath: '/recipes/import'
+      preLoaderRoute: typeof AuthenticatedRecipesImportRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/recipes/$recipeId': {
       id: '/_authenticated/recipes/$recipeId'
       path: '/recipes/$recipeId'
@@ -373,6 +393,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedPantryPantryItemIdRoute: typeof AuthenticatedPantryPantryItemIdRoute
   AuthenticatedPantryNewRoute: typeof AuthenticatedPantryNewRoute
   AuthenticatedRecipesRecipeIdRoute: typeof AuthenticatedRecipesRecipeIdRoute
+  AuthenticatedRecipesImportRoute: typeof AuthenticatedRecipesImportRoute
   AuthenticatedRecipesNewRoute: typeof AuthenticatedRecipesNewRoute
   AuthenticatedGroceryListsIndexRoute: typeof AuthenticatedGroceryListsIndexRoute
   AuthenticatedPantryIndexRoute: typeof AuthenticatedPantryIndexRoute
@@ -388,6 +409,7 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedPantryPantryItemIdRoute: AuthenticatedPantryPantryItemIdRoute,
   AuthenticatedPantryNewRoute: AuthenticatedPantryNewRoute,
   AuthenticatedRecipesRecipeIdRoute: AuthenticatedRecipesRecipeIdRoute,
+  AuthenticatedRecipesImportRoute: AuthenticatedRecipesImportRoute,
   AuthenticatedRecipesNewRoute: AuthenticatedRecipesNewRoute,
   AuthenticatedGroceryListsIndexRoute: AuthenticatedGroceryListsIndexRoute,
   AuthenticatedPantryIndexRoute: AuthenticatedPantryIndexRoute,
