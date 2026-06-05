@@ -8,8 +8,12 @@ import { FilterBar, FilterSelect } from '../../../components/ui/filter-bar';
 import { type ViewMode, ViewToggle } from '../../../components/ui/view-toggle';
 import { RecipeCards } from '../../../features/recipes/components/recipe-cards';
 import { RecipeTable } from '../../../features/recipes/components/recipe-table';
+import {
+  matchesRecipeTimeFilter,
+  type RecipeTimeFilter,
+  recipeTimeFilterOptions,
+} from '../../../features/recipes/recipe-filters';
 import { listRecipes } from '../../../features/recipes/recipes.functions';
-import type { RecipeListItem } from '../../../features/recipes/recipes.schema';
 import { useFilteredList } from '../../../hooks/use-filtered-list';
 
 export const Route = createFileRoute('/_authenticated/recipes/')({
@@ -95,39 +99,4 @@ function RecipesPage() {
       )}
     </div>
   );
-}
-
-type RecipeTimeFilter = '30-60' | '60-plus' | 'all' | 'under-30';
-
-const recipeTimeFilterOptions: Array<{
-  label: string;
-  value: RecipeTimeFilter;
-}> = [
-  { label: 'Any time', value: 'all' },
-  { label: 'Under 30 min', value: 'under-30' },
-  { label: '30-60 min', value: '30-60' },
-  { label: '60+ min', value: '60-plus' },
-];
-
-function getRecipeTime(recipe: RecipeListItem) {
-  if (recipe.totalTime) return recipe.totalTime;
-  if (recipe.prepTime && recipe.cookTime)
-    return recipe.prepTime + recipe.cookTime;
-
-  return recipe.prepTime ?? recipe.cookTime;
-}
-
-function matchesRecipeTimeFilter(
-  recipe: RecipeListItem,
-  filter: RecipeTimeFilter,
-) {
-  if (filter === 'all') return true;
-
-  const time = getRecipeTime(recipe);
-
-  if (!time) return false;
-  if (filter === 'under-30') return time < 30;
-  if (filter === '30-60') return time >= 30 && time <= 60;
-
-  return time > 60;
 }

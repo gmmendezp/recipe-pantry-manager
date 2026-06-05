@@ -308,6 +308,8 @@ export const groceryListItems = pgTable(
     category: text('category'),
     isChecked: boolean('is_checked').default(false).notNull(),
     pantryMatch: boolean('pantry_match').default(false).notNull(),
+    pantryQuantity: text('pantry_quantity'),
+    pantryUnit: text('pantry_unit'),
     sourceRecipeIds: jsonb('source_recipe_ids')
       .$type<string[]>()
       .default(sql`'[]'::jsonb`)

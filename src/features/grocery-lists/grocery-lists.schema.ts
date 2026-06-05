@@ -28,6 +28,8 @@ export type GroceryListItem = {
   isChecked: boolean;
   name: string;
   pantryMatch: boolean;
+  pantryQuantity: string | null;
+  pantryUnit: string | null;
   quantity: string | null;
   sourceRecipeIds: string[];
   unit: string | null;

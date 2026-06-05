@@ -11,6 +11,7 @@ import {
   getGroceryListForUser,
   listGroceryListsForUser,
   toggleGroceryListItemForUser,
+  updateGroceryListForUser,
 } from './grocery-lists.server';
 
 export const listGroceryLists = createServerFn({ method: 'GET' }).handler(
@@ -30,6 +31,10 @@ export const toggleGroceryListItem = createServerFn({ method: 'POST' })
   .handler(async ({ data }) =>
     toggleGroceryListItemForUser(data.groceryListItemId),
   );
+
+export const updateGroceryList = createServerFn({ method: 'POST' })
+  .inputValidator(groceryListIdSchema)
+  .handler(async ({ data }) => updateGroceryListForUser(data.groceryListId));
 
 export const deleteGroceryList = createServerFn({ method: 'POST' })
   .inputValidator(groceryListIdSchema)

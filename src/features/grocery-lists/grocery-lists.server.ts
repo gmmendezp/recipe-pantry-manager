@@ -29,6 +29,8 @@ function toGroceryListItem(
     isChecked: item.isChecked,
     name: item.name,
     pantryMatch: item.pantryMatch,
+    pantryQuantity: item.pantryQuantity,
+    pantryUnit: item.pantryUnit,
     quantity: item.quantity,
     sourceRecipeIds: item.sourceRecipeIds,
     unit: item.unit,
@@ -67,6 +69,99 @@ function mergeQuantity(current: string | null, next: string | null) {
     return String(currentNumber + nextNumber);
 
   return Array.from(new Set([...current.split(', '), next])).join(', ');
+}
+
+type MergedGroceryListItem = {
+  category: string | null;
+  name: string;
+  pantryMatch: boolean;
+  pantryQuantity: string | null;
+  pantryUnit: string | null;
+  quantity: string | null;
+  sourceRecipeIds: Set<string>;
+  unit: string | null;
+};
+
+async function buildMergedGroceryListItems(
+  userId: string,
+  recipeIds: string[],
+) {
+  const uniqueRecipeIds = Array.from(new Set(recipeIds));
+
+  const selectedRecipes = await db
+    .select({ id: recipes.id })
+    .from(recipes)
+    .where(
+      and(eq(recipes.userId, userId), inArray(recipes.id, uniqueRecipeIds)),
+    );
+
+  if (selectedRecipes.length === 0) {
+    throw new Error('Select at least one recipe you can access.');
+  }
+
+  const ownedRecipeIds = selectedRecipes.map((recipe) => recipe.id);
+
+  const [ingredients, pantry] = await Promise.all([
+    db
+      .select()
+      .from(recipeIngredients)
+      .where(inArray(recipeIngredients.recipeId, ownedRecipeIds))
+      .orderBy(asc(recipeIngredients.sortOrder)),
+    db.select().from(pantryItems).where(eq(pantryItems.userId, userId)),
+  ]);
+
+  const pantryByName = new Map<
+    string,
+    { quantity: string | null; unit: string | null }
+  >();
+
+  for (const item of pantry) {
+    const normalizedName = normalizeIngredientName(item.name);
+
+    if (normalizedName && !pantryByName.has(normalizedName)) {
+      pantryByName.set(normalizedName, {
+        quantity: item.quantity,
+        unit: item.unit,
+      });
+    }
+  }
+
+  const mergedItems = new Map<string, MergedGroceryListItem>();
+
+  for (const ingredient of ingredients) {
+    const normalizedName = normalizeIngredientName(ingredient.name);
+    const pantryMatch = pantryByName.get(normalizedName) ?? null;
+    const key = [
+      normalizedName,
+      ingredient.unit ?? '',
+      ingredient.category ?? '',
+      Boolean(pantryMatch),
+    ].join('|');
+    const existing = mergedItems.get(key);
+
+    if (existing) {
+      existing.quantity = mergeQuantity(existing.quantity, ingredient.quantity);
+      existing.sourceRecipeIds.add(ingredient.recipeId);
+      continue;
+    }
+
+    mergedItems.set(key, {
+      category: ingredient.category,
+      name: ingredient.name,
+      pantryMatch: Boolean(pantryMatch),
+      pantryQuantity: pantryMatch?.quantity ?? null,
+      pantryUnit: pantryMatch?.unit ?? null,
+      quantity: ingredient.quantity,
+      sourceRecipeIds: new Set([ingredient.recipeId]),
+      unit: ingredient.unit,
+    });
+  }
+
+  if (mergedItems.size === 0) {
+    throw new Error('Selected recipes do not have ingredients to add.');
+  }
+
+  return mergedItems;
 }
 
 export async function listGroceryListsForUser(): Promise<GroceryListSummary[]> {
@@ -132,76 +227,11 @@ export async function generateGroceryListForUser(
   input: ParsedGenerateGroceryListInput,
 ) {
   const user = await requireUser();
-  const uniqueRecipeIds = Array.from(new Set(input.recipeIds));
   const now = new Date();
-
-  const selectedRecipes = await db
-    .select({ id: recipes.id })
-    .from(recipes)
-    .where(
-      and(eq(recipes.userId, user.id), inArray(recipes.id, uniqueRecipeIds)),
-    );
-
-  if (selectedRecipes.length === 0) {
-    throw new Error('Select at least one recipe you can access.');
-  }
-
-  const ownedRecipeIds = selectedRecipes.map((recipe) => recipe.id);
-
-  const [ingredients, pantry] = await Promise.all([
-    db
-      .select()
-      .from(recipeIngredients)
-      .where(inArray(recipeIngredients.recipeId, ownedRecipeIds))
-      .orderBy(asc(recipeIngredients.sortOrder)),
-    db.select().from(pantryItems).where(eq(pantryItems.userId, user.id)),
-  ]);
-
-  const pantryNames = new Set(
-    pantry.map((item) => normalizeIngredientName(item.name)).filter(Boolean),
+  const mergedItems = await buildMergedGroceryListItems(
+    user.id,
+    input.recipeIds,
   );
-  const mergedItems = new Map<
-    string,
-    {
-      category: string | null;
-      name: string;
-      pantryMatch: boolean;
-      quantity: string | null;
-      sourceRecipeIds: Set<string>;
-      unit: string | null;
-    }
-  >();
-
-  for (const ingredient of ingredients) {
-    const normalizedName = normalizeIngredientName(ingredient.name);
-    const pantryMatch = pantryNames.has(normalizedName);
-    const key = [
-      normalizedName,
-      ingredient.unit ?? '',
-      ingredient.category ?? '',
-      pantryMatch,
-    ].join('|');
-    const existing = mergedItems.get(key);
-
-    if (existing) {
-      existing.quantity = mergeQuantity(existing.quantity, ingredient.quantity);
-      existing.sourceRecipeIds.add(ingredient.recipeId);
-      continue;
-    }
-
-    mergedItems.set(key, {
-      category: ingredient.category,
-      name: ingredient.name,
-      pantryMatch,
-      quantity: ingredient.quantity,
-      sourceRecipeIds: new Set([ingredient.recipeId]),
-      unit: ingredient.unit,
-    });
-  }
-
-  if (mergedItems.size === 0) {
-    throw new Error('Selected recipes do not have ingredients to add.');
-  }
 
   const [list] = await db.transaction(async (tx) => {
     const [createdList] = await tx
@@ -219,6 +249,8 @@ export async function generateGroceryListForUser(
         groceryListId: createdList.id,
         name: item.name,
         pantryMatch: item.pantryMatch,
+        pantryQuantity: item.pantryQuantity,
+        pantryUnit: item.pantryUnit,
         quantity: item.quantity,
         sourceRecipeIds: Array.from(item.sourceRecipeIds),
         unit: item.unit,
@@ -229,6 +261,67 @@ export async function generateGroceryListForUser(
   });
 
   return toGroceryListSummary(list, mergedItems.size);
+}
+
+export async function updateGroceryListForUser(groceryListId: string) {
+  const user = await requireUser();
+  const now = new Date();
+
+  const [list] = await db
+    .select()
+    .from(groceryLists)
+    .where(
+      and(eq(groceryLists.id, groceryListId), eq(groceryLists.userId, user.id)),
+    )
+    .limit(1);
+
+  if (!list) return null;
+
+  const currentItems = await db
+    .select({ sourceRecipeIds: groceryListItems.sourceRecipeIds })
+    .from(groceryListItems)
+    .where(eq(groceryListItems.groceryListId, list.id));
+
+  const sourceRecipeIds = Array.from(
+    new Set(currentItems.flatMap((item) => item.sourceRecipeIds)),
+  );
+
+  if (sourceRecipeIds.length === 0) {
+    throw new Error('This grocery list has no source recipes to update from.');
+  }
+
+  const mergedItems = await buildMergedGroceryListItems(
+    user.id,
+    sourceRecipeIds,
+  );
+
+  const [updatedList] = await db.transaction(async (tx) => {
+    await tx
+      .delete(groceryListItems)
+      .where(eq(groceryListItems.groceryListId, list.id));
+
+    await tx.insert(groceryListItems).values(
+      Array.from(mergedItems.values()).map((item) => ({
+        category: item.category,
+        groceryListId: list.id,
+        name: item.name,
+        pantryMatch: item.pantryMatch,
+        pantryQuantity: item.pantryQuantity,
+        pantryUnit: item.pantryUnit,
+        quantity: item.quantity,
+        sourceRecipeIds: Array.from(item.sourceRecipeIds),
+        unit: item.unit,
+      })),
+    );
+
+    return tx
+      .update(groceryLists)
+      .set({ updatedAt: now })
+      .where(eq(groceryLists.id, list.id))
+      .returning();
+  });
+
+  return toGroceryListSummary(updatedList, mergedItems.size);
 }
 
 export async function toggleGroceryListItemForUser(groceryListItemId: string) {

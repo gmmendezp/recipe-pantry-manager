@@ -5,21 +5,22 @@ import { useState } from 'react';
 import { DetailHero } from '../../../components/layout/detail-hero';
 import { Badge } from '../../../components/ui/badge';
 import { Button, LinkButton } from '../../../components/ui/button';
+import { ConfirmationPanel } from '../../../components/ui/confirmation-panel';
 import { DeleteConfirmation } from '../../../components/ui/delete-confirmation';
 import { FormError } from '../../../components/ui/form-error';
 import { MissingResource } from '../../../components/ui/missing-resource';
-import { Panel } from '../../../components/ui/panel';
+import { GroceryListSection } from '../../../features/grocery-lists/components/grocery-list-section';
 import {
   deleteGroceryList,
   getGroceryList,
   toggleGroceryListItem,
+  updateGroceryList,
 } from '../../../features/grocery-lists/grocery-lists.functions';
 import {
   type GroceryListDetail,
-  type GroceryListItem,
   groceryListIdSchema,
 } from '../../../features/grocery-lists/grocery-lists.schema';
-import { formatCount, formatDelimitedMeta } from '../../../lib/format';
+import { formatCount } from '../../../lib/format';
 
 export const Route = createFileRoute(
   '/_authenticated/grocery-lists/$groceryListId',
@@ -67,7 +68,9 @@ function GroceryListDetailView({
   const [pendingItemId, setPendingItemId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isConfirmingDelete, setIsConfirmingDelete] = useState(false);
+  const [isConfirmingUpdate, setIsConfirmingUpdate] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [isUpdating, setIsUpdating] = useState(false);
   const checkedItems = groceryList.items.filter((item) => item.isChecked);
   const pantryItems = groceryList.items.filter(
     (item) => item.pantryMatch && !item.isChecked,
@@ -112,6 +115,25 @@ function GroceryListDetailView({
     }
   }
 
+  async function handleUpdate() {
+    setError(null);
+    setIsUpdating(true);
+
+    try {
+      await updateGroceryList({ data: { groceryListId: groceryList.id } });
+      setIsConfirmingUpdate(false);
+      await router.invalidate();
+    } catch (updateError) {
+      setError(
+        updateError instanceof Error
+          ? updateError.message
+          : 'Unable to update this grocery list. Please try again.',
+      );
+    } finally {
+      setIsUpdating(false);
+    }
+  }
+
   return (
     <div className="space-y-8">
       <LinkButton to="/grocery-lists" variant="secondary">
@@ -121,18 +143,42 @@ function GroceryListDetailView({
 
       <DetailHero
         actions={
-          <Button
-            disabled={isDeleting || isConfirmingDelete}
-            onClick={() => {
-              setError(null);
-              setIsConfirmingDelete(true);
-            }}
-            size="sm"
-            type="button"
-            variant="inverseOutline"
-          >
-            Delete
-          </Button>
+          <div className="flex flex-wrap gap-2">
+            <Button
+              disabled={
+                isDeleting ||
+                isConfirmingDelete ||
+                isConfirmingUpdate ||
+                isUpdating
+              }
+              onClick={() => {
+                setError(null);
+                setIsConfirmingUpdate(true);
+              }}
+              size="sm"
+              type="button"
+              variant="inverseOutline"
+            >
+              {isUpdating ? 'Updating...' : 'Update'}
+            </Button>
+            <Button
+              disabled={
+                isDeleting ||
+                isConfirmingDelete ||
+                isConfirmingUpdate ||
+                isUpdating
+              }
+              onClick={() => {
+                setError(null);
+                setIsConfirmingDelete(true);
+              }}
+              size="sm"
+              type="button"
+              variant="inverseOutline"
+            >
+              Delete
+            </Button>
+          </div>
         }
         eyebrow="Grocery list"
         meta={
@@ -144,6 +190,18 @@ function GroceryListDetailView({
         }
         title={groceryList.title}
       />
+
+      {isConfirmingUpdate ? (
+        <ConfirmationPanel
+          confirmLabel="Update grocery list"
+          description="This will regenerate the list from its source recipes and current pantry. Checked-off items will be reset."
+          isPending={isUpdating}
+          onCancel={() => setIsConfirmingUpdate(false)}
+          onConfirm={handleUpdate}
+          pendingLabel="Updating..."
+          title="Update this grocery list?"
+        />
+      ) : null}
 
       {isConfirmingDelete ? (
         <DeleteConfirmation
@@ -183,64 +241,5 @@ function GroceryListDetailView({
         title="Checked Off"
       />
     </div>
-  );
-}
-
-function GroceryListSection({
-  emptyText,
-  items,
-  onToggle,
-  pendingItemId,
-  title,
-}: {
-  emptyText: string;
-  items: GroceryListItem[];
-  onToggle: (itemId: string) => Promise<void>;
-  pendingItemId: string | null;
-  title: string;
-}) {
-  return (
-    <Panel>
-      <h2 className="font-semibold text-2xl">{title}</h2>
-      {items.length > 0 ? (
-        <ul className="mt-5 divide-y divide-border">
-          {items.map((item) => (
-            <li
-              className="flex flex-col gap-3 py-4 first:pt-0 last:pb-0 sm:flex-row sm:items-center sm:justify-between"
-              key={item.id}
-            >
-              <div>
-                <p className="font-semibold">{item.name}</p>
-                <p className="mt-1 text-muted text-sm">
-                  {formatItemMeta(item)}
-                </p>
-              </div>
-              <Button
-                disabled={pendingItemId === item.id}
-                onClick={() => void onToggle(item.id)}
-                size="xs"
-                type="button"
-                variant={item.isChecked ? 'secondary' : 'primary'}
-              >
-                {pendingItemId === item.id
-                  ? 'Updating...'
-                  : item.isChecked
-                    ? 'Uncheck'
-                    : 'Check off'}
-              </Button>
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <p className="mt-3 text-muted">{emptyText}</p>
-      )}
-    </Panel>
-  );
-}
-
-function formatItemMeta(item: GroceryListItem) {
-  return formatDelimitedMeta(
-    [item.quantity, item.unit, item.category],
-    'No quantity specified',
   );
 }

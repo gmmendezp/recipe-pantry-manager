@@ -1,3 +1,4 @@
+import clsx from 'clsx';
 import type { ReactNode } from 'react';
 
 type FilterBarProps = {
@@ -6,6 +7,7 @@ type FilterBarProps = {
   searchLabel: string;
   searchPlaceholder: string;
   searchValue: string;
+  variant?: 'primary' | 'secondary';
 };
 
 type FilterSelectProps<T extends string> = {
@@ -24,9 +26,14 @@ export function FilterBar({
   searchLabel,
   searchPlaceholder,
   searchValue,
+  variant = 'primary',
 }: FilterBarProps) {
+  const sectionClassName = clsx(
+    'flex flex-col gap-4 rounded-2xl bg-paper sm:flex-row sm:items-end sm:justify-between',
+    variant === 'primary' && 'border border-border shadow-sm p-4',
+  );
   return (
-    <section className="flex flex-col gap-4 rounded-2xl border border-border bg-paper p-4 shadow-sm sm:flex-row sm:items-end sm:justify-between">
+    <section className={sectionClassName}>
       <label className="block flex-1 space-y-2">
         <span className="font-medium text-foreground text-sm">
           {searchLabel}
