@@ -23,7 +23,7 @@ type LinkButtonProps = AnchorHTMLAttributes<HTMLAnchorElement> &
   ButtonStyleProps;
 
 const baseClass =
-  'inline-flex items-center justify-center rounded-full font-semibold transition disabled:cursor-not-allowed';
+  'inline-flex items-center justify-center rounded-full font-semibold transition disabled:cursor-not-allowed whitespace-nowrap';
 
 const variantClasses: Record<ButtonVariant, string> = {
   danger:
