@@ -21,8 +21,10 @@ function NewRecipePage() {
 
       <RecipeForm
         cancelTo="/recipes"
-        onSubmit={async (values) => {
-          const recipe = await createRecipe({ data: values });
+        onSubmit={(values) => createRecipe({ data: values })}
+        onSuccess={async (result) => {
+          const recipe = result as Awaited<ReturnType<typeof createRecipe>>;
+
           await navigate({
             params: { recipeId: recipe.id },
             to: '/recipes/$recipeId',

@@ -4,6 +4,11 @@ import { requireUser } from '../../lib/auth/server';
 import { toIsoString } from '../../lib/date';
 import { db } from '../../lib/db/client';
 import { recipeIngredients, recipeSteps, recipes } from '../../lib/db/schema';
+import { createSupabaseServerClient } from '../../lib/supabase/server';
+import {
+  getRecipeImagePathFromPublicUrl,
+  RECIPE_IMAGES_BUCKET,
+} from './recipe-image-storage';
 import type {
   ParsedRecipeInput,
   RecipeDetail,
@@ -53,6 +58,20 @@ function toRecipeStepRows(recipeId: string, steps: ParsedRecipeInput['steps']) {
     recipeId,
     stepNumber: index + 1,
   }));
+}
+
+async function deleteRecipeImageByUrl(imageUrl: string | null, userId: string) {
+  try {
+    const path = getRecipeImagePathFromPublicUrl(imageUrl, userId);
+
+    if (!path) return;
+
+    const supabase = createSupabaseServerClient();
+
+    await supabase.storage.from(RECIPE_IMAGES_BUCKET).remove([path]);
+  } catch {
+    // Image cleanup is best-effort; recipe writes should remain authoritative.
+  }
 }
 
 export async function listRecipesForUser(): Promise<RecipeListItem[]> {
@@ -153,6 +172,11 @@ export async function updateRecipeForUser(
 ) {
   const user = await requireUser();
   const now = new Date();
+  const [currentRecipe] = await db
+    .select({ imageUrl: recipes.imageUrl })
+    .from(recipes)
+    .where(and(eq(recipes.id, recipeId), eq(recipes.userId, user.id)))
+    .limit(1);
 
   const [recipe] = await db.transaction(async (tx) => {
     const [updatedRecipe] = await tx
@@ -191,6 +215,10 @@ export async function updateRecipeForUser(
     return [updatedRecipe];
   });
 
+  if (recipe && currentRecipe?.imageUrl !== input.imageUrl) {
+    await deleteRecipeImageByUrl(currentRecipe?.imageUrl ?? null, user.id);
+  }
+
   return recipe ? toRecipeListItem(recipe) : null;
 }
 
@@ -200,7 +228,9 @@ export async function deleteRecipeForUser(recipeId: string) {
   const deletedRecipes = await db
     .delete(recipes)
     .where(and(eq(recipes.id, recipeId), eq(recipes.userId, user.id)))
-    .returning({ id: recipes.id });
+    .returning({ id: recipes.id, imageUrl: recipes.imageUrl });
+
+  await deleteRecipeImageByUrl(deletedRecipes[0]?.imageUrl ?? null, user.id);
 
   return { deleted: deletedRecipes.length > 0 };
 }

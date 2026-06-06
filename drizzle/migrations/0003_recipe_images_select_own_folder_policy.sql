@@ -1,0 +1,1 @@
+CREATE POLICY "recipe_images_select_own_folder" ON storage.objects AS PERMISSIVE FOR SELECT TO authenticated USING (bucket_id = 'recipe-images' AND (storage.foldername(name))[1] = (select auth.uid())::text);

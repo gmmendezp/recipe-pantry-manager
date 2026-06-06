@@ -15,6 +15,20 @@
       "when": 1780595864629,
       "tag": "0001_workable_jane_foster",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1780681975498,
+      "tag": "0002_recipe_image_storage",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1780684264191,
+      "tag": "0003_recipe_images_select_own_folder_policy",
+      "breakpoints": true
     }
   ]
 }

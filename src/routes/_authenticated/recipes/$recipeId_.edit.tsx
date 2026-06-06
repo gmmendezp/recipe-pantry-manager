@@ -56,8 +56,10 @@ function EditRecipePage() {
         cancelParams={{ recipeId: recipe.id }}
         cancelTo="/recipes/$recipeId"
         defaultValues={recipeDetailToFormValues(recipe)}
-        onSubmit={async (values) => {
-          await updateRecipe({ data: { ...values, recipeId: recipe.id } });
+        onSubmit={(values) =>
+          updateRecipe({ data: { ...values, recipeId: recipe.id } })
+        }
+        onSuccess={async () => {
           await navigate({
             params: { recipeId: recipe.id },
             to: '/recipes/$recipeId',
