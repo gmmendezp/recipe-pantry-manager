@@ -6,7 +6,10 @@ type FormErrorProps = {
 
 export function FormError({ children }: FormErrorProps) {
   return (
-    <p className="whitespace-pre-line rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-red-700 text-sm">
+    <p
+      className="whitespace-pre-line rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-red-700 text-sm"
+      role="alert"
+    >
       {children}
     </p>
   );
