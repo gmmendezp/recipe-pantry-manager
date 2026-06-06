@@ -12,6 +12,7 @@
 		"preview": "vite preview",
 		"prepare": "husky",
 		"test": "vitest run",
+		"verify": "pnpm run check && pnpm run typecheck && pnpm test",
 		"db:generate": "drizzle-kit generate",
 		"db:migrate": "drizzle-kit migrate",
 		"db:studio": "drizzle-kit studio",

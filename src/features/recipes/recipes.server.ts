@@ -8,7 +8,7 @@ import { createSupabaseServerClient } from '../../lib/supabase/server';
 import {
   getRecipeImagePathFromPublicUrl,
   RECIPE_IMAGES_BUCKET,
-} from './recipe-image-storage';
+} from './images/recipe-image-storage';
 import type {
   ParsedRecipeInput,
   RecipeDetail,

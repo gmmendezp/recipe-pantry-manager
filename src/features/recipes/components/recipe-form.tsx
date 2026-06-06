@@ -2,15 +2,15 @@ import { useEffect, useState } from 'react';
 
 import { Button, LinkButton } from '../../../components/ui/button';
 import { FormError } from '../../../components/ui/form-error';
+import { useRecipeForm } from '../form/use-recipe-form';
 import {
   deleteUploadedRecipeImage,
   uploadRecipeImage,
-} from '../recipe-image-upload';
+} from '../images/recipe-image-upload';
 import {
   createEmptyRecipeFormValues,
   type RecipeFormValues,
 } from '../recipes.schema';
-import { useRecipeForm } from '../use-recipe-form';
 import { RecipeBasicsFields } from './recipe-basics-fields';
 import { RecipeIngredientsFields } from './recipe-ingredients-fields';
 import { RecipeStepsFields } from './recipe-steps-fields';

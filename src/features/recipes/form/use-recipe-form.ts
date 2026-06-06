@@ -1,6 +1,6 @@
 import { useForm } from '@tanstack/react-form';
 
-import type { RecipeFormValues } from './recipes.schema';
+import type { RecipeFormValues } from '../recipes.schema';
 
 type UseRecipeFormOptions = {
   defaultValues: RecipeFormValues;

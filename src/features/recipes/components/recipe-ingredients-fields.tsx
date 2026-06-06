@@ -1,8 +1,8 @@
 import { Button } from '../../../components/ui/button';
 import { TextField } from '../../../components/ui/fields';
 import { Panel } from '../../../components/ui/panel';
+import type { RecipeFormApi } from '../form/use-recipe-form';
 import { createEmptyIngredient } from '../recipes.schema';
-import type { RecipeFormApi } from '../use-recipe-form';
 import { RecipeFormSectionHeader } from './recipe-form-section-header';
 
 type RecipeIngredientsFieldsProps = {

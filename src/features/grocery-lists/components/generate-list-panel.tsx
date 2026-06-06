@@ -161,7 +161,14 @@ export function GenerateListPanel({
 
         {error ? <FormError>{error}</FormError> : null}
 
-        <Button disabled={isSubmitting || recipes.length === 0} type="submit">
+        <Button
+          disabled={
+            isSubmitting ||
+            recipes.length === 0 ||
+            selectedRecipeIds.length === 0
+          }
+          type="submit"
+        >
           {isSubmitting ? 'Generating...' : 'Generate grocery list'}
         </Button>
       </form>

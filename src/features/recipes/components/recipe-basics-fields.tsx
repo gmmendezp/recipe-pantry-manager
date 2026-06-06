@@ -2,8 +2,8 @@ import { useState } from 'react';
 
 import { TextAreaField, TextField } from '../../../components/ui/fields';
 import { Panel } from '../../../components/ui/panel';
-import { validateRecipeImageFile } from '../recipe-image-storage';
-import type { RecipeFormApi } from '../use-recipe-form';
+import type { RecipeFormApi } from '../form/use-recipe-form';
+import { validateRecipeImageFile } from '../images/recipe-image-storage';
 
 type RecipeBasicsFieldsProps = {
   clearPendingImage: () => void;

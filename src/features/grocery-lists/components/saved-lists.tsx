@@ -27,7 +27,7 @@ export function SavedLists({
     if (hasSavedLists) {
       return (
         <EmptyState title="No grocery lists match your search">
-          Try a different list title.
+          Try a different title.
         </EmptyState>
       );
     }
