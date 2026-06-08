@@ -2,26 +2,21 @@ import { createFileRoute } from '@tanstack/react-router';
 import { useState } from 'react';
 
 import { PageHeader } from '../../../components/layout/page-header';
-import { Button } from '../../../components/ui/button';
+import { LinkButton } from '../../../components/ui/button';
 import { FilterBar } from '../../../components/ui/filter-bar';
-import { GenerateListPanel } from '../../../features/grocery-lists/components/generate-list-panel';
 import { SavedLists } from '../../../features/grocery-lists/components/saved-lists';
 import { listGroceryLists } from '../../../features/grocery-lists/grocery-lists.functions';
-import { listRecipes } from '../../../features/recipes/recipes.functions';
 import { useFilteredList } from '../../../hooks/use-filtered-list';
 
 export const Route = createFileRoute('/_authenticated/grocery-lists/')({
   component: GroceryListsPage,
   loader: async () => ({
     groceryLists: await listGroceryLists(),
-    recipes: await listRecipes(),
   }),
 });
 
 function GroceryListsPage() {
-  const { groceryLists, recipes } = Route.useLoaderData();
-  const navigate = Route.useNavigate();
-  const [isGeneratePanelOpen, setIsGeneratePanelOpen] = useState(false);
+  const { groceryLists } = Route.useLoaderData();
   const [searchQuery, setSearchQuery] = useState('');
   const filteredGroceryLists = useFilteredList(groceryLists, {
     searchFields: (list) => [list.title],
@@ -36,26 +31,13 @@ function GroceryListsPage() {
           eyebrow="Shopping workflow"
           title="Grocery Lists"
         />
-        <Button
+        <LinkButton
           className="text-center whitespace-nowrap"
-          onClick={() => setIsGeneratePanelOpen((current) => !current)}
-          type="button"
-          variant={isGeneratePanelOpen ? 'secondary' : 'primary'}
+          to="/grocery-lists/new"
         >
-          {isGeneratePanelOpen ? 'Cancel' : 'Generate grocery list'}
-        </Button>
+          New grocery list
+        </LinkButton>
       </div>
-      {isGeneratePanelOpen ? (
-        <GenerateListPanel
-          onGenerated={(groceryListId) =>
-            navigate({
-              params: { groceryListId },
-              to: '/grocery-lists/$groceryListId',
-            })
-          }
-          recipes={recipes}
-        />
-      ) : null}
       {groceryLists.length > 0 ? (
         <FilterBar
           onSearchChange={setSearchQuery}
@@ -65,9 +47,11 @@ function GroceryListsPage() {
         />
       ) : null}
       <SavedLists
+        emptyAction={
+          <LinkButton to="/grocery-lists/new">Create grocery list</LinkButton>
+        }
         groceryLists={filteredGroceryLists}
         hasSavedLists={groceryLists.length > 0}
-        onGenerate={() => setIsGeneratePanelOpen(true)}
       />
     </div>
   );

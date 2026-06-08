@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 
-import { cleanup, fireEvent, render, screen } from '@testing-library/react';
+import { cleanup, render, screen } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { SavedLists } from '../../../../../src/features/grocery-lists/components/saved-lists';
@@ -17,13 +17,11 @@ afterEach(() => {
 
 describe('SavedLists', () => {
   it('renders the new-user empty state and generate action', () => {
-    const onGenerate = vi.fn();
-
     render(
       <SavedLists
+        emptyAction={<a href="/grocery-lists/new">Create grocery list</a>}
         groceryLists={[]}
         hasSavedLists={false}
-        onGenerate={onGenerate}
       />,
     );
 
@@ -34,19 +32,19 @@ describe('SavedLists', () => {
       ),
     ).toBeTruthy();
 
-    fireEvent.click(
-      screen.getByRole('button', { name: 'Generate grocery list' }),
-    );
-
-    expect(onGenerate).toHaveBeenCalledOnce();
+    expect(
+      screen
+        .getByRole('link', { name: 'Create grocery list' })
+        .getAttribute('href'),
+    ).toBe('/grocery-lists/new');
   });
 
   it('renders the filtered empty state when saved lists exist', () => {
     render(
       <SavedLists
+        emptyAction={<a href="/grocery-lists/new">Create grocery list</a>}
         groceryLists={[]}
         hasSavedLists={true}
-        onGenerate={vi.fn()}
       />,
     );
 
@@ -57,6 +55,7 @@ describe('SavedLists', () => {
   it('renders saved grocery list rows', () => {
     render(
       <SavedLists
+        emptyAction={<a href="/grocery-lists/new">Create grocery list</a>}
         groceryLists={[
           createGroceryList({
             itemCount: 1,
@@ -71,7 +70,6 @@ describe('SavedLists', () => {
           }),
         ]}
         hasSavedLists={true}
-        onGenerate={vi.fn()}
       />,
     );
 
@@ -85,9 +83,9 @@ describe('SavedLists', () => {
   it('renders detail links for saved grocery lists', () => {
     render(
       <SavedLists
+        emptyAction={<a href="/grocery-lists/new">Create grocery list</a>}
         groceryLists={[createGroceryList({ id: 'list-1' })]}
         hasSavedLists={true}
-        onGenerate={vi.fn()}
       />,
     );
 

@@ -52,7 +52,7 @@ export async function fetchRecipeHtml(url: URL) {
         signal: controller.signal,
       });
 
-      if (isRedirectStatus(response.status)) {
+      if ([301, 302, 303, 307, 308].includes(response.status)) {
         const location = response.headers.get('location');
 
         if (!location) {
@@ -116,10 +116,6 @@ async function readRecipeHtmlResponse(response: Response) {
   }
 
   return new TextDecoder().decode(concatUint8Arrays(chunks, received));
-}
-
-function isRedirectStatus(status: number) {
-  return [301, 302, 303, 307, 308].includes(status);
 }
 
 function concatUint8Arrays(chunks: Uint8Array[], length: number) {

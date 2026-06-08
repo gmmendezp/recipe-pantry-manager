@@ -1,6 +1,6 @@
 import { Button } from '../../../components/ui/button';
 import { Panel } from '../../../components/ui/panel';
-import { formatDelimitedMeta } from '../../../lib/format';
+import { formatDelimitedMeta, formatQuantity } from '../../../lib/format';
 import type { GroceryListItem } from '../grocery-lists.schema';
 
 type GroceryListSectionProps = {
@@ -59,19 +59,25 @@ function GroceryListItemMeta({ item }: { item: GroceryListItem }) {
   if (item.pantryMatch) {
     return (
       <div className="mt-1 space-y-1 text-muted text-sm">
-        <p>Needed: {formatAmount(item.quantity, item.unit)}</p>
-        <p>In pantry: {formatAmount(item.pantryQuantity, item.pantryUnit)}</p>
+        <p>
+          Needed:{' '}
+          {formatQuantity(item.quantity, item.unit, 'No amount specified')}
+        </p>
+        <p>
+          In pantry:{' '}
+          {formatQuantity(
+            item.pantryQuantity,
+            item.pantryUnit,
+            'No amount specified',
+          )}
+        </p>
       </div>
     );
   }
 
-  return <p className="mt-1 text-muted text-sm">{formatItemMeta(item)}</p>;
-}
-
-function formatItemMeta(item: GroceryListItem) {
-  return formatDelimitedMeta([item.quantity, item.unit, item.category], '');
-}
-
-function formatAmount(quantity: string | null, unit: string | null) {
-  return [quantity, unit].filter(Boolean).join(' ') || 'No amount specified';
+  return (
+    <p className="mt-1 text-muted text-sm">
+      {formatDelimitedMeta([item.quantity, item.unit, item.category], '')}
+    </p>
+  );
 }

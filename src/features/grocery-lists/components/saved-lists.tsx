@@ -1,6 +1,6 @@
 import { Link } from '@tanstack/react-router';
+import type { ReactNode } from 'react';
 
-import { Button } from '../../../components/ui/button';
 import { EmptyState } from '../../../components/ui/empty-state';
 import {
   TableShell,
@@ -13,15 +13,15 @@ import { formatCount } from '../../../lib/format';
 import type { GroceryListSummary } from '../grocery-lists.schema';
 
 type SavedListsProps = {
+  emptyAction: ReactNode;
   groceryLists: GroceryListSummary[];
   hasSavedLists: boolean;
-  onGenerate: () => void;
 };
 
 export function SavedLists({
+  emptyAction,
   groceryLists,
   hasSavedLists,
-  onGenerate,
 }: SavedListsProps) {
   if (groceryLists.length === 0) {
     if (hasSavedLists) {
@@ -33,14 +33,7 @@ export function SavedLists({
     }
 
     return (
-      <EmptyState
-        action={
-          <Button onClick={onGenerate} type="button">
-            Generate grocery list
-          </Button>
-        }
-        title="No saved grocery lists yet"
-      >
+      <EmptyState action={emptyAction} title="No saved grocery lists yet">
         Generated lists will appear here after you select recipes.
       </EmptyState>
     );

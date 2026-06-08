@@ -13,7 +13,12 @@ import {
   recipeTimeFilterOptions,
 } from '../../recipes/recipe-filters';
 import type { RecipeListItem } from '../../recipes/recipes.schema';
-import { generateGroceryList } from '../grocery-lists.functions';
+import {
+  generateReviewedGroceryList,
+  previewGroceryListMatches,
+} from '../grocery-lists.functions';
+import type { GroceryListReview } from '../grocery-lists.schema';
+import { MatchReviewPanel, type ReviewedItem } from './match-review-panel';
 
 type GenerateListPanelProps = {
   onGenerated: (groceryListId: string) => Promise<void> | void;
@@ -30,6 +35,7 @@ export function GenerateListPanel({
   const [selectedRecipeIds, setSelectedRecipeIds] = useState<string[]>([]);
   const [title, setTitle] = useState('');
   const [error, setError] = useState<string | null>(null);
+  const [review, setReview] = useState<GroceryListReview | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const filteredRecipes = useFilteredList(recipes, {
     filters: [(recipe) => matchesRecipeTimeFilter(recipe, recipeTimeFilter)],
@@ -45,7 +51,7 @@ export function GenerateListPanel({
     );
   }
 
-  async function handleSubmit(
+  async function handleReviewSubmit(
     event: React.SyntheticEvent<HTMLFormElement, SubmitEvent>,
   ) {
     event.preventDefault();
@@ -53,15 +59,15 @@ export function GenerateListPanel({
     setIsSubmitting(true);
 
     try {
-      const list = await generateGroceryList({
+      const groceryListReview = await previewGroceryListMatches({
         data: { recipeIds: selectedRecipeIds, title },
       });
-      await onGenerated(list.id);
-    } catch (generationError) {
+      setReview(groceryListReview);
+    } catch (reviewError) {
       setError(
         getAuthErrorMessage(
-          generationError,
-          'Unable to generate grocery list. Please try again.',
+          reviewError,
+          'Unable to review grocery list matches. Please try again.',
         ),
       );
     } finally {
@@ -69,15 +75,70 @@ export function GenerateListPanel({
     }
   }
 
+  async function handleCreateSubmit(items: ReviewedItem[]) {
+    setError(null);
+    setIsSubmitting(true);
+
+    try {
+      const list = await generateReviewedGroceryList({
+        data: {
+          items: items.map((item) => ({
+            category: item.category,
+            name: item.name,
+            pantryItemId: item.pantryItemId,
+            quantity: item.quantity,
+            sourceRecipeIds: item.sourceRecipeIds,
+            unit: item.unit,
+          })),
+          title,
+        },
+      });
+      await onGenerated(list.id);
+    } catch (generationError) {
+      setError(
+        getAuthErrorMessage(
+          generationError,
+          'Unable to create grocery list. Please try again.',
+        ),
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
+  }
+
+  function goBackToRecipes() {
+    setError(null);
+    setReview(null);
+  }
+
+  if (review) {
+    return (
+      <MatchReviewPanel
+        backLabel="Back to recipes"
+        description="These choices apply only to this grocery list. Clear a match to move an ingredient into Need to Buy, or choose a different pantry item for this list."
+        error={error}
+        initialItems={review.items}
+        isSubmitting={isSubmitting}
+        onBack={goBackToRecipes}
+        onSubmit={handleCreateSubmit}
+        pantryOptions={review.pantryOptions}
+        pendingLabel="Creating..."
+        stepLabel="Step 2 of 2"
+        submitLabel="Create grocery list"
+        title="Review pantry matches"
+      />
+    );
+  }
+
   return (
     <Panel>
-      <form className="space-y-6" onSubmit={handleSubmit}>
+      <form className="space-y-6" onSubmit={handleReviewSubmit}>
         <div>
-          <h2 className="font-semibold text-2xl">Generate a list</h2>
-          <p className="mt-2 text-muted">
-            Pick one or more saved recipes. Pantry matches are moved into a
-            separate section on the generated list.
+          <p className="font-medium text-muted text-sm uppercase tracking-[0.2em]">
+            Step 1 of 2
           </p>
+          <h2 className="mt-2 font-semibold text-2xl">Choose recipes</h2>
+          <p className="mt-2 text-muted">Pick one or more saved recipes.</p>
         </div>
 
         <label className="block space-y-2">
@@ -169,7 +230,7 @@ export function GenerateListPanel({
           }
           type="submit"
         >
-          {isSubmitting ? 'Generating...' : 'Generate grocery list'}
+          {isSubmitting ? 'Reviewing...' : 'Review matches'}
         </Button>
       </form>
     </Panel>

@@ -135,6 +135,14 @@ export function createEmptyRecipeFormValues(): RecipeFormValues {
   };
 }
 
+export function capitalizeIngredientName(name: string) {
+  const firstVisibleCharacterIndex = name.search(/\S/);
+
+  if (firstVisibleCharacterIndex === -1) return name;
+
+  return `${name.slice(0, firstVisibleCharacterIndex)}${name[firstVisibleCharacterIndex]?.toUpperCase()}${name.slice(firstVisibleCharacterIndex + 1)}`;
+}
+
 export function recipeDetailToFormValues(
   recipe: RecipeDetail,
 ): RecipeFormValues {

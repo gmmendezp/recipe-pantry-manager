@@ -33,13 +33,13 @@ describe('recipeObjectToFormValues', () => {
     });
     expect(values.ingredients).toHaveLength(2);
     expect(values.ingredients[0]).toMatchObject({
-      name: 'broth',
+      name: 'Broth',
       quantity: '2',
       rawText: '2 cups broth',
       unit: 'cups',
     });
     expect(values.ingredients[1]).toMatchObject({
-      name: 'salt',
+      name: 'Salt',
       quantity: '1/2',
       rawText: '½ tsp salt',
       unit: 'tsp',

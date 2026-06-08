@@ -1,4 +1,4 @@
-import { normalizeIngredientName } from '../../lib/normalization/ingredients';
+import { normalizeIngredientShoppingKey } from '../../lib/normalization/ingredients';
 
 type RecipeIngredientForGroceryList = {
   category: string | null;
@@ -9,6 +9,7 @@ type RecipeIngredientForGroceryList = {
 };
 
 type PantryItemForGroceryList = {
+  id?: string;
   name: string;
   quantity: string | null;
   unit: string | null;
@@ -17,6 +18,7 @@ type PantryItemForGroceryList = {
 export type MergedGroceryListItem = {
   category: string | null;
   name: string;
+  pantryItemId: string | null;
   pantryMatch: boolean;
   pantryQuantity: string | null;
   pantryUnit: string | null;
@@ -44,14 +46,15 @@ export function mergeGroceryListItems(
 ) {
   const pantryByName = new Map<
     string,
-    { quantity: string | null; unit: string | null }
+    { id: string | null; quantity: string | null; unit: string | null }
   >();
 
   for (const item of pantryItems) {
-    const normalizedName = normalizeIngredientName(item.name);
+    const normalizedName = normalizeIngredientShoppingKey(item.name);
 
     if (normalizedName && !pantryByName.has(normalizedName)) {
       pantryByName.set(normalizedName, {
+        id: item.id ?? null,
         quantity: item.quantity,
         unit: item.unit,
       });
@@ -61,7 +64,7 @@ export function mergeGroceryListItems(
   const mergedItems = new Map<string, MergedGroceryListItem>();
 
   for (const ingredient of ingredients) {
-    const normalizedName = normalizeIngredientName(ingredient.name);
+    const normalizedName = normalizeIngredientShoppingKey(ingredient.name);
     const pantryMatch = pantryByName.get(normalizedName) ?? null;
     const key = [
       normalizedName,
@@ -80,6 +83,7 @@ export function mergeGroceryListItems(
     mergedItems.set(key, {
       category: ingredient.category,
       name: ingredient.name,
+      pantryItemId: pantryMatch?.id ?? null,
       pantryMatch: Boolean(pantryMatch),
       pantryQuantity: pantryMatch?.quantity ?? null,
       pantryUnit: pantryMatch?.unit ?? null,

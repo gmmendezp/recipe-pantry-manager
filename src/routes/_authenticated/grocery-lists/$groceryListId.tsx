@@ -5,7 +5,6 @@ import { useState } from 'react';
 import { DetailHero } from '../../../components/layout/detail-hero';
 import { Badge } from '../../../components/ui/badge';
 import { Button, LinkButton } from '../../../components/ui/button';
-import { ConfirmationPanel } from '../../../components/ui/confirmation-panel';
 import { DeleteConfirmation } from '../../../components/ui/delete-confirmation';
 import { FormError } from '../../../components/ui/form-error';
 import { MissingResource } from '../../../components/ui/missing-resource';
@@ -14,7 +13,6 @@ import {
   deleteGroceryList,
   getGroceryList,
   toggleGroceryListItem,
-  updateGroceryList,
 } from '../../../features/grocery-lists/grocery-lists.functions';
 import {
   type GroceryListDetail,
@@ -68,9 +66,7 @@ function GroceryListDetailView({
   const [pendingItemId, setPendingItemId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isConfirmingDelete, setIsConfirmingDelete] = useState(false);
-  const [isConfirmingUpdate, setIsConfirmingUpdate] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
-  const [isUpdating, setIsUpdating] = useState(false);
   const checkedItems = groceryList.items.filter((item) => item.isChecked);
   const pantryItems = groceryList.items.filter(
     (item) => item.pantryMatch && !item.isChecked,
@@ -115,25 +111,6 @@ function GroceryListDetailView({
     }
   }
 
-  async function handleUpdate() {
-    setError(null);
-    setIsUpdating(true);
-
-    try {
-      await updateGroceryList({ data: { groceryListId: groceryList.id } });
-      setIsConfirmingUpdate(false);
-      await router.invalidate();
-    } catch (updateError) {
-      setError(
-        updateError instanceof Error
-          ? updateError.message
-          : 'Unable to update this grocery list. Please try again.',
-      );
-    } finally {
-      setIsUpdating(false);
-    }
-  }
-
   return (
     <div className="space-y-8">
       <LinkButton to="/grocery-lists" variant="secondary">
@@ -145,29 +122,7 @@ function GroceryListDetailView({
         actions={
           <div className="flex flex-wrap gap-2">
             <Button
-              disabled={
-                isDeleting ||
-                isConfirmingDelete ||
-                isConfirmingUpdate ||
-                isUpdating
-              }
-              onClick={() => {
-                setError(null);
-                setIsConfirmingUpdate(true);
-              }}
-              size="sm"
-              type="button"
-              variant="inverseOutline"
-            >
-              {isUpdating ? 'Updating...' : 'Update'}
-            </Button>
-            <Button
-              disabled={
-                isDeleting ||
-                isConfirmingDelete ||
-                isConfirmingUpdate ||
-                isUpdating
-              }
+              disabled={isDeleting || isConfirmingDelete}
               onClick={() => {
                 setError(null);
                 setIsConfirmingDelete(true);
@@ -190,18 +145,6 @@ function GroceryListDetailView({
         }
         title={groceryList.title}
       />
-
-      {isConfirmingUpdate ? (
-        <ConfirmationPanel
-          confirmLabel="Update grocery list"
-          description="This will regenerate the list from its source recipes and current pantry. Checked-off items will be reset."
-          isPending={isUpdating}
-          onCancel={() => setIsConfirmingUpdate(false)}
-          onConfirm={handleUpdate}
-          pendingLabel="Updating..."
-          title="Update this grocery list?"
-        />
-      ) : null}
 
       {isConfirmingDelete ? (
         <DeleteConfirmation

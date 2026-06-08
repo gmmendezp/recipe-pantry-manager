@@ -5,7 +5,7 @@ import { parseImportedIngredient } from '../../../../src/features/recipes/import
 describe('parseImportedIngredient', () => {
   it('parses simple quantity, unit, and name', () => {
     expect(parseImportedIngredient('2 cups flour')).toMatchObject({
-      name: 'flour',
+      name: 'Flour',
       quantity: '2',
       rawText: '2 cups flour',
       unit: 'cups',
@@ -14,7 +14,7 @@ describe('parseImportedIngredient', () => {
 
   it('parses fractional quantities', () => {
     expect(parseImportedIngredient('1/2 tsp salt')).toMatchObject({
-      name: 'salt',
+      name: 'Salt',
       quantity: '1/2',
       rawText: '1/2 tsp salt',
       unit: 'tsp',
@@ -23,7 +23,7 @@ describe('parseImportedIngredient', () => {
 
   it('parses mixed-number quantities', () => {
     expect(parseImportedIngredient('1 1/2 cups rice')).toMatchObject({
-      name: 'rice',
+      name: 'Rice',
       quantity: '1 1/2',
       rawText: '1 1/2 cups rice',
       unit: 'cups',
@@ -32,7 +32,7 @@ describe('parseImportedIngredient', () => {
 
   it('parses hyphenated mixed-number quantities', () => {
     expect(parseImportedIngredient('1-3/4 cups flour')).toMatchObject({
-      name: 'flour',
+      name: 'Flour',
       quantity: '1 3/4',
       rawText: '1-3/4 cups flour',
       unit: 'cups',
@@ -41,7 +41,7 @@ describe('parseImportedIngredient', () => {
 
   it('parses unicode fractions', () => {
     expect(parseImportedIngredient('½ cup butter')).toMatchObject({
-      name: 'butter',
+      name: 'Butter',
       quantity: '1/2',
       rawText: '½ cup butter',
       unit: 'cup',
@@ -50,7 +50,7 @@ describe('parseImportedIngredient', () => {
 
   it('parses whole-number unicode fractions', () => {
     expect(parseImportedIngredient('1½ cups flour')).toMatchObject({
-      name: 'flour',
+      name: 'Flour',
       quantity: '1 1/2',
       rawText: '1½ cups flour',
       unit: 'cups',
@@ -59,7 +59,7 @@ describe('parseImportedIngredient', () => {
 
   it('parses spaced whole-number unicode fractions', () => {
     expect(parseImportedIngredient('1 ½ cups flour')).toMatchObject({
-      name: 'flour',
+      name: 'Flour',
       quantity: '1 1/2',
       rawText: '1 ½ cups flour',
       unit: 'cups',
@@ -68,7 +68,7 @@ describe('parseImportedIngredient', () => {
 
   it('parses quantity ranges', () => {
     expect(parseImportedIngredient('1-2 tbsp olive oil')).toMatchObject({
-      name: 'olive oil',
+      name: 'Olive oil',
       quantity: '1-2',
       rawText: '1-2 tbsp olive oil',
       unit: 'tbsp',
@@ -77,7 +77,7 @@ describe('parseImportedIngredient', () => {
 
   it('keeps unknown units with the ingredient name', () => {
     expect(parseImportedIngredient('2 large eggs')).toMatchObject({
-      name: 'large eggs',
+      name: 'Large eggs',
       quantity: '2',
       rawText: '2 large eggs',
       unit: '',
@@ -86,7 +86,7 @@ describe('parseImportedIngredient', () => {
 
   it('keeps unquantified ingredient text intact', () => {
     expect(parseImportedIngredient('salt to taste')).toMatchObject({
-      name: 'salt to taste',
+      name: 'Salt to taste',
       quantity: '',
       rawText: 'salt to taste',
       unit: '',

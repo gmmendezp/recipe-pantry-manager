@@ -115,6 +115,82 @@ describe('mergeGroceryListItems', () => {
 
     expect(items[0]?.quantity).toBe('1');
   });
+
+  it('matches pantry items using shopping cleanup while preserving display name', () => {
+    const items = toItems(
+      mergeGroceryListItems(
+        [ingredient({ name: 'minced fresh basil', quantity: '3' })],
+        [{ name: 'fresh basil', quantity: '1', unit: 'bunch' }],
+      ),
+    );
+
+    expect(items[0]).toMatchObject({
+      name: 'minced fresh basil',
+      pantryItemId: null,
+      pantryMatch: true,
+      pantryQuantity: '1',
+      pantryUnit: 'bunch',
+    });
+  });
+
+  it('tracks the matched pantry item id when available', () => {
+    const items = toItems(
+      mergeGroceryListItems(
+        [ingredient({ name: 'minced fresh basil', quantity: '3' })],
+        [
+          {
+            id: 'pantry-1',
+            name: 'fresh basil',
+            quantity: '1',
+            unit: 'bunch',
+          },
+        ],
+      ),
+    );
+
+    expect(items[0]).toMatchObject({
+      pantryItemId: 'pantry-1',
+      pantryMatch: true,
+    });
+  });
+
+  it('matches pantry items when recipe names include leading measurements', () => {
+    const items = toItems(
+      mergeGroceryListItems(
+        [
+          ingredient({ name: '2 tablespoons olive oil', recipeId: 'recipe-1' }),
+          ingredient({ name: '2 sprigs fresh thyme', recipeId: 'recipe-2' }),
+        ],
+        [
+          { name: 'olive oil', quantity: null, unit: null },
+          { name: 'fresh thyme', quantity: null, unit: null },
+        ],
+      ),
+    );
+
+    expect(items).toHaveLength(2);
+    expect(items.every((item) => item.pantryMatch)).toBe(true);
+  });
+
+  it('does not match distinct ingredients after shopping cleanup', () => {
+    const items = toItems(
+      mergeGroceryListItems(
+        [
+          ingredient({ name: 'red onion', recipeId: 'recipe-1' }),
+          ingredient({ name: 'garbanzo beans', recipeId: 'recipe-2' }),
+          ingredient({ name: 'scallions', recipeId: 'recipe-3' }),
+        ],
+        [
+          { name: 'onion', quantity: null, unit: null },
+          { name: 'chickpeas', quantity: null, unit: null },
+          { name: 'green onions', quantity: null, unit: null },
+        ],
+      ),
+    );
+
+    expect(items).toHaveLength(3);
+    expect(items.every((item) => !item.pantryMatch)).toBe(true);
+  });
 });
 
 function ingredient(

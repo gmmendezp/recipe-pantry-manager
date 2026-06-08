@@ -1,6 +1,9 @@
 import { useForm } from '@tanstack/react-form';
 
-import type { RecipeFormValues } from '../recipes.schema';
+import {
+  capitalizeIngredientName,
+  type RecipeFormValues,
+} from '../recipes.schema';
 
 type UseRecipeFormOptions = {
   defaultValues: RecipeFormValues;
@@ -19,7 +22,7 @@ export function useRecipeForm({
       setSubmitError(null);
 
       try {
-        await onSubmit(value);
+        await onSubmit(normalizeRecipeFormValuesForSubmit(value));
       } catch (error) {
         setSubmitError(
           error instanceof Error
@@ -32,3 +35,15 @@ export function useRecipeForm({
 }
 
 export type RecipeFormApi = ReturnType<typeof useRecipeForm>;
+
+function normalizeRecipeFormValuesForSubmit(
+  values: RecipeFormValues,
+): RecipeFormValues {
+  return {
+    ...values,
+    ingredients: values.ingredients.map((ingredient) => ({
+      ...ingredient,
+      name: capitalizeIngredientName(ingredient.name),
+    })),
+  };
+}

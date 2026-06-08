@@ -1,4 +1,5 @@
 import {
+  capitalizeIngredientName,
   createEmptyIngredient,
   type RecipeFormValues,
 } from '../recipes.schema';
@@ -8,8 +9,6 @@ const knownUnits = new Set([
   'bunches',
   'can',
   'cans',
-  'clove',
-  'cloves',
   'cup',
   'cups',
   'dash',
@@ -69,7 +68,7 @@ export function parseImportedIngredient(
   if (!match?.groups) {
     return {
       ...createEmptyIngredient(),
-      name: text,
+      name: capitalizeIngredientName(text),
       rawText: text,
     };
   }
@@ -82,7 +81,7 @@ export function parseImportedIngredient(
   if (knownUnits.has(normalizedUnit) && nameParts.length > 0) {
     return {
       ...createEmptyIngredient(),
-      name: nameParts.join(' '),
+      name: capitalizeIngredientName(nameParts.join(' ')),
       quantity,
       rawText: text,
       unit: normalizedUnit,
@@ -91,7 +90,7 @@ export function parseImportedIngredient(
 
   return {
     ...createEmptyIngredient(),
-    name: rest,
+    name: capitalizeIngredientName(rest),
     quantity,
     rawText: text,
   };

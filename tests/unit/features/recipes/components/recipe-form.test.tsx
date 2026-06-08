@@ -55,7 +55,7 @@ describe('RecipeForm', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Save changes' }));
 
     await waitFor(() => {
-      expect(onSubmit).toHaveBeenCalledWith(defaultRecipeValues());
+      expect(onSubmit).toHaveBeenCalledWith(submittedRecipeValues());
       expect(onSuccess).toHaveBeenCalledWith({ id: 'recipe-1' });
     });
     expect(mockUploadRecipeImage).not.toHaveBeenCalled();
@@ -78,7 +78,7 @@ describe('RecipeForm', () => {
     await waitFor(() => {
       expect(mockUploadRecipeImage).toHaveBeenCalledWith(file);
       expect(onSubmit).toHaveBeenCalledWith({
-        ...defaultRecipeValues(),
+        ...submittedRecipeValues(),
         imageUrl: 'https://example.com/uploaded.png',
       });
     });
@@ -101,6 +101,30 @@ describe('RecipeForm', () => {
     expect(mockDeleteUploadedRecipeImage).toHaveBeenCalledWith(
       'https://example.com/uploaded.png',
     );
+  });
+
+  it('capitalizes only ingredient names before submitting', async () => {
+    const onSubmit = vi.fn().mockResolvedValue({ id: 'recipe-1' });
+
+    renderRecipeForm({ onSubmit });
+
+    fireEvent.click(screen.getByRole('button', { name: 'Save changes' }));
+
+    await waitFor(() => {
+      expect(onSubmit).toHaveBeenCalledWith({
+        ...defaultRecipeValues(),
+        ingredients: [
+          {
+            category: 'produce',
+            clientId: 'ingredient-1',
+            name: 'Tomato',
+            quantity: '2',
+            rawText: '2 cups tomato',
+            unit: 'cups',
+          },
+        ],
+      });
+    });
   });
 
   it('validates selected image files before marking them pending', () => {
@@ -152,11 +176,11 @@ function defaultRecipeValues(): RecipeFormValues {
     imageUrl: '',
     ingredients: [
       {
-        category: 'Produce',
+        category: 'produce',
         clientId: 'ingredient-1',
-        name: 'Tomato',
+        name: 'tomato',
         quantity: '2',
-        rawText: '',
+        rawText: '2 cups tomato',
         unit: 'cups',
       },
     ],
@@ -165,6 +189,18 @@ function defaultRecipeValues(): RecipeFormValues {
     sourceUrl: '',
     steps: [{ clientId: 'step-1', instruction: 'Simmer.' }],
     title: 'Tomato Soup',
+  };
+}
+
+function submittedRecipeValues(): RecipeFormValues {
+  return {
+    ...defaultRecipeValues(),
+    ingredients: [
+      {
+        ...defaultRecipeValues().ingredients[0],
+        name: 'Tomato',
+      },
+    ],
   };
 }
 

@@ -10,17 +10,22 @@ import {
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { GenerateListPanel } from '../../../../../src/features/grocery-lists/components/generate-list-panel';
-import { generateGroceryList } from '../../../../../src/features/grocery-lists/grocery-lists.functions';
+import {
+  generateReviewedGroceryList,
+  previewGroceryListMatches,
+} from '../../../../../src/features/grocery-lists/grocery-lists.functions';
 import type { RecipeListItem } from '../../../../../src/features/recipes/recipes.schema';
 
 vi.mock(
   '../../../../../src/features/grocery-lists/grocery-lists.functions',
   () => ({
-    generateGroceryList: vi.fn(),
+    generateReviewedGroceryList: vi.fn(),
+    previewGroceryListMatches: vi.fn(),
   }),
 );
 
-const mockGenerateGroceryList = vi.mocked(generateGroceryList);
+const mockGenerateReviewedGroceryList = vi.mocked(generateReviewedGroceryList);
+const mockPreviewGroceryListMatches = vi.mocked(previewGroceryListMatches);
 
 afterEach(() => {
   cleanup();
@@ -33,7 +38,7 @@ describe('GenerateListPanel', () => {
       <GenerateListPanel onGenerated={vi.fn()} recipes={createRecipes()} />,
     );
 
-    expect(screen.getByText('Generate a list')).toBeTruthy();
+    expect(screen.getByText('Choose recipes')).toBeTruthy();
     expect(screen.getByText('0 recipes selected')).toBeTruthy();
     expect(screen.getByText('3 matching recipes')).toBeTruthy();
     expect(screen.getByLabelText(/Tomato Soup/)).toBeTruthy();
@@ -62,7 +67,7 @@ describe('GenerateListPanel', () => {
     );
 
     const button = screen.getByRole('button', {
-      name: 'Generate grocery list',
+      name: 'Review matches',
     });
 
     expect(button).toHaveProperty('disabled', true);
@@ -114,9 +119,40 @@ describe('GenerateListPanel', () => {
     expect(screen.getByText('No recipes match your filters')).toBeTruthy();
   });
 
-  it('generates a grocery list from selected recipes', async () => {
+  it('reviews matches and creates a grocery list from selected recipes', async () => {
     const onGenerated = vi.fn();
-    mockGenerateGroceryList.mockResolvedValueOnce({
+    mockPreviewGroceryListMatches.mockResolvedValueOnce({
+      items: [
+        {
+          category: null,
+          matchedPantryItemId: 'pantry-1',
+          name: 'minced fresh basil',
+          quantity: '3',
+          reviewId: 'review-1',
+          sourceRecipeIds: ['recipe-1'],
+          unit: 'tbsp',
+        },
+        {
+          category: null,
+          matchedPantryItemId: null,
+          name: 'flour',
+          quantity: '2',
+          reviewId: 'review-2',
+          sourceRecipeIds: ['recipe-2'],
+          unit: 'cups',
+        },
+      ],
+      pantryOptions: [
+        { id: 'pantry-1', name: 'fresh basil', quantity: '1', unit: 'bunch' },
+        {
+          id: 'pantry-2',
+          name: 'all-purpose flour',
+          quantity: '5',
+          unit: 'lb',
+        },
+      ],
+    });
+    mockGenerateReviewedGroceryList.mockResolvedValueOnce({
       createdAt: '2026-06-06T00:00:00.000Z',
       id: 'list-1',
       itemCount: 3,
@@ -133,14 +169,53 @@ describe('GenerateListPanel', () => {
     });
     fireEvent.click(screen.getByLabelText(/Tomato Soup/));
     fireEvent.click(screen.getByLabelText(/Pancakes/));
+    fireEvent.click(screen.getByRole('button', { name: 'Review matches' }));
+
+    await waitFor(() => {
+      expect(mockPreviewGroceryListMatches).toHaveBeenCalledWith({
+        data: {
+          recipeIds: ['recipe-1', 'recipe-2'],
+          title: 'Weekend Shopping',
+        },
+      });
+    });
+
+    expect(await screen.findByText('Review pantry matches')).toBeTruthy();
+    expect(screen.getByText('minced fresh basil')).toBeTruthy();
+
+    const pantryMatchSelects = screen.getAllByLabelText('Pantry match');
+    const flourPantryMatchSelect = pantryMatchSelects[1];
+
+    expect(flourPantryMatchSelect).toBeTruthy();
+
+    fireEvent.change(flourPantryMatchSelect, {
+      target: { value: 'pantry-2' },
+    });
     fireEvent.click(
-      screen.getByRole('button', { name: 'Generate grocery list' }),
+      screen.getByRole('button', { name: 'Create grocery list' }),
     );
 
     await waitFor(() => {
-      expect(mockGenerateGroceryList).toHaveBeenCalledWith({
+      expect(mockGenerateReviewedGroceryList).toHaveBeenCalledWith({
         data: {
-          recipeIds: ['recipe-1', 'recipe-2'],
+          items: [
+            {
+              category: null,
+              name: 'minced fresh basil',
+              pantryItemId: 'pantry-1',
+              quantity: '3',
+              sourceRecipeIds: ['recipe-1'],
+              unit: 'tbsp',
+            },
+            {
+              category: null,
+              name: 'flour',
+              pantryItemId: 'pantry-2',
+              quantity: '2',
+              sourceRecipeIds: ['recipe-2'],
+              unit: 'cups',
+            },
+          ],
           title: 'Weekend Shopping',
         },
       });
@@ -148,19 +223,19 @@ describe('GenerateListPanel', () => {
     });
   });
 
-  it('renders an error when grocery list generation fails', async () => {
-    mockGenerateGroceryList.mockRejectedValueOnce(new Error('Unable to save.'));
+  it('renders an error when grocery list review fails', async () => {
+    mockPreviewGroceryListMatches.mockRejectedValueOnce(
+      new Error('Unable to review.'),
+    );
 
     render(
       <GenerateListPanel onGenerated={vi.fn()} recipes={createRecipes()} />,
     );
 
     fireEvent.click(screen.getByLabelText(/Tomato Soup/));
-    fireEvent.click(
-      screen.getByRole('button', { name: 'Generate grocery list' }),
-    );
+    fireEvent.click(screen.getByRole('button', { name: 'Review matches' }));
 
-    expect(await screen.findByText('Unable to save.')).toBeTruthy();
+    expect(await screen.findByText('Unable to review.')).toBeTruthy();
   });
 });
 
