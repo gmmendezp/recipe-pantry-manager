@@ -1,15 +1,15 @@
 import { Link } from '@tanstack/react-router';
 import type { ReactNode } from 'react';
 
-import { EmptyState } from '../../../components/ui/empty-state';
+import { EmptyState } from '#/components/ui/empty-state';
 import {
   TableShell,
   tableCellClass,
   tableHeaderCellClass,
   tableRowClass,
-} from '../../../components/ui/table-shell';
-import { formatShortDate } from '../../../lib/date';
-import { formatCount } from '../../../lib/format';
+} from '#/components/ui/table-shell';
+import { formatShortDate } from '#/lib/date';
+import { formatCount } from '#/lib/format';
 import type { GroceryListSummary } from '../grocery-lists.schema';
 
 type SavedListsProps = {

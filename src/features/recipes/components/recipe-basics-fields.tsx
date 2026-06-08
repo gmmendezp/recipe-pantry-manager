@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
-import { TextAreaField, TextField } from '../../../components/ui/fields';
-import { Panel } from '../../../components/ui/panel';
+import { TextAreaField, TextField } from '#/components/ui/fields';
+import { Panel } from '#/components/ui/panel';
 import type { RecipeFormApi } from '../form/use-recipe-form';
 import { validateRecipeImageFile } from '../images/recipe-image-storage';
 

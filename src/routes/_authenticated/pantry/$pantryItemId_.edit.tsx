@@ -1,18 +1,18 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { ArrowLeft } from 'lucide-react';
 
-import { PageHeader } from '../../../components/layout/page-header';
-import { LinkButton } from '../../../components/ui/button';
-import { MissingPantryItem } from '../../../features/pantry/components/missing-pantry-item';
-import { PantryForm } from '../../../features/pantry/components/pantry-form';
+import { PageHeader } from '#/components/layout/page-header';
+import { LinkButton } from '#/components/ui/button';
+import { MissingPantryItem } from '#/features/pantry/components/missing-pantry-item';
+import { PantryForm } from '#/features/pantry/components/pantry-form';
 import {
   getPantryItem,
   updatePantryItem,
-} from '../../../features/pantry/pantry.functions';
+} from '#/features/pantry/pantry.functions';
 import {
   pantryItemIdSchema,
   pantryItemToFormValues,
-} from '../../../features/pantry/pantry.schema';
+} from '#/features/pantry/pantry.schema';
 
 export const Route = createFileRoute(
   '/_authenticated/pantry/$pantryItemId_/edit',

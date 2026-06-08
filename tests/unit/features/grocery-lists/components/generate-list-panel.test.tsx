@@ -9,20 +9,17 @@ import {
 } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import { GenerateListPanel } from '../../../../../src/features/grocery-lists/components/generate-list-panel';
+import { GenerateListPanel } from '#/features/grocery-lists/components/generate-list-panel';
 import {
   generateReviewedGroceryList,
   previewGroceryListMatches,
-} from '../../../../../src/features/grocery-lists/grocery-lists.functions';
-import type { RecipeListItem } from '../../../../../src/features/recipes/recipes.schema';
+} from '#/features/grocery-lists/grocery-lists.functions';
+import type { RecipeListItem } from '#/features/recipes/recipes.schema';
 
-vi.mock(
-  '../../../../../src/features/grocery-lists/grocery-lists.functions',
-  () => ({
-    generateReviewedGroceryList: vi.fn(),
-    previewGroceryListMatches: vi.fn(),
-  }),
-);
+vi.mock('#/features/grocery-lists/grocery-lists.functions', () => ({
+  generateReviewedGroceryList: vi.fn(),
+  previewGroceryListMatches: vi.fn(),
+}));
 
 const mockGenerateReviewedGroceryList = vi.mocked(generateReviewedGroceryList);
 const mockPreviewGroceryListMatches = vi.mocked(previewGroceryListMatches);

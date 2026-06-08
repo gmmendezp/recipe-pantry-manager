@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { recipeObjectToFormValues } from '../../../../../src/features/recipes/importer/normalize-imported-recipe';
+import { recipeObjectToFormValues } from '#/features/recipes/importer/normalize-imported-recipe';
 
 describe('recipeObjectToFormValues', () => {
   it('normalizes Schema.org recipe data into form values', () => {

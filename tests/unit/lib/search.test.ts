@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { matchesSearch, normalizeSearchText } from '../../../src/lib/search';
+import { matchesSearch, normalizeSearchText } from '#/lib/search';
 
 describe('normalizeSearchText', () => {
   it('trims, lowercases, and collapses whitespace', () => {

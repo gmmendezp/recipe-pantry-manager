@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from '@tanstack/react-router';
 
-import { CardPage } from '../components/layout/card-page';
+import { CardPage } from '#/components/layout/card-page';
 
 export const Route = createFileRoute('/check-email')({
   component: CheckEmailPage,

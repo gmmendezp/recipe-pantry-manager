@@ -6,7 +6,7 @@ import {
   tableCellClass,
   tableHeaderCellClass,
   tableRowClass,
-} from '../../../components/ui/table-shell';
+} from '#/components/ui/table-shell';
 import type { RecipeListItem } from '../recipes.schema';
 
 type RecipeTableProps = {

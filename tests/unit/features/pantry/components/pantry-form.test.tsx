@@ -9,8 +9,8 @@ import {
 } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import { PantryForm } from '../../../../../src/features/pantry/components/pantry-form';
-import type { PantryFormValues } from '../../../../../src/features/pantry/pantry.schema';
+import { PantryForm } from '#/features/pantry/components/pantry-form';
+import type { PantryFormValues } from '#/features/pantry/pantry.schema';
 
 vi.mock(
   '@tanstack/react-router',

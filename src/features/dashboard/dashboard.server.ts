@@ -1,8 +1,8 @@
 import { count, eq } from 'drizzle-orm';
 
-import { requireUser } from '../../lib/auth/server';
-import { db } from '../../lib/db/client';
-import { groceryLists, pantryItems, recipes } from '../../lib/db/schema';
+import { requireUser } from '#/lib/auth/server';
+import { db } from '#/lib/db/client';
+import { groceryLists, pantryItems, recipes } from '#/lib/db/schema';
 
 export type DashboardStats = {
   groceryListCount: number;

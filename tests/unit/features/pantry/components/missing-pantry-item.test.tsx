@@ -3,7 +3,7 @@
 import { cleanup, render, screen } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import { MissingPantryItem } from '../../../../../src/features/pantry/components/missing-pantry-item';
+import { MissingPantryItem } from '#/features/pantry/components/missing-pantry-item';
 
 vi.mock(
   '@tanstack/react-router',

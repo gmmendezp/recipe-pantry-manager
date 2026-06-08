@@ -3,8 +3,8 @@
 import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import { GroceryListSection } from '../../../../../src/features/grocery-lists/components/grocery-list-section';
-import type { GroceryListItem } from '../../../../../src/features/grocery-lists/grocery-lists.schema';
+import { GroceryListSection } from '#/features/grocery-lists/components/grocery-list-section';
+import type { GroceryListItem } from '#/features/grocery-lists/grocery-lists.schema';
 
 afterEach(() => {
   cleanup();

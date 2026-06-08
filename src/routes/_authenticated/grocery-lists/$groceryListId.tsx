@@ -2,23 +2,23 @@ import { createFileRoute, useRouter } from '@tanstack/react-router';
 import { ArrowLeft } from 'lucide-react';
 import { useState } from 'react';
 
-import { DetailHero } from '../../../components/layout/detail-hero';
-import { Badge } from '../../../components/ui/badge';
-import { Button, LinkButton } from '../../../components/ui/button';
-import { DeleteConfirmation } from '../../../components/ui/delete-confirmation';
-import { FormError } from '../../../components/ui/form-error';
-import { MissingResource } from '../../../components/ui/missing-resource';
-import { GroceryListSection } from '../../../features/grocery-lists/components/grocery-list-section';
+import { DetailHero } from '#/components/layout/detail-hero';
+import { Badge } from '#/components/ui/badge';
+import { Button, LinkButton } from '#/components/ui/button';
+import { DeleteConfirmation } from '#/components/ui/delete-confirmation';
+import { FormError } from '#/components/ui/form-error';
+import { MissingResource } from '#/components/ui/missing-resource';
+import { GroceryListSection } from '#/features/grocery-lists/components/grocery-list-section';
 import {
   deleteGroceryList,
   getGroceryList,
   toggleGroceryListItem,
-} from '../../../features/grocery-lists/grocery-lists.functions';
+} from '#/features/grocery-lists/grocery-lists.functions';
 import {
   type GroceryListDetail,
   groceryListIdSchema,
-} from '../../../features/grocery-lists/grocery-lists.schema';
-import { formatCount } from '../../../lib/format';
+} from '#/features/grocery-lists/grocery-lists.schema';
+import { formatCount } from '#/lib/format';
 
 export const Route = createFileRoute(
   '/_authenticated/grocery-lists/$groceryListId',

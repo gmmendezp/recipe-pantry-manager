@@ -3,8 +3,8 @@
 import { cleanup, render, screen } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import { RecipeTable } from '../../../../../src/features/recipes/components/recipe-table';
-import type { RecipeListItem } from '../../../../../src/features/recipes/recipes.schema';
+import { RecipeTable } from '#/features/recipes/components/recipe-table';
+import type { RecipeListItem } from '#/features/recipes/recipes.schema';
 
 vi.mock(
   '@tanstack/react-router',

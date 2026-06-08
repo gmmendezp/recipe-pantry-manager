@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { mergeGroceryListItems } from '../../../../src/features/grocery-lists/generate-grocery-list';
+import { mergeGroceryListItems } from '#/features/grocery-lists/generate-grocery-list';
 
 describe('mergeGroceryListItems', () => {
   it('merges ingredients by normalized name, unit, category, and pantry status', () => {

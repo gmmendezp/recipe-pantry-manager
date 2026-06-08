@@ -2,9 +2,9 @@ import { TanStackDevtools } from '@tanstack/react-devtools';
 import { createRootRoute, HeadContent, Scripts } from '@tanstack/react-router';
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools';
 
-import { CardPage } from '../components/layout/card-page';
-import { LinkButton } from '../components/ui/button';
-import { getCurrentUserForRoute } from '../lib/auth/functions';
+import { CardPage } from '#/components/layout/card-page';
+import { LinkButton } from '#/components/ui/button';
+import { getCurrentUserForRoute } from '#/lib/auth/functions';
 import appCss from '../styles.css?url';
 
 export const Route = createRootRoute({

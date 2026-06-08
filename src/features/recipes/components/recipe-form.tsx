@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
-import { Button, LinkButton } from '../../../components/ui/button';
-import { FormError } from '../../../components/ui/form-error';
+import { Button, LinkButton } from '#/components/ui/button';
+import { FormError } from '#/components/ui/form-error';
 import { useRecipeForm } from '../form/use-recipe-form';
 import {
   deleteUploadedRecipeImage,

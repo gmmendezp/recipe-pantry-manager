@@ -2,22 +2,22 @@ import { createFileRoute } from '@tanstack/react-router';
 import { ArrowLeft } from 'lucide-react';
 import { useState } from 'react';
 
-import { DetailHero } from '../../../components/layout/detail-hero';
-import { Badge } from '../../../components/ui/badge';
-import { Button, LinkButton } from '../../../components/ui/button';
-import { DeleteConfirmation } from '../../../components/ui/delete-confirmation';
-import { FormError } from '../../../components/ui/form-error';
-import { Panel } from '../../../components/ui/panel';
-import { MissingPantryItem } from '../../../features/pantry/components/missing-pantry-item';
+import { DetailHero } from '#/components/layout/detail-hero';
+import { Badge } from '#/components/ui/badge';
+import { Button, LinkButton } from '#/components/ui/button';
+import { DeleteConfirmation } from '#/components/ui/delete-confirmation';
+import { FormError } from '#/components/ui/form-error';
+import { Panel } from '#/components/ui/panel';
+import { MissingPantryItem } from '#/features/pantry/components/missing-pantry-item';
 import {
   deletePantryItem,
   getPantryItem,
-} from '../../../features/pantry/pantry.functions';
+} from '#/features/pantry/pantry.functions';
 import {
   type PantryItemDetail,
   pantryItemIdSchema,
-} from '../../../features/pantry/pantry.schema';
-import { formatQuantity } from '../../../lib/format';
+} from '#/features/pantry/pantry.schema';
+import { formatQuantity } from '#/lib/format';
 
 export const Route = createFileRoute('/_authenticated/pantry/$pantryItemId')({
   component: PantryItemDetailPage,

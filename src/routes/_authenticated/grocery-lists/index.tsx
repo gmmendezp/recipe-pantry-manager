@@ -1,12 +1,12 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { useState } from 'react';
 
-import { PageHeader } from '../../../components/layout/page-header';
-import { LinkButton } from '../../../components/ui/button';
-import { FilterBar } from '../../../components/ui/filter-bar';
-import { SavedLists } from '../../../features/grocery-lists/components/saved-lists';
-import { listGroceryLists } from '../../../features/grocery-lists/grocery-lists.functions';
-import { useFilteredList } from '../../../hooks/use-filtered-list';
+import { PageHeader } from '#/components/layout/page-header';
+import { LinkButton } from '#/components/ui/button';
+import { FilterBar } from '#/components/ui/filter-bar';
+import { SavedLists } from '#/features/grocery-lists/components/saved-lists';
+import { listGroceryLists } from '#/features/grocery-lists/grocery-lists.functions';
+import { useFilteredList } from '#/hooks/use-filtered-list';
 
 export const Route = createFileRoute('/_authenticated/grocery-lists/')({
   component: GroceryListsPage,

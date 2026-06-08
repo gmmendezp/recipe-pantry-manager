@@ -1,10 +1,10 @@
 import { and, asc, desc, eq } from 'drizzle-orm';
 
-import { requireUser } from '../../lib/auth/server';
-import { toIsoString } from '../../lib/date';
-import { db } from '../../lib/db/client';
-import { recipeIngredients, recipeSteps, recipes } from '../../lib/db/schema';
-import { createSupabaseServerClient } from '../../lib/supabase/server';
+import { requireUser } from '#/lib/auth/server';
+import { toIsoString } from '#/lib/date';
+import { db } from '#/lib/db/client';
+import { recipeIngredients, recipeSteps, recipes } from '#/lib/db/schema';
+import { createSupabaseServerClient } from '#/lib/supabase/server';
 import {
   getRecipeImagePathFromPublicUrl,
   RECIPE_IMAGES_BUCKET,

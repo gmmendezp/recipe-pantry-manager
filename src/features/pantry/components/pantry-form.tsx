@@ -1,10 +1,10 @@
 import { useForm } from '@tanstack/react-form';
 import { useState } from 'react';
 
-import { Button, LinkButton } from '../../../components/ui/button';
-import { TextAreaField, TextField } from '../../../components/ui/fields';
-import { FormError } from '../../../components/ui/form-error';
-import { Panel } from '../../../components/ui/panel';
+import { Button, LinkButton } from '#/components/ui/button';
+import { TextAreaField, TextField } from '#/components/ui/fields';
+import { FormError } from '#/components/ui/form-error';
+import { Panel } from '#/components/ui/panel';
 import {
   createEmptyPantryFormValues,
   type PantryFormValues,

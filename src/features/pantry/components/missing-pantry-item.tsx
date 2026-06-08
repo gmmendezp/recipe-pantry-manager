@@ -1,4 +1,4 @@
-import { MissingResource } from '../../../components/ui/missing-resource';
+import { MissingResource } from '#/components/ui/missing-resource';
 
 export function MissingPantryItem() {
   return (

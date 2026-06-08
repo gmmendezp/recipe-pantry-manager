@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
-import { matchesRecipeTimeFilter } from '../../../../src/features/recipes/recipe-filters';
-import type { RecipeListItem } from '../../../../src/features/recipes/recipes.schema';
+import { matchesRecipeTimeFilter } from '#/features/recipes/recipe-filters';
+import type { RecipeListItem } from '#/features/recipes/recipes.schema';
 
 describe('matchesRecipeTimeFilter', () => {
   it('matches all recipes for the all filter', () => {

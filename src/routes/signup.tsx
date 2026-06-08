@@ -1,11 +1,11 @@
 import { createFileRoute, Link } from '@tanstack/react-router';
 import { useState } from 'react';
 
-import { CardPage } from '../components/layout/card-page';
-import { Button } from '../components/ui/button';
-import { FormError } from '../components/ui/form-error';
-import { getAuthErrorMessage } from '../lib/auth/errors';
-import { signupWithPassword } from '../lib/auth/functions';
+import { CardPage } from '#/components/layout/card-page';
+import { Button } from '#/components/ui/button';
+import { FormError } from '#/components/ui/form-error';
+import { getAuthErrorMessage } from '#/lib/auth/errors';
+import { signupWithPassword } from '#/lib/auth/functions';
 
 export const Route = createFileRoute('/signup')({ component: SignupPage });
 

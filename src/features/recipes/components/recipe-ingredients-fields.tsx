@@ -1,8 +1,8 @@
 import clsx from 'clsx';
-import { Button } from '../../../components/ui/button';
-import { TextField } from '../../../components/ui/fields';
-import { Panel } from '../../../components/ui/panel';
-import { SortableList } from '../../../components/ui/sortable-list';
+import { Button } from '#/components/ui/button';
+import { TextField } from '#/components/ui/fields';
+import { Panel } from '#/components/ui/panel';
+import { SortableList } from '#/components/ui/sortable-list';
 import type { RecipeFormApi } from '../form/use-recipe-form';
 import { createEmptyIngredient } from '../recipes.schema';
 import { RecipeFormSectionHeader } from './recipe-form-section-header';

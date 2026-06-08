@@ -1,14 +1,14 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { useState } from 'react';
 
-import { PageHeader } from '../../../components/layout/page-header';
-import { LinkButton } from '../../../components/ui/button';
-import { EmptyState } from '../../../components/ui/empty-state';
-import { FilterBar, FilterSelect } from '../../../components/ui/filter-bar';
-import { PantryTable } from '../../../features/pantry/components/pantry-table';
-import { listPantryItems } from '../../../features/pantry/pantry.functions';
-import type { PantryListItem } from '../../../features/pantry/pantry.schema';
-import { useFilteredList } from '../../../hooks/use-filtered-list';
+import { PageHeader } from '#/components/layout/page-header';
+import { LinkButton } from '#/components/ui/button';
+import { EmptyState } from '#/components/ui/empty-state';
+import { FilterBar, FilterSelect } from '#/components/ui/filter-bar';
+import { PantryTable } from '#/features/pantry/components/pantry-table';
+import { listPantryItems } from '#/features/pantry/pantry.functions';
+import type { PantryListItem } from '#/features/pantry/pantry.schema';
+import { useFilteredList } from '#/hooks/use-filtered-list';
 
 export const Route = createFileRoute('/_authenticated/pantry/')({
   component: PantryPage,

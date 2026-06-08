@@ -1,4 +1,4 @@
-import { matchesSearch } from '../lib/search';
+import { matchesSearch } from '#/lib/search';
 
 type FilterConfig<T> = {
   filters?: Array<(item: T) => boolean>;

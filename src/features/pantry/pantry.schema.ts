@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { optionalTextSchema } from '../../lib/validation/schemas';
+import { optionalTextSchema } from '#/lib/validation/schemas';
 
 export const pantryItemInputSchema = z.object({
   category: optionalTextSchema,

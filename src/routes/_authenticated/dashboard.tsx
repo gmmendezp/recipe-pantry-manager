@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from '@tanstack/react-router';
 
-import { getDashboardStats } from '../../features/dashboard/dashboard.functions';
+import { getDashboardStats } from '#/features/dashboard/dashboard.functions';
 
 export const Route = createFileRoute('/_authenticated/dashboard')({
   component: DashboardPage,

@@ -8,9 +8,9 @@ import {
 import { LoaderCircle, Menu, X } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
-import { getAuthErrorMessage } from '../lib/auth/errors';
-import { getCurrentUserForRoute, logout } from '../lib/auth/functions';
-import { getLoginRedirectOrDefault } from '../lib/auth/redirects';
+import { getAuthErrorMessage } from '#/lib/auth/errors';
+import { getCurrentUserForRoute, logout } from '#/lib/auth/functions';
+import { getLoginRedirectOrDefault } from '#/lib/auth/redirects';
 
 export const Route = createFileRoute('/_authenticated')({
   beforeLoad: async ({ location }) => {

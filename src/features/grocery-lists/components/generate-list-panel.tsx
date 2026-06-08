@@ -1,18 +1,18 @@
 import { useState } from 'react';
+import { Button, LinkButton } from '#/components/ui/button';
+import { EmptyState } from '#/components/ui/empty-state';
 import { FilterBar, FilterSelect } from '#/components/ui/filter-bar';
-import { Button, LinkButton } from '../../../components/ui/button';
-import { EmptyState } from '../../../components/ui/empty-state';
-import { FormError } from '../../../components/ui/form-error';
-import { Panel } from '../../../components/ui/panel';
-import { useFilteredList } from '../../../hooks/use-filtered-list';
-import { getAuthErrorMessage } from '../../../lib/auth/errors';
-import { formatCount } from '../../../lib/format';
+import { FormError } from '#/components/ui/form-error';
+import { Panel } from '#/components/ui/panel';
 import {
   matchesRecipeTimeFilter,
   type RecipeTimeFilter,
   recipeTimeFilterOptions,
-} from '../../recipes/recipe-filters';
-import type { RecipeListItem } from '../../recipes/recipes.schema';
+} from '#/features/recipes/recipe-filters';
+import type { RecipeListItem } from '#/features/recipes/recipes.schema';
+import { useFilteredList } from '#/hooks/use-filtered-list';
+import { getAuthErrorMessage } from '#/lib/auth/errors';
+import { formatCount } from '#/lib/format';
 import {
   generateReviewedGroceryList,
   previewGroceryListMatches,

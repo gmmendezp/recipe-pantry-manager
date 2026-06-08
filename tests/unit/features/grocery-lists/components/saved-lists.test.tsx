@@ -3,8 +3,8 @@
 import { cleanup, render, screen } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import { SavedLists } from '../../../../../src/features/grocery-lists/components/saved-lists';
-import type { GroceryListSummary } from '../../../../../src/features/grocery-lists/grocery-lists.schema';
+import { SavedLists } from '#/features/grocery-lists/components/saved-lists';
+import type { GroceryListSummary } from '#/features/grocery-lists/grocery-lists.schema';
 
 vi.mock(
   '@tanstack/react-router',

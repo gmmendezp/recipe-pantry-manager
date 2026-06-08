@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest';
 import {
   recipeDetailToFormValues,
   recipeInputSchema,
-} from '../../../../src/features/recipes/recipes.schema';
+} from '#/features/recipes/recipes.schema';
 
 describe('recipeInputSchema', () => {
   it('trims text, converts empty optional fields to null, and parses numeric strings', () => {

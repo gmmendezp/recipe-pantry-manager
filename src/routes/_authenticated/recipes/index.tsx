@@ -1,20 +1,20 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { useState } from 'react';
 
-import { PageHeader } from '../../../components/layout/page-header';
-import { LinkButton } from '../../../components/ui/button';
-import { EmptyState } from '../../../components/ui/empty-state';
-import { FilterBar, FilterSelect } from '../../../components/ui/filter-bar';
-import { type ViewMode, ViewToggle } from '../../../components/ui/view-toggle';
-import { RecipeCards } from '../../../features/recipes/components/recipe-cards';
-import { RecipeTable } from '../../../features/recipes/components/recipe-table';
+import { PageHeader } from '#/components/layout/page-header';
+import { LinkButton } from '#/components/ui/button';
+import { EmptyState } from '#/components/ui/empty-state';
+import { FilterBar, FilterSelect } from '#/components/ui/filter-bar';
+import { type ViewMode, ViewToggle } from '#/components/ui/view-toggle';
+import { RecipeCards } from '#/features/recipes/components/recipe-cards';
+import { RecipeTable } from '#/features/recipes/components/recipe-table';
 import {
   matchesRecipeTimeFilter,
   type RecipeTimeFilter,
   recipeTimeFilterOptions,
-} from '../../../features/recipes/recipe-filters';
-import { listRecipes } from '../../../features/recipes/recipes.functions';
-import { useFilteredList } from '../../../hooks/use-filtered-list';
+} from '#/features/recipes/recipe-filters';
+import { listRecipes } from '#/features/recipes/recipes.functions';
+import { useFilteredList } from '#/hooks/use-filtered-list';
 
 export const Route = createFileRoute('/_authenticated/recipes/')({
   component: RecipesPage,

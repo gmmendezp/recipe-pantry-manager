@@ -5,7 +5,7 @@ import {
   generateReviewedGroceryListInputSchema,
   groceryListIdSchema,
   groceryListItemIdSchema,
-} from '../../../../src/features/grocery-lists/grocery-lists.schema';
+} from '#/features/grocery-lists/grocery-lists.schema';
 
 const recipeId = '11111111-1111-4111-8111-111111111111';
 const groceryListId = '22222222-2222-4222-8222-222222222222';

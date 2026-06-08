@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { getAuthErrorMessage } from '../../../../src/lib/auth/errors';
+import { getAuthErrorMessage } from '#/lib/auth/errors';
 
 describe('getAuthErrorMessage', () => {
   it('returns the fallback message for non-error values', () => {

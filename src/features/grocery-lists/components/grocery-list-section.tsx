@@ -1,6 +1,6 @@
-import { Button } from '../../../components/ui/button';
-import { Panel } from '../../../components/ui/panel';
-import { formatDelimitedMeta, formatQuantity } from '../../../lib/format';
+import { Button } from '#/components/ui/button';
+import { Panel } from '#/components/ui/panel';
+import { formatDelimitedMeta, formatQuantity } from '#/lib/format';
 import type { GroceryListItem } from '../grocery-lists.schema';
 
 type GroceryListSectionProps = {

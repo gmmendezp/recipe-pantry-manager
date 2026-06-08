@@ -2,22 +2,19 @@ import { createFileRoute } from '@tanstack/react-router';
 import { ArrowLeft } from 'lucide-react';
 import { useState } from 'react';
 
-import { DetailHero } from '../../../components/layout/detail-hero';
-import { Badge } from '../../../components/ui/badge';
-import { Button, LinkButton } from '../../../components/ui/button';
-import { DeleteConfirmation } from '../../../components/ui/delete-confirmation';
-import { FormError } from '../../../components/ui/form-error';
-import { Panel } from '../../../components/ui/panel';
-import { MissingRecipe } from '../../../features/recipes/components/missing-recipe';
-import {
-  deleteRecipe,
-  getRecipe,
-} from '../../../features/recipes/recipes.functions';
+import { DetailHero } from '#/components/layout/detail-hero';
+import { Badge } from '#/components/ui/badge';
+import { Button, LinkButton } from '#/components/ui/button';
+import { DeleteConfirmation } from '#/components/ui/delete-confirmation';
+import { FormError } from '#/components/ui/form-error';
+import { Panel } from '#/components/ui/panel';
+import { MissingRecipe } from '#/features/recipes/components/missing-recipe';
+import { deleteRecipe, getRecipe } from '#/features/recipes/recipes.functions';
 import {
   type RecipeDetail,
   recipeIdSchema,
-} from '../../../features/recipes/recipes.schema';
-import { formatDelimitedMeta } from '../../../lib/format';
+} from '#/features/recipes/recipes.schema';
+import { formatDelimitedMeta } from '#/lib/format';
 
 export const Route = createFileRoute('/_authenticated/recipes/$recipeId')({
   component: RecipeDetailPage,

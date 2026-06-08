@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest';
 import {
   pantryItemInputSchema,
   pantryItemToFormValues,
-} from '../../../../src/features/pantry/pantry.schema';
+} from '#/features/pantry/pantry.schema';
 
 describe('pantryItemInputSchema', () => {
   it('trims text and converts empty optional fields to null', () => {

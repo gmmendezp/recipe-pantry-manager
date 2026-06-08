@@ -9,7 +9,7 @@ export { validateRecipeImageFile } from './recipe-image-storage';
 export async function uploadRecipeImage(file: File) {
   const extension = validateRecipeImageFile(file);
 
-  const { supabase } = await import('../../../lib/supabase/client');
+  const { supabase } = await import('#/lib/supabase/client');
   const { data: userData, error: userError } = await supabase.auth.getUser();
 
   if (userError || !userData.user) {
@@ -38,7 +38,7 @@ export async function uploadRecipeImage(file: File) {
 
 export async function deleteUploadedRecipeImage(imageUrl: string) {
   try {
-    const { supabase } = await import('../../../lib/supabase/client');
+    const { supabase } = await import('#/lib/supabase/client');
     const { data: userData } = await supabase.auth.getUser();
     const user = userData.user;
 

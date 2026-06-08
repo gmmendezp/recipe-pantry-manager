@@ -3,7 +3,7 @@
 import { cleanup, render, screen } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import { MissingRecipe } from '../../../../../src/features/recipes/components/missing-recipe';
+import { MissingRecipe } from '#/features/recipes/components/missing-recipe';
 
 vi.mock(
   '@tanstack/react-router',

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { validateImportUrl } from '../../../../../src/features/recipes/importer/import-fetch.server';
+import { validateImportUrl } from '#/features/recipes/importer/import-fetch.server';
 
 describe('validateImportUrl', () => {
   it('allows normal http and https URLs', () => {

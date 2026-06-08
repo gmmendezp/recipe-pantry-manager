@@ -1,8 +1,8 @@
 import { createFileRoute } from '@tanstack/react-router';
 
-import { PageHeader } from '../../../components/layout/page-header';
-import { PantryForm } from '../../../features/pantry/components/pantry-form';
-import { createPantryItem } from '../../../features/pantry/pantry.functions';
+import { PageHeader } from '#/components/layout/page-header';
+import { PantryForm } from '#/features/pantry/components/pantry-form';
+import { createPantryItem } from '#/features/pantry/pantry.functions';
 
 export const Route = createFileRoute('/_authenticated/pantry/new')({
   component: NewPantryItemPage,

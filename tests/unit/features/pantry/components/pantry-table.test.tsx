@@ -3,8 +3,8 @@
 import { cleanup, render, screen } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import { PantryTable } from '../../../../../src/features/pantry/components/pantry-table';
-import type { PantryListItem } from '../../../../../src/features/pantry/pantry.schema';
+import { PantryTable } from '#/features/pantry/components/pantry-table';
+import type { PantryListItem } from '#/features/pantry/pantry.schema';
 
 vi.mock(
   '@tanstack/react-router',

@@ -9,25 +9,22 @@ import {
 } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { RecipeForm } from '../../../../../src/features/recipes/components/recipe-form';
+import { RecipeForm } from '#/features/recipes/components/recipe-form';
 import {
   deleteUploadedRecipeImage,
   uploadRecipeImage,
-} from '../../../../../src/features/recipes/images/recipe-image-upload';
-import type { RecipeFormValues } from '../../../../../src/features/recipes/recipes.schema';
+} from '#/features/recipes/images/recipe-image-upload';
+import type { RecipeFormValues } from '#/features/recipes/recipes.schema';
 
 vi.mock(
   '@tanstack/react-router',
   async () => import('../../../helpers/mock-router'),
 );
 
-vi.mock(
-  '../../../../../src/features/recipes/images/recipe-image-upload',
-  () => ({
-    deleteUploadedRecipeImage: vi.fn(),
-    uploadRecipeImage: vi.fn(),
-  }),
-);
+vi.mock('#/features/recipes/images/recipe-image-upload', () => ({
+  deleteUploadedRecipeImage: vi.fn(),
+  uploadRecipeImage: vi.fn(),
+}));
 
 const mockUploadRecipeImage = vi.mocked(uploadRecipeImage);
 const mockDeleteUploadedRecipeImage = vi.mocked(deleteUploadedRecipeImage);

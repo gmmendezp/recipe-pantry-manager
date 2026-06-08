@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { normalizeIngredientShoppingKey } from '../../../../src/lib/normalization/ingredients';
+import { normalizeIngredientShoppingKey } from '#/lib/normalization/ingredients';
 
 describe('normalizeIngredientShoppingKey', () => {
   it('removes prep words used for recipe instructions', () => {

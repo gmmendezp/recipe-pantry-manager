@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { parseImportedIngredient } from '../../../../src/features/recipes/importer/parse-imported-ingredient';
+import { parseImportedIngredient } from '#/features/recipes/importer/parse-imported-ingredient';
 
 describe('parseImportedIngredient', () => {
   it('parses simple quantity, unit, and name', () => {

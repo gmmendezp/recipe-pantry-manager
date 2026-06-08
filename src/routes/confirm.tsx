@@ -1,8 +1,8 @@
 import { createFileRoute, Link, redirect } from '@tanstack/react-router';
 
-import { CardPage } from '../components/layout/card-page';
-import { FormError } from '../components/ui/form-error';
-import { confirmEmail } from '../lib/auth/functions';
+import { CardPage } from '#/components/layout/card-page';
+import { FormError } from '#/components/ui/form-error';
+import { confirmEmail } from '#/lib/auth/functions';
 
 type ConfirmSearch = {
   token_hash?: string;

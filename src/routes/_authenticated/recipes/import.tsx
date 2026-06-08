@@ -1,17 +1,17 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { useState } from 'react';
 
-import { PageHeader } from '../../../components/layout/page-header';
-import { Button, LinkButton } from '../../../components/ui/button';
-import { FormError } from '../../../components/ui/form-error';
-import { Panel } from '../../../components/ui/panel';
-import { RecipeForm } from '../../../features/recipes/components/recipe-form';
+import { PageHeader } from '#/components/layout/page-header';
+import { Button, LinkButton } from '#/components/ui/button';
+import { FormError } from '#/components/ui/form-error';
+import { Panel } from '#/components/ui/panel';
+import { RecipeForm } from '#/features/recipes/components/recipe-form';
 import {
   createRecipe,
   importRecipe,
-} from '../../../features/recipes/recipes.functions';
-import type { RecipeFormValues } from '../../../features/recipes/recipes.schema';
-import { getAuthErrorMessage } from '../../../lib/auth/errors';
+} from '#/features/recipes/recipes.functions';
+import type { RecipeFormValues } from '#/features/recipes/recipes.schema';
+import { getAuthErrorMessage } from '#/lib/auth/errors';
 
 export const Route = createFileRoute('/_authenticated/recipes/import')({
   component: ImportRecipePage,

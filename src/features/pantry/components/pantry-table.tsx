@@ -6,8 +6,8 @@ import {
   tableCellClass,
   tableHeaderCellClass,
   tableRowClass,
-} from '../../../components/ui/table-shell';
-import { formatQuantity } from '../../../lib/format';
+} from '#/components/ui/table-shell';
+import { formatQuantity } from '#/lib/format';
 import type { PantryListItem } from '../pantry.schema';
 
 type PantryTableProps = {

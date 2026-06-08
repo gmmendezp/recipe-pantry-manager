@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
 
-vi.mock('../../../../../src/lib/env', () => ({
+vi.mock('#/lib/env', () => ({
   clientEnv: {
     VITE_SUPABASE_ANON_KEY: 'test-anon-key',
     VITE_SUPABASE_URL: 'https://example.supabase.co/',
@@ -10,7 +10,7 @@ vi.mock('../../../../../src/lib/env', () => ({
 import {
   getRecipeImagePathFromPublicUrl,
   validateRecipeImageFile,
-} from '../../../../../src/features/recipes/images/recipe-image-storage';
+} from '#/features/recipes/images/recipe-image-storage';
 
 describe('validateRecipeImageFile', () => {
   it('returns the storage extension for supported image types', () => {

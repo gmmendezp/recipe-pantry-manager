@@ -3,7 +3,7 @@ import { z } from 'zod';
 import {
   optionalPositiveIntegerSchema,
   optionalTextSchema,
-} from '../../lib/validation/schemas';
+} from '#/lib/validation/schemas';
 
 export const recipeIngredientInputSchema = z.object({
   category: optionalTextSchema,

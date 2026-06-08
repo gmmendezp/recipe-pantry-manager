@@ -1,10 +1,10 @@
 import { X } from 'lucide-react';
 import { useState } from 'react';
+import { Button } from '#/components/ui/button';
+import { EmptyState } from '#/components/ui/empty-state';
+import { FormError } from '#/components/ui/form-error';
+import { Panel } from '#/components/ui/panel';
 import { formatQuantity } from '#/lib/format';
-import { Button } from '../../../components/ui/button';
-import { EmptyState } from '../../../components/ui/empty-state';
-import { FormError } from '../../../components/ui/form-error';
-import { Panel } from '../../../components/ui/panel';
 import type {
   GroceryListReviewItem,
   PantryMatchOption,

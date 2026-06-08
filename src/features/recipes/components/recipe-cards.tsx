@@ -1,7 +1,7 @@
 import { Link } from '@tanstack/react-router';
 import { Pencil } from 'lucide-react';
 
-import { Badge } from '../../../components/ui/badge';
+import { Badge } from '#/components/ui/badge';
 import type { RecipeListItem } from '../recipes.schema';
 
 type RecipeCardsProps = {

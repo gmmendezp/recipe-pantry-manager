@@ -4,7 +4,7 @@ import {
   getLoginRedirect,
   getLoginRedirectOrDefault,
   loginRedirects,
-} from '../../../../src/lib/auth/redirects';
+} from '#/lib/auth/redirects';
 
 describe('login redirect helpers', () => {
   it.each(loginRedirects)('allows %s', (redirect) => {

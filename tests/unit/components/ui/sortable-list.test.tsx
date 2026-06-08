@@ -4,7 +4,7 @@ import { cleanup, render, screen } from '@testing-library/react';
 import type { ReactNode } from 'react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import { SortableList } from '../../../../src/components/ui/sortable-list';
+import { SortableList } from '#/components/ui/sortable-list';
 
 type DragEndHandler = (event: {
   canceled: boolean;

@@ -1,15 +1,15 @@
 import { and, asc, desc, eq, inArray } from 'drizzle-orm';
 
-import { requireUser } from '../../lib/auth/server';
-import { toIsoString } from '../../lib/date';
-import { db } from '../../lib/db/client';
+import { requireUser } from '#/lib/auth/server';
+import { toIsoString } from '#/lib/date';
+import { db } from '#/lib/db/client';
 import {
   groceryListItems,
   groceryLists,
   pantryItems,
   recipeIngredients,
   recipes,
-} from '../../lib/db/schema';
+} from '#/lib/db/schema';
 import { mergeGroceryListItems } from './generate-grocery-list';
 import type {
   GroceryListDetail,

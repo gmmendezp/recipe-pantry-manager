@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest';
 import {
   extractJsonLdValues,
   findRecipeObject,
-} from '../../../../../src/features/recipes/importer/json-ld-recipe';
+} from '#/features/recipes/importer/json-ld-recipe';
 
 describe('extractJsonLdValues', () => {
   it('extracts JSON-LD script values', () => {

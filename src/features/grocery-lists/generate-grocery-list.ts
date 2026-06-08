@@ -1,4 +1,4 @@
-import { normalizeIngredientShoppingKey } from '../../lib/normalization/ingredients';
+import { normalizeIngredientShoppingKey } from '#/lib/normalization/ingredients';
 
 type RecipeIngredientForGroceryList = {
   category: string | null;

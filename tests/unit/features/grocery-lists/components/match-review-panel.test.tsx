@@ -12,11 +12,11 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import {
   MatchReviewPanel,
   type ReviewedItem,
-} from '../../../../../src/features/grocery-lists/components/match-review-panel';
+} from '#/features/grocery-lists/components/match-review-panel';
 import type {
   GroceryListReviewItem,
   PantryMatchOption,
-} from '../../../../../src/features/grocery-lists/grocery-lists.schema';
+} from '#/features/grocery-lists/grocery-lists.schema';
 
 afterEach(() => {
   cleanup();

@@ -1,10 +1,10 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { ArrowLeft } from 'lucide-react';
 
-import { PageHeader } from '../../../components/layout/page-header';
-import { LinkButton } from '../../../components/ui/button';
-import { GenerateListPanel } from '../../../features/grocery-lists/components/generate-list-panel';
-import { listRecipes } from '../../../features/recipes/recipes.functions';
+import { PageHeader } from '#/components/layout/page-header';
+import { LinkButton } from '#/components/ui/button';
+import { GenerateListPanel } from '#/features/grocery-lists/components/generate-list-panel';
+import { listRecipes } from '#/features/recipes/recipes.functions';
 
 export const Route = createFileRoute('/_authenticated/grocery-lists/new')({
   component: NewGroceryListPage,

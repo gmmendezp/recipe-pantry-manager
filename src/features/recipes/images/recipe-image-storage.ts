@@ -1,4 +1,4 @@
-import { clientEnv } from '../../../lib/env';
+import { clientEnv } from '#/lib/env';
 
 export const RECIPE_IMAGES_BUCKET = 'recipe-images';
 

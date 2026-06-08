@@ -1,8 +1,8 @@
 import { createFileRoute } from '@tanstack/react-router';
 
-import { PageHeader } from '../../../components/layout/page-header';
-import { RecipeForm } from '../../../features/recipes/components/recipe-form';
-import { createRecipe } from '../../../features/recipes/recipes.functions';
+import { PageHeader } from '#/components/layout/page-header';
+import { RecipeForm } from '#/features/recipes/components/recipe-form';
+import { createRecipe } from '#/features/recipes/recipes.functions';
 
 export const Route = createFileRoute('/_authenticated/recipes/new')({
   component: NewRecipePage,

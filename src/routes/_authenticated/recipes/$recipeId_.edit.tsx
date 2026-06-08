@@ -1,18 +1,15 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { ArrowLeft } from 'lucide-react';
 
-import { PageHeader } from '../../../components/layout/page-header';
-import { LinkButton } from '../../../components/ui/button';
-import { MissingRecipe } from '../../../features/recipes/components/missing-recipe';
-import { RecipeForm } from '../../../features/recipes/components/recipe-form';
-import {
-  getRecipe,
-  updateRecipe,
-} from '../../../features/recipes/recipes.functions';
+import { PageHeader } from '#/components/layout/page-header';
+import { LinkButton } from '#/components/ui/button';
+import { MissingRecipe } from '#/features/recipes/components/missing-recipe';
+import { RecipeForm } from '#/features/recipes/components/recipe-form';
+import { getRecipe, updateRecipe } from '#/features/recipes/recipes.functions';
 import {
   recipeDetailToFormValues,
   recipeIdSchema,
-} from '../../../features/recipes/recipes.schema';
+} from '#/features/recipes/recipes.schema';
 
 export const Route = createFileRoute('/_authenticated/recipes/$recipeId_/edit')(
   {
