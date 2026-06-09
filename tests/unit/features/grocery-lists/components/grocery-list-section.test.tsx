@@ -46,7 +46,34 @@ describe('GroceryListSection', () => {
 
     expect(screen.getByText('Tomato')).toBeTruthy();
     expect(screen.getByText('2 · cups · Produce')).toBeTruthy();
-    expect(screen.getByRole('button', { name: 'Check off' })).toBeTruthy();
+    expect(
+      screen.getByRole('button', { name: 'Check off Tomato' }),
+    ).toBeTruthy();
+    expect(
+      screen.getByRole('button', { name: 'Need to Buy (1)' }),
+    ).toHaveProperty('ariaExpanded', 'true');
+  });
+
+  it('collapses and expands the section items', () => {
+    render(
+      <GroceryListSection
+        emptyText="Nothing to buy."
+        items={[createGroceryListItem()]}
+        onToggle={vi.fn()}
+        pendingItemId={null}
+        title="Need to Buy"
+      />,
+    );
+
+    fireEvent.click(screen.getByRole('button', { name: 'Need to Buy (1)' }));
+
+    expect(
+      screen.getByRole('button', { name: 'Need to Buy (1)' }),
+    ).toHaveProperty('ariaExpanded', 'false');
+
+    fireEvent.click(screen.getByRole('button', { name: 'Need to Buy (1)' }));
+
+    expect(screen.getByText('Tomato')).toBeTruthy();
   });
 
   it('renders pantry match details', () => {
@@ -84,7 +111,7 @@ describe('GroceryListSection', () => {
       />,
     );
 
-    expect(screen.getByRole('button', { name: 'Uncheck' })).toBeTruthy();
+    expect(screen.getByRole('button', { name: 'Uncheck Tomato' })).toBeTruthy();
   });
 
   it('disables the pending item action', () => {
@@ -98,9 +125,10 @@ describe('GroceryListSection', () => {
       />,
     );
 
-    const button = screen.getByRole('button', { name: 'Updating...' });
+    const button = screen.getByRole('button', { name: 'Check off Tomato' });
 
     expect(button).toHaveProperty('disabled', true);
+    expect(screen.getByText('Updating')).toBeTruthy();
   });
 
   it('calls onToggle with the item ID when checking off an item', () => {
@@ -116,7 +144,7 @@ describe('GroceryListSection', () => {
       />,
     );
 
-    fireEvent.click(screen.getByRole('button', { name: 'Check off' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Check off Tomato' }));
 
     expect(onToggle).toHaveBeenCalledWith('item-1');
   });

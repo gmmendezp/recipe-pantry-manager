@@ -1,6 +1,6 @@
 import { Link } from '@tanstack/react-router';
+import clsx from 'clsx';
 import { Pencil } from 'lucide-react';
-
 import {
   TableShell,
   tableCellClass,
@@ -54,7 +54,7 @@ export function PantryTable({ pantryItems }: PantryTableProps) {
               {formatQuantity(pantryItem.quantity, pantryItem.unit)}
             </td>
             <td className={tableCellClass}>{pantryItem.category ?? '-'}</td>
-            <td className={`${tableCellClass} text-right`}>
+            <td className={clsx(tableCellClass, 'text-right')}>
               <div className="flex justify-end gap-2">
                 <Link
                   aria-label={`Edit ${pantryItem.name}`}

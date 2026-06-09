@@ -1,4 +1,4 @@
-import { createFileRoute, useRouter } from '@tanstack/react-router';
+import { createFileRoute } from '@tanstack/react-router';
 import { ArrowLeft } from 'lucide-react';
 import { useState } from 'react';
 
@@ -61,17 +61,17 @@ function GroceryListDetailView({
 }: {
   groceryList: GroceryListDetail;
 }) {
-  const router = useRouter();
   const navigate = Route.useNavigate();
+  const [items, setItems] = useState(groceryList.items);
   const [pendingItemId, setPendingItemId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isConfirmingDelete, setIsConfirmingDelete] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
-  const checkedItems = groceryList.items.filter((item) => item.isChecked);
-  const pantryItems = groceryList.items.filter(
+  const checkedItems = items.filter((item) => item.isChecked);
+  const pantryItems = items.filter(
     (item) => item.pantryMatch && !item.isChecked,
   );
-  const needToBuyItems = groceryList.items.filter(
+  const needToBuyItems = items.filter(
     (item) => !item.pantryMatch && !item.isChecked,
   );
 
@@ -80,8 +80,17 @@ function GroceryListDetailView({
     setPendingItemId(itemId);
 
     try {
-      await toggleGroceryListItem({ data: { groceryListItemId: itemId } });
-      await router.invalidate();
+      const updatedItem = await toggleGroceryListItem({
+        data: { groceryListItemId: itemId },
+      });
+
+      if (!updatedItem) {
+        throw new Error('Unable to update this grocery item.');
+      }
+
+      setItems((current) =>
+        current.map((item) => (item.id === itemId ? updatedItem : item)),
+      );
     } catch (toggleError) {
       setError(
         toggleError instanceof Error
@@ -159,30 +168,33 @@ function GroceryListDetailView({
 
       {error ? <FormError>{error}</FormError> : null}
 
-      <section className="grid gap-6 lg:grid-cols-2">
+      <GroceryListSection
+        emptyText="There are no more shopping items for these recipes."
+        items={needToBuyItems}
+        onToggle={handleToggle}
+        pendingItemId={pendingItemId}
+        title="Need to Buy"
+      />
+
+      <section className="grid items-start gap-6 lg:grid-cols-2">
         <GroceryListSection
-          emptyText="No shopping items for these recipes."
-          items={needToBuyItems}
-          onToggle={handleToggle}
-          pendingItemId={pendingItemId}
-          title="Need to Buy"
-        />
-        <GroceryListSection
-          emptyText="No ingredients matched your pantry."
+          emptyText="No more ingredients match your pantry."
           items={pantryItems}
           onToggle={handleToggle}
           pendingItemId={pendingItemId}
           title="Already in Pantry"
+          variant="secondary"
+        />
+
+        <GroceryListSection
+          emptyText="Checked items will stay visible here while shopping."
+          items={checkedItems}
+          onToggle={handleToggle}
+          pendingItemId={pendingItemId}
+          title="Checked Off"
+          variant="secondary"
         />
       </section>
-
-      <GroceryListSection
-        emptyText="Checked items stay visible here while shopping."
-        items={checkedItems}
-        onToggle={handleToggle}
-        pendingItemId={pendingItemId}
-        title="Checked Off"
-      />
     </div>
   );
 }

@@ -1,7 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router';
+import clsx from 'clsx';
 import { ArrowLeft } from 'lucide-react';
 import { useState } from 'react';
-
 import { DetailHero } from '#/components/layout/detail-hero';
 import { Badge } from '#/components/ui/badge';
 import { Button, LinkButton } from '#/components/ui/button';
@@ -171,7 +171,7 @@ function DetailItem({
   wide?: boolean;
 }) {
   return (
-    <div className={wide ? 'sm:col-span-2' : undefined}>
+    <div className={clsx(wide && 'sm:col-span-2')}>
       <dt className="font-medium text-muted text-sm">{label}</dt>
       <dd className="mt-1 font-semibold text-lg">{children}</dd>
     </div>

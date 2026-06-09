@@ -1,4 +1,4 @@
-import { clsx } from 'clsx';
+import clsx from 'clsx';
 import { LayoutGrid, Table } from 'lucide-react';
 
 export type ViewMode = 'cards' | 'table';

@@ -5,9 +5,9 @@ import {
   redirect,
   useRouterState,
 } from '@tanstack/react-router';
+import clsx from 'clsx';
 import { LoaderCircle, Menu, X } from 'lucide-react';
 import { useEffect, useState } from 'react';
-
 import { getAuthErrorMessage } from '#/lib/auth/errors';
 import { getCurrentUserForRoute, logout } from '#/lib/auth/functions';
 import { getLoginRedirectOrDefault } from '#/lib/auth/redirects';
@@ -117,7 +117,10 @@ function AuthenticatedLayout() {
             </button>
           </div>
           <div
-            className={`${isMenuOpen ? 'flex' : 'hidden'} mt-4 flex-col gap-3 md:mt-0 md:flex md:items-end`}
+            className={clsx(
+              isMenuOpen ? 'flex' : 'hidden',
+              'mt-4 flex-col gap-3 md:mt-0 md:flex md:items-end',
+            )}
             id="authenticated-navigation"
           >
             <nav className="flex flex-col gap-2 md:flex-row md:flex-wrap">
@@ -126,7 +129,10 @@ function AuthenticatedLayout() {
                   activeProps={{
                     className: 'bg-primary text-paper',
                   }}
-                  className={`inline-flex items-center justify-between gap-2 rounded-full px-4 py-2 font-medium text-muted text-sm transition hover:bg-primary-soft hover:text-primary-hover ${pendingPath === item.to ? 'pointer-events-none opacity-70' : ''}`}
+                  className={clsx(
+                    'inline-flex items-center justify-between gap-2 rounded-full px-4 py-2 font-medium text-muted text-sm transition hover:bg-primary-soft hover:text-primary-hover',
+                    pendingPath === item.to && 'pointer-events-none opacity-70',
+                  )}
                   key={item.to}
                   onClick={() => handleNavigationClick(item.to)}
                   to={item.to}

@@ -1,3 +1,4 @@
+import clsx from 'clsx';
 import type { InputHTMLAttributes, TextareaHTMLAttributes } from 'react';
 
 type TextFieldProps = {
@@ -39,7 +40,9 @@ export function TextField({
 
   return (
     <label className="block space-y-2">
-      <span className={`font-medium text-foreground text-sm ${labelClassName}`}>
+      <span
+        className={clsx('font-medium text-foreground text-sm', labelClassName)}
+      >
         {label}
       </span>
       <input
@@ -72,7 +75,9 @@ export function TextAreaField({
 
   return (
     <label className="block space-y-2">
-      <span className={`font-medium text-foreground text-sm ${labelClassName}`}>
+      <span
+        className={clsx('font-medium text-foreground text-sm', labelClassName)}
+      >
         {label}
       </span>
       <textarea

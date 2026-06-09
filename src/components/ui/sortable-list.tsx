@@ -1,5 +1,6 @@
 import { DragDropProvider } from '@dnd-kit/react';
 import { isSortableOperation, useSortable } from '@dnd-kit/react/sortable';
+import clsx from 'clsx';
 import { GripVertical } from 'lucide-react';
 import type { ComponentType, ReactNode } from 'react';
 import { useId } from 'react';
@@ -79,7 +80,7 @@ function SortableListItem<T>({
 
   function DragHandle({ className = '', label }: DragHandleProps) {
     return (
-      <div className={`flex items-start ${className}`}>
+      <div className={clsx('flex items-start', className)}>
         <button
           aria-label={label}
           className="inline-flex h-10 w-10 cursor-grab touch-none items-center justify-center rounded-lg text-muted transition hover:bg-primary-soft hover:text-primary active:cursor-grabbing"
@@ -93,7 +94,7 @@ function SortableListItem<T>({
   }
 
   return (
-    <div className={isDragSource ? 'opacity-60' : undefined} ref={ref}>
+    <div className={clsx(isDragSource && 'opacity-60')} ref={ref}>
       {renderItem({ DragHandle, index, item })}
     </div>
   );

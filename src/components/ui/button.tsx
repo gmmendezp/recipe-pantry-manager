@@ -1,5 +1,5 @@
 import { createLink } from '@tanstack/react-router';
-import { clsx } from 'clsx';
+import clsx from 'clsx';
 import type { AnchorHTMLAttributes, ButtonHTMLAttributes } from 'react';
 import { forwardRef } from 'react';
 
