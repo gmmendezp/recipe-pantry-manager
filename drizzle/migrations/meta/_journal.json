@@ -29,6 +29,13 @@
       "when": 1780684264191,
       "tag": "0003_recipe_images_select_own_folder_policy",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1795105565066,
+      "tag": "0004_sudden_violations",
+      "breakpoints": true
     }
   ]
 }

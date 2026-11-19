@@ -5,3 +5,6 @@
   command = "pnpm run dev"
   targetPort = 3000
   port = 8888
+
+[functions."reset-demo-data"]
+  schedule = "@hourly"

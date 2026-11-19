@@ -13,7 +13,7 @@ export type JsonLdObject = { [key: string]: JsonLdValue };
 export function extractJsonLdValues(html: string): JsonLdValue[] {
   const values: JsonLdValue[] = [];
   const scriptPattern =
-    /<script\b[^>]*type=["']application\/ld\+json["'][^>]*>([\s\S]*?)<\/script>/gi;
+    /<script\b[^>]*\btype\s*=\s*(?:["']application\/ld\+json["']|application\/ld\+json\b)[^>]*>([\s\S]*?)<\/script>/gi;
 
   for (const match of html.matchAll(scriptPattern)) {
     const content = match[1]?.trim() ?? '';

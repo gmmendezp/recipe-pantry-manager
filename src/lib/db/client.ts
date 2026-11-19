@@ -1,7 +1,7 @@
 import { drizzle } from 'drizzle-orm/postgres-js';
 import postgres from 'postgres';
 
-import { serverEnv } from '../env';
+import { serverEnv } from '../env.server';
 import * as schema from './schema';
 
 if (!serverEnv.DATABASE_URL) {

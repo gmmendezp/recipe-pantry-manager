@@ -13,3 +13,6 @@ dist-ssr
 __unconfig*
 todos.json
 test-results
+
+.agents
+skills-lock.json

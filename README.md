@@ -68,12 +68,38 @@ DATABASE_URL="postgresql://postgres.PROJECT_REF:YOUR_PASSWORD@aws-1-us-east-1.po
 VITE_SUPABASE_URL="https://PROJECT_REF.supabase.co"
 VITE_SUPABASE_ANON_KEY="YOUR_SUPABASE_ANON_KEY"
 
+DEMO_EMAIL="recipe-pantry-demo@example.com"
+DEMO_PASSWORD="YOUR_DEMO_ACCOUNT_PASSWORD"
+
 E2E_EMAIL="recipe-pantry-e2e@example.com"
 E2E_PASSWORD="YOUR_E2E_TEST_PASSWORD"
 PLAYWRIGHT_BASE_URL="http://localhost:3000"
 ```
 
-`DATABASE_URL`, `VITE_SUPABASE_URL`, and `VITE_SUPABASE_ANON_KEY` are required for the app to connect to Supabase. The `E2E_*` values are only required when running the Playwright workflow test.
+`DATABASE_URL`, `VITE_SUPABASE_URL`, and `VITE_SUPABASE_ANON_KEY` are required for the app to connect to Supabase. `DEMO_EMAIL` and `DEMO_PASSWORD` are optional and must both be configured for the demo login button to appear. They are read only on the server and are not exposed to the browser. The `E2E_*` values are only required when running the Playwright workflow test.
+
+## Demo Account
+
+To offer a demo login:
+
+1. Create a user in Supabase Authentication and confirm its email if required.
+2. Set `DEMO_EMAIL` and `DEMO_PASSWORD` to that user's credentials.
+3. Log in as the demo user and add representative recipes, pantry items, and grocery lists.
+
+All visitors use the same editable demo account and can modify its data. Do not store personal or sensitive information in the account.
+
+### Automatic Demo Restoration
+
+Netlify checks the demo account once per hour. Data is restored only when at least 12 hours have passed since the previous reset and at least 4 hours have passed since the latest demo login. Recent logins postpone restoration so an active visitor is not interrupted.
+
+The reset replaces only the configured demo user's recipes, pantry items, tags, and grocery lists. Other users are unaffected. The canonical dataset is stored in:
+
+- `src/features/demo/demo-seed.server.ts`
+- `src/features/demo/demo-recipes.snapshot.json`
+
+To change the restored demo content, update these files and deploy again.
+
+The scheduled function is named `reset-demo-data`. It can be invoked from Netlify's Functions page using **Run now**. Manual invocation performs the same eligibility checks and does not force a reset.
 
 ## Database
 
@@ -152,5 +178,10 @@ Add the Supabase environment variables in Netlify before deploying:
 - `DATABASE_URL`
 - `VITE_SUPABASE_URL`
 - `VITE_SUPABASE_ANON_KEY`
+
+To enable the demo login in the deployed app, also add:
+
+- `DEMO_EMAIL`
+- `DEMO_PASSWORD`
 
 Server functions run through Netlify Functions.

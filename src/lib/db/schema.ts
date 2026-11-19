@@ -344,6 +344,13 @@ export const groceryListItems = pgTable(
   ],
 ).enableRLS();
 
+export const demoResetState = pgTable('demo_reset_state', {
+  userId: uuid('user_id')
+    .primaryKey()
+    .references(() => authUsers.id, { onDelete: 'cascade' }),
+  lastResetAt: timestamp('last_reset_at', { withTimezone: true }).notNull(),
+}).enableRLS();
+
 export const recipesRelations = relations(recipes, ({ many }) => ({
   ingredients: many(recipeIngredients),
   steps: many(recipeSteps),

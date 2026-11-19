@@ -16,6 +16,14 @@ describe('extractJsonLdValues', () => {
     expect(values).toEqual([{ '@type': 'Recipe', name: 'Soup' }]);
   });
 
+  it('extracts JSON-LD with an unquoted type attribute', () => {
+    const values = extractJsonLdValues(`
+      <script type=application/ld+json class=schema-data>{"@type":"Recipe","name":"Example Recipe"}</script>
+    `);
+
+    expect(values).toEqual([{ '@type': 'Recipe', name: 'Example Recipe' }]);
+  });
+
   it('parses entity-encoded JSON-LD when raw JSON fails', () => {
     const values = extractJsonLdValues(`
       <script type="application/ld+json">{&quot;@type&quot;:&quot;Recipe&quot;,&quot;name&quot;:&quot;Soup&quot;}</script>

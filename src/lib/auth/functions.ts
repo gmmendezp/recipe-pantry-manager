@@ -3,6 +3,7 @@ import { createServerFn } from '@tanstack/react-start';
 import { getRequestUrl } from '@tanstack/react-start/server';
 import { z } from 'zod';
 
+import { serverEnv } from '../env.server';
 import { createSupabaseServerClient } from '../supabase/server';
 import {
   authCredentialsSchema,
@@ -44,6 +45,37 @@ export const loginWithPassword = createServerFn({ method: 'POST' })
       },
     };
   });
+
+export const getDemoAccountAvailability = createServerFn({
+  method: 'GET',
+}).handler(() => Boolean(serverEnv.DEMO_EMAIL && serverEnv.DEMO_PASSWORD));
+
+export const loginWithDemoAccount = createServerFn({ method: 'POST' }).handler(
+  async () => {
+    const { DEMO_EMAIL, DEMO_PASSWORD } = serverEnv;
+
+    if (!DEMO_EMAIL || !DEMO_PASSWORD) {
+      throw new Error('Demo account is not configured.');
+    }
+
+    const supabase = createSupabaseServerClient();
+    const { data: authData, error } = await supabase.auth.signInWithPassword({
+      email: DEMO_EMAIL,
+      password: DEMO_PASSWORD,
+    });
+
+    if (error) {
+      throw new Error(getSafeAuthError(error));
+    }
+
+    return {
+      user: {
+        email: authData.user.email ?? null,
+        id: authData.user.id,
+      },
+    };
+  },
+);
 
 export const signupWithPassword = createServerFn({ method: 'POST' })
   .inputValidator(signupCredentialsSchema)
