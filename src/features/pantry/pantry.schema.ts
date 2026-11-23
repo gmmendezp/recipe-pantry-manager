@@ -1,13 +1,38 @@
 import { z } from 'zod';
 
-import { optionalTextSchema } from '#/lib/validation/schemas';
+import { createOptionalTextSchema } from '#/lib/validation/schemas';
+
+const MAX_CATEGORY_LENGTH = 60;
+const MAX_NAME_LENGTH = 150;
+const MAX_NOTES_LENGTH = 1000;
+const MAX_QUANTITY_LENGTH = 50;
+const MAX_UNIT_LENGTH = 30;
 
 export const pantryItemInputSchema = z.object({
-  category: optionalTextSchema,
-  name: z.string().trim().min(1, 'Pantry item name is required.'),
-  notes: optionalTextSchema,
-  quantity: optionalTextSchema,
-  unit: optionalTextSchema,
+  category: createOptionalTextSchema(
+    MAX_CATEGORY_LENGTH,
+    `Category must be ${MAX_CATEGORY_LENGTH} characters or fewer.`,
+  ),
+  name: z
+    .string()
+    .trim()
+    .min(1, 'Pantry item name is required.')
+    .max(
+      MAX_NAME_LENGTH,
+      `Pantry item name must be ${MAX_NAME_LENGTH} characters or fewer.`,
+    ),
+  notes: createOptionalTextSchema(
+    MAX_NOTES_LENGTH,
+    `Notes must be ${MAX_NOTES_LENGTH} characters or fewer.`,
+  ),
+  quantity: createOptionalTextSchema(
+    MAX_QUANTITY_LENGTH,
+    `Quantity must be ${MAX_QUANTITY_LENGTH} characters or fewer.`,
+  ),
+  unit: createOptionalTextSchema(
+    MAX_UNIT_LENGTH,
+    `Unit must be ${MAX_UNIT_LENGTH} characters or fewer.`,
+  ),
 });
 
 export const pantryItemIdSchema = z.object({

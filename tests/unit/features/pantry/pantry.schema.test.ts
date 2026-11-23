@@ -35,6 +35,37 @@ describe('pantryItemInputSchema', () => {
       }),
     ).toThrow('Pantry item name is required.');
   });
+
+  it('accepts pantry values at the configured limits', () => {
+    expect(
+      pantryItemInputSchema.parse({
+        category: 'c'.repeat(60),
+        name: 'n'.repeat(150),
+        notes: 'x'.repeat(1000),
+        quantity: 'q'.repeat(50),
+        unit: 'u'.repeat(30),
+      }),
+    ).toBeDefined();
+  });
+
+  it.each([
+    ['category', { category: 'c'.repeat(61) }],
+    ['name', { name: 'n'.repeat(151) }],
+    ['notes', { notes: 'x'.repeat(1001) }],
+    ['quantity', { quantity: 'q'.repeat(51) }],
+    ['unit', { unit: 'u'.repeat(31) }],
+  ])('rejects an oversized %s', (_, override) => {
+    expect(() =>
+      pantryItemInputSchema.parse({
+        category: '',
+        name: 'Tomato',
+        notes: '',
+        quantity: '',
+        unit: '',
+        ...override,
+      }),
+    ).toThrow();
+  });
 });
 
 describe('pantryItemToFormValues', () => {

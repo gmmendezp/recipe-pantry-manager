@@ -1,24 +1,60 @@
 import { z } from 'zod';
 
+const MAX_CATEGORY_LENGTH = 60;
+const MAX_GROCERY_ITEMS = 300;
+const MAX_ITEM_NAME_LENGTH = 150;
+const MAX_QUANTITY_LENGTH = 50;
+const MAX_RECIPES = 25;
+const MAX_TITLE_LENGTH = 150;
+const MAX_UNIT_LENGTH = 30;
+
 export const generateGroceryListInputSchema = z.object({
-  recipeIds: z.array(z.uuid()).min(1, 'Select at least one recipe.'),
-  title: z.string().trim().optional(),
+  recipeIds: z
+    .array(z.uuid())
+    .min(1, 'Select at least one recipe.')
+    .max(MAX_RECIPES, `Select no more than ${MAX_RECIPES} recipes.`),
+  title: z
+    .string()
+    .trim()
+    .max(
+      MAX_TITLE_LENGTH,
+      `Grocery list title must be ${MAX_TITLE_LENGTH} characters or fewer.`,
+    )
+    .optional(),
 });
 
 export const reviewedGroceryListItemInputSchema = z.object({
-  category: z.string().trim().nullable(),
-  name: z.string().trim().min(1, 'Grocery item name is required.'),
+  category: z.string().trim().max(MAX_CATEGORY_LENGTH).nullable(),
+  name: z
+    .string()
+    .trim()
+    .min(1, 'Grocery item name is required.')
+    .max(
+      MAX_ITEM_NAME_LENGTH,
+      `Grocery item name must be ${MAX_ITEM_NAME_LENGTH} characters or fewer.`,
+    ),
   pantryItemId: z.uuid().nullable(),
-  quantity: z.string().trim().nullable(),
-  sourceRecipeIds: z.array(z.uuid()).min(1),
-  unit: z.string().trim().nullable(),
+  quantity: z.string().trim().max(MAX_QUANTITY_LENGTH).nullable(),
+  sourceRecipeIds: z.array(z.uuid()).min(1).max(MAX_RECIPES),
+  unit: z.string().trim().max(MAX_UNIT_LENGTH).nullable(),
 });
 
 export const generateReviewedGroceryListInputSchema = z.object({
   items: z
     .array(reviewedGroceryListItemInputSchema)
-    .min(1, 'Review at least one grocery item.'),
-  title: z.string().trim().optional(),
+    .min(1, 'Review at least one grocery item.')
+    .max(
+      MAX_GROCERY_ITEMS,
+      `Review no more than ${MAX_GROCERY_ITEMS} grocery items.`,
+    ),
+  title: z
+    .string()
+    .trim()
+    .max(
+      MAX_TITLE_LENGTH,
+      `Grocery list title must be ${MAX_TITLE_LENGTH} characters or fewer.`,
+    )
+    .optional(),
 });
 
 export const groceryListIdSchema = z.object({

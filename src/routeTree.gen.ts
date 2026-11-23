@@ -9,39 +9,33 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as SignupRouteImport } from './routes/signup'
-import { Route as LoginRouteImport } from './routes/login'
-import { Route as ConfirmRouteImport } from './routes/confirm'
-import { Route as CheckEmailRouteImport } from './routes/check-email'
-import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
+import { Route as CheckEmailRouteImport } from './routes/check-email'
+import { Route as ConfirmRouteImport } from './routes/confirm'
+import { Route as LoginRouteImport } from './routes/login'
+import { Route as SignupRouteImport } from './routes/signup'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
-import { Route as AuthenticatedRecipesIndexRouteImport } from './routes/_authenticated/recipes/index'
-import { Route as AuthenticatedPantryIndexRouteImport } from './routes/_authenticated/pantry/index'
 import { Route as AuthenticatedGroceryListsIndexRouteImport } from './routes/_authenticated/grocery-lists/index'
-import { Route as AuthenticatedRecipesNewRouteImport } from './routes/_authenticated/recipes/new'
-import { Route as AuthenticatedRecipesImportRouteImport } from './routes/_authenticated/recipes/import'
-import { Route as AuthenticatedRecipesRecipeIdRouteImport } from './routes/_authenticated/recipes/$recipeId'
-import { Route as AuthenticatedPantryNewRouteImport } from './routes/_authenticated/pantry/new'
-import { Route as AuthenticatedPantryPantryItemIdRouteImport } from './routes/_authenticated/pantry/$pantryItemId'
-import { Route as AuthenticatedGroceryListsNewRouteImport } from './routes/_authenticated/grocery-lists/new'
 import { Route as AuthenticatedGroceryListsGroceryListIdRouteImport } from './routes/_authenticated/grocery-lists/$groceryListId'
-import { Route as AuthenticatedRecipesRecipeIdEditRouteImport } from './routes/_authenticated/recipes/$recipeId_.edit'
+import { Route as AuthenticatedGroceryListsNewRouteImport } from './routes/_authenticated/grocery-lists/new'
+import { Route as AuthenticatedPantryIndexRouteImport } from './routes/_authenticated/pantry/index'
+import { Route as AuthenticatedPantryPantryItemIdRouteImport } from './routes/_authenticated/pantry/$pantryItemId'
+import { Route as AuthenticatedPantryNewRouteImport } from './routes/_authenticated/pantry/new'
+import { Route as AuthenticatedRecipesIndexRouteImport } from './routes/_authenticated/recipes/index'
+import { Route as AuthenticatedRecipesRecipeIdRouteImport } from './routes/_authenticated/recipes/$recipeId'
+import { Route as AuthenticatedRecipesImportRouteImport } from './routes/_authenticated/recipes/import'
+import { Route as AuthenticatedRecipesNewRouteImport } from './routes/_authenticated/recipes/new'
 import { Route as AuthenticatedPantryPantryItemIdEditRouteImport } from './routes/_authenticated/pantry/$pantryItemId_.edit'
+import { Route as AuthenticatedRecipesRecipeIdEditRouteImport } from './routes/_authenticated/recipes/$recipeId_.edit'
 
-const SignupRoute = SignupRouteImport.update({
-  id: '/signup',
-  path: '/signup',
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const LoginRoute = LoginRouteImport.update({
-  id: '/login',
-  path: '/login',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ConfirmRoute = ConfirmRouteImport.update({
-  id: '/confirm',
-  path: '/confirm',
+const AuthenticatedRoute = AuthenticatedRouteImport.update({
+  id: '/_authenticated',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CheckEmailRoute = CheckEmailRouteImport.update({
@@ -49,13 +43,19 @@ const CheckEmailRoute = CheckEmailRouteImport.update({
   path: '/check-email',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AuthenticatedRoute = AuthenticatedRouteImport.update({
-  id: '/_authenticated',
+const ConfirmRoute = ConfirmRouteImport.update({
+  id: '/confirm',
+  path: '/confirm',
   getParentRoute: () => rootRouteImport,
 } as any)
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SignupRoute = SignupRouteImport.update({
+  id: '/signup',
+  path: '/signup',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
@@ -63,56 +63,10 @@ const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
-const AuthenticatedRecipesIndexRoute =
-  AuthenticatedRecipesIndexRouteImport.update({
-    id: '/recipes/',
-    path: '/recipes/',
-    getParentRoute: () => AuthenticatedRoute,
-  } as any)
-const AuthenticatedPantryIndexRoute =
-  AuthenticatedPantryIndexRouteImport.update({
-    id: '/pantry/',
-    path: '/pantry/',
-    getParentRoute: () => AuthenticatedRoute,
-  } as any)
 const AuthenticatedGroceryListsIndexRoute =
   AuthenticatedGroceryListsIndexRouteImport.update({
     id: '/grocery-lists/',
     path: '/grocery-lists/',
-    getParentRoute: () => AuthenticatedRoute,
-  } as any)
-const AuthenticatedRecipesNewRoute = AuthenticatedRecipesNewRouteImport.update({
-  id: '/recipes/new',
-  path: '/recipes/new',
-  getParentRoute: () => AuthenticatedRoute,
-} as any)
-const AuthenticatedRecipesImportRoute =
-  AuthenticatedRecipesImportRouteImport.update({
-    id: '/recipes/import',
-    path: '/recipes/import',
-    getParentRoute: () => AuthenticatedRoute,
-  } as any)
-const AuthenticatedRecipesRecipeIdRoute =
-  AuthenticatedRecipesRecipeIdRouteImport.update({
-    id: '/recipes/$recipeId',
-    path: '/recipes/$recipeId',
-    getParentRoute: () => AuthenticatedRoute,
-  } as any)
-const AuthenticatedPantryNewRoute = AuthenticatedPantryNewRouteImport.update({
-  id: '/pantry/new',
-  path: '/pantry/new',
-  getParentRoute: () => AuthenticatedRoute,
-} as any)
-const AuthenticatedPantryPantryItemIdRoute =
-  AuthenticatedPantryPantryItemIdRouteImport.update({
-    id: '/pantry/$pantryItemId',
-    path: '/pantry/$pantryItemId',
-    getParentRoute: () => AuthenticatedRoute,
-  } as any)
-const AuthenticatedGroceryListsNewRoute =
-  AuthenticatedGroceryListsNewRouteImport.update({
-    id: '/grocery-lists/new',
-    path: '/grocery-lists/new',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
 const AuthenticatedGroceryListsGroceryListIdRoute =
@@ -121,16 +75,62 @@ const AuthenticatedGroceryListsGroceryListIdRoute =
     path: '/grocery-lists/$groceryListId',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
-const AuthenticatedRecipesRecipeIdEditRoute =
-  AuthenticatedRecipesRecipeIdEditRouteImport.update({
-    id: '/recipes/$recipeId_/edit',
-    path: '/recipes/$recipeId/edit',
+const AuthenticatedGroceryListsNewRoute =
+  AuthenticatedGroceryListsNewRouteImport.update({
+    id: '/grocery-lists/new',
+    path: '/grocery-lists/new',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const AuthenticatedPantryIndexRoute =
+  AuthenticatedPantryIndexRouteImport.update({
+    id: '/pantry/',
+    path: '/pantry/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedPantryPantryItemIdRoute =
+  AuthenticatedPantryPantryItemIdRouteImport.update({
+    id: '/pantry/$pantryItemId',
+    path: '/pantry/$pantryItemId',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedPantryNewRoute = AuthenticatedPantryNewRouteImport.update({
+  id: '/pantry/new',
+  path: '/pantry/new',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedRecipesIndexRoute =
+  AuthenticatedRecipesIndexRouteImport.update({
+    id: '/recipes/',
+    path: '/recipes/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedRecipesRecipeIdRoute =
+  AuthenticatedRecipesRecipeIdRouteImport.update({
+    id: '/recipes/$recipeId',
+    path: '/recipes/$recipeId',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedRecipesImportRoute =
+  AuthenticatedRecipesImportRouteImport.update({
+    id: '/recipes/import',
+    path: '/recipes/import',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedRecipesNewRoute = AuthenticatedRecipesNewRouteImport.update({
+  id: '/recipes/new',
+  path: '/recipes/new',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
 const AuthenticatedPantryPantryItemIdEditRoute =
   AuthenticatedPantryPantryItemIdEditRouteImport.update({
     id: '/pantry/$pantryItemId_/edit',
     path: '/pantry/$pantryItemId/edit',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedRecipesRecipeIdEditRoute =
+  AuthenticatedRecipesRecipeIdEditRouteImport.update({
+    id: '/recipes/$recipeId_/edit',
+    path: '/recipes/$recipeId/edit',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
 
@@ -271,32 +271,11 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/signup': {
-      id: '/signup'
-      path: '/signup'
-      fullPath: '/signup'
-      preLoaderRoute: typeof SignupRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/login': {
-      id: '/login'
-      path: '/login'
-      fullPath: '/login'
-      preLoaderRoute: typeof LoginRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/confirm': {
-      id: '/confirm'
-      path: '/confirm'
-      fullPath: '/confirm'
-      preLoaderRoute: typeof ConfirmRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/check-email': {
-      id: '/check-email'
-      path: '/check-email'
-      fullPath: '/check-email'
-      preLoaderRoute: typeof CheckEmailRouteImport
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated': {
@@ -306,11 +285,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+    '/check-email': {
+      id: '/check-email'
+      path: '/check-email'
+      fullPath: '/check-email'
+      preLoaderRoute: typeof CheckEmailRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/confirm': {
+      id: '/confirm'
+      path: '/confirm'
+      fullPath: '/confirm'
+      preLoaderRoute: typeof ConfirmRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/signup': {
+      id: '/signup'
+      path: '/signup'
+      fullPath: '/signup'
+      preLoaderRoute: typeof SignupRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated/dashboard': {
@@ -320,67 +320,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
-    '/_authenticated/recipes/': {
-      id: '/_authenticated/recipes/'
-      path: '/recipes'
-      fullPath: '/recipes/'
-      preLoaderRoute: typeof AuthenticatedRecipesIndexRouteImport
-      parentRoute: typeof AuthenticatedRoute
-    }
-    '/_authenticated/pantry/': {
-      id: '/_authenticated/pantry/'
-      path: '/pantry'
-      fullPath: '/pantry/'
-      preLoaderRoute: typeof AuthenticatedPantryIndexRouteImport
-      parentRoute: typeof AuthenticatedRoute
-    }
     '/_authenticated/grocery-lists/': {
       id: '/_authenticated/grocery-lists/'
       path: '/grocery-lists'
       fullPath: '/grocery-lists/'
       preLoaderRoute: typeof AuthenticatedGroceryListsIndexRouteImport
-      parentRoute: typeof AuthenticatedRoute
-    }
-    '/_authenticated/recipes/new': {
-      id: '/_authenticated/recipes/new'
-      path: '/recipes/new'
-      fullPath: '/recipes/new'
-      preLoaderRoute: typeof AuthenticatedRecipesNewRouteImport
-      parentRoute: typeof AuthenticatedRoute
-    }
-    '/_authenticated/recipes/import': {
-      id: '/_authenticated/recipes/import'
-      path: '/recipes/import'
-      fullPath: '/recipes/import'
-      preLoaderRoute: typeof AuthenticatedRecipesImportRouteImport
-      parentRoute: typeof AuthenticatedRoute
-    }
-    '/_authenticated/recipes/$recipeId': {
-      id: '/_authenticated/recipes/$recipeId'
-      path: '/recipes/$recipeId'
-      fullPath: '/recipes/$recipeId'
-      preLoaderRoute: typeof AuthenticatedRecipesRecipeIdRouteImport
-      parentRoute: typeof AuthenticatedRoute
-    }
-    '/_authenticated/pantry/new': {
-      id: '/_authenticated/pantry/new'
-      path: '/pantry/new'
-      fullPath: '/pantry/new'
-      preLoaderRoute: typeof AuthenticatedPantryNewRouteImport
-      parentRoute: typeof AuthenticatedRoute
-    }
-    '/_authenticated/pantry/$pantryItemId': {
-      id: '/_authenticated/pantry/$pantryItemId'
-      path: '/pantry/$pantryItemId'
-      fullPath: '/pantry/$pantryItemId'
-      preLoaderRoute: typeof AuthenticatedPantryPantryItemIdRouteImport
-      parentRoute: typeof AuthenticatedRoute
-    }
-    '/_authenticated/grocery-lists/new': {
-      id: '/_authenticated/grocery-lists/new'
-      path: '/grocery-lists/new'
-      fullPath: '/grocery-lists/new'
-      preLoaderRoute: typeof AuthenticatedGroceryListsNewRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/grocery-lists/$groceryListId': {
@@ -390,11 +334,60 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedGroceryListsGroceryListIdRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
-    '/_authenticated/recipes/$recipeId_/edit': {
-      id: '/_authenticated/recipes/$recipeId_/edit'
-      path: '/recipes/$recipeId/edit'
-      fullPath: '/recipes/$recipeId/edit'
-      preLoaderRoute: typeof AuthenticatedRecipesRecipeIdEditRouteImport
+    '/_authenticated/grocery-lists/new': {
+      id: '/_authenticated/grocery-lists/new'
+      path: '/grocery-lists/new'
+      fullPath: '/grocery-lists/new'
+      preLoaderRoute: typeof AuthenticatedGroceryListsNewRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/pantry/': {
+      id: '/_authenticated/pantry/'
+      path: '/pantry'
+      fullPath: '/pantry/'
+      preLoaderRoute: typeof AuthenticatedPantryIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/pantry/$pantryItemId': {
+      id: '/_authenticated/pantry/$pantryItemId'
+      path: '/pantry/$pantryItemId'
+      fullPath: '/pantry/$pantryItemId'
+      preLoaderRoute: typeof AuthenticatedPantryPantryItemIdRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/pantry/new': {
+      id: '/_authenticated/pantry/new'
+      path: '/pantry/new'
+      fullPath: '/pantry/new'
+      preLoaderRoute: typeof AuthenticatedPantryNewRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/recipes/': {
+      id: '/_authenticated/recipes/'
+      path: '/recipes'
+      fullPath: '/recipes/'
+      preLoaderRoute: typeof AuthenticatedRecipesIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/recipes/$recipeId': {
+      id: '/_authenticated/recipes/$recipeId'
+      path: '/recipes/$recipeId'
+      fullPath: '/recipes/$recipeId'
+      preLoaderRoute: typeof AuthenticatedRecipesRecipeIdRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/recipes/import': {
+      id: '/_authenticated/recipes/import'
+      path: '/recipes/import'
+      fullPath: '/recipes/import'
+      preLoaderRoute: typeof AuthenticatedRecipesImportRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/recipes/new': {
+      id: '/_authenticated/recipes/new'
+      path: '/recipes/new'
+      fullPath: '/recipes/new'
+      preLoaderRoute: typeof AuthenticatedRecipesNewRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/pantry/$pantryItemId_/edit': {
@@ -402,6 +395,13 @@ declare module '@tanstack/react-router' {
       path: '/pantry/$pantryItemId/edit'
       fullPath: '/pantry/$pantryItemId/edit'
       preLoaderRoute: typeof AuthenticatedPantryPantryItemIdEditRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/recipes/$recipeId_/edit': {
+      id: '/_authenticated/recipes/$recipeId_/edit'
+      path: '/recipes/$recipeId/edit'
+      fullPath: '/recipes/$recipeId/edit'
+      preLoaderRoute: typeof AuthenticatedRecipesRecipeIdEditRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
   }
@@ -458,10 +458,11 @@ export const routeTree = rootRouteImport
   ._addFileTypes<FileRouteTypes>()
 
 import type { getRouter } from './router.tsx'
-import type { createStart } from '@tanstack/react-start'
+import type { startInstance } from './start.ts'
 declare module '@tanstack/react-start' {
   interface Register {
     ssr: true
     router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
   }
 }

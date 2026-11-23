@@ -1,3 +1,4 @@
+import { requireUser } from '#/lib/auth/server';
 import type { RecipeFormValues } from '../recipes.schema';
 import { fetchRecipeHtml, validateImportUrl } from './import-fetch.server';
 import { extractJsonLdValues, findRecipeObject } from './json-ld-recipe';
@@ -6,6 +7,8 @@ import { recipeObjectToFormValues } from './normalize-imported-recipe';
 export async function importRecipeFromUrl(
   url: string,
 ): Promise<RecipeFormValues> {
+  await requireUser();
+
   const recipeUrl = validateImportUrl(url);
   const html = await fetchRecipeHtml(recipeUrl);
   const jsonLdValues = extractJsonLdValues(html);

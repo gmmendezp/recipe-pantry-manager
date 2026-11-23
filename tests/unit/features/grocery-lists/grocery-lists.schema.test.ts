@@ -39,6 +39,27 @@ describe('generateGroceryListInputSchema', () => {
       generateGroceryListInputSchema.parse({ recipeIds: ['not-a-uuid'] }),
     ).toThrow();
   });
+
+  it('accepts 25 recipes and rejects larger selections', () => {
+    expect(
+      generateGroceryListInputSchema.parse({
+        recipeIds: Array(25).fill(recipeId),
+        title: 't'.repeat(150),
+      }).recipeIds,
+    ).toHaveLength(25);
+
+    expect(() =>
+      generateGroceryListInputSchema.parse({
+        recipeIds: Array(26).fill(recipeId),
+      }),
+    ).toThrow('Select no more than 25 recipes.');
+    expect(() =>
+      generateGroceryListInputSchema.parse({
+        recipeIds: [recipeId],
+        title: 't'.repeat(151),
+      }),
+    ).toThrow('Grocery list title must be 150 characters or fewer.');
+  });
 });
 
 describe('generateReviewedGroceryListInputSchema', () => {
@@ -93,6 +114,50 @@ describe('generateReviewedGroceryListInputSchema', () => {
     expect(() =>
       generateReviewedGroceryListInputSchema.parse({ items: [] }),
     ).toThrow('Review at least one grocery item.');
+  });
+
+  it('rejects more than 300 reviewed grocery items', () => {
+    const item = {
+      category: null,
+      name: 'Tomato',
+      pantryItemId: null,
+      quantity: null,
+      sourceRecipeIds: [recipeId],
+      unit: null,
+    };
+
+    expect(() =>
+      generateReviewedGroceryListInputSchema.parse({
+        items: Array(301).fill(item),
+      }),
+    ).toThrow('Review no more than 300 grocery items.');
+  });
+
+  it('rejects oversized reviewed item fields and source recipe lists', () => {
+    const createInput = (item: Record<string, unknown>) => ({
+      items: [
+        {
+          category: null,
+          name: 'Tomato',
+          pantryItemId: null,
+          quantity: null,
+          sourceRecipeIds: [recipeId],
+          unit: null,
+          ...item,
+        },
+      ],
+    });
+
+    expect(() =>
+      generateReviewedGroceryListInputSchema.parse(
+        createInput({ name: 'n'.repeat(151) }),
+      ),
+    ).toThrow();
+    expect(() =>
+      generateReviewedGroceryListInputSchema.parse(
+        createInput({ sourceRecipeIds: Array(26).fill(recipeId) }),
+      ),
+    ).toThrow();
   });
 });
 

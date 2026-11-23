@@ -22,31 +22,31 @@ export const listGroceryLists = createServerFn({ method: 'GET' }).handler(
 );
 
 export const getGroceryList = createServerFn({ method: 'GET' })
-  .inputValidator(groceryListIdSchema)
+  .validator(groceryListIdSchema)
   .handler(async ({ data }) => getGroceryListForUser(data.groceryListId));
 
 export const generateGroceryList = createServerFn({ method: 'POST' })
-  .inputValidator(generateGroceryListInputSchema)
+  .validator(generateGroceryListInputSchema)
   .handler(async ({ data }) => generateGroceryListForUser(data));
 
 export const previewGroceryListMatches = createServerFn({ method: 'POST' })
-  .inputValidator(generateGroceryListInputSchema)
+  .validator(generateGroceryListInputSchema)
   .handler(async ({ data }) => previewGroceryListMatchesForUser(data));
 
 export const generateReviewedGroceryList = createServerFn({ method: 'POST' })
-  .inputValidator(generateReviewedGroceryListInputSchema)
+  .validator(generateReviewedGroceryListInputSchema)
   .handler(async ({ data }) => generateReviewedGroceryListForUser(data));
 
 export const toggleGroceryListItem = createServerFn({ method: 'POST' })
-  .inputValidator(groceryListItemIdSchema)
+  .validator(groceryListItemIdSchema)
   .handler(async ({ data }) =>
     toggleGroceryListItemForUser(data.groceryListItemId),
   );
 
 export const updateGroceryList = createServerFn({ method: 'POST' })
-  .inputValidator(groceryListIdSchema)
+  .validator(groceryListIdSchema)
   .handler(async ({ data }) => updateGroceryListForUser(data.groceryListId));
 
 export const deleteGroceryList = createServerFn({ method: 'POST' })
-  .inputValidator(groceryListIdSchema)
+  .validator(groceryListIdSchema)
   .handler(async ({ data }) => deleteGroceryListForUser(data.groceryListId));

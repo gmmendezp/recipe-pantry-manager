@@ -1,4 +1,5 @@
-import { isIP } from 'node:net';
+import { lookup } from 'node:dns/promises';
+import ipaddr from 'ipaddr.js';
 
 const MAX_RESPONSE_BYTES = 1_000_000;
 const MAX_REDIRECTS = 5;
@@ -23,7 +24,7 @@ export function validateImportUrl(url: string) {
   if (
     hostname === 'localhost' ||
     hostname.endsWith('.localhost') ||
-    isIP(ipHostname) !== 0
+    ipaddr.isValid(ipHostname)
   ) {
     throw new Error('Recipe imports cannot fetch local or IP address URLs.');
   }
@@ -43,6 +44,8 @@ export async function fetchRecipeHtml(url: URL) {
       redirectCount <= MAX_REDIRECTS;
       redirectCount += 1
     ) {
+      await assertPublicHostname(currentUrl.hostname);
+
       const response = await fetch(currentUrl, {
         headers: {
           accept: 'text/html,application/xhtml+xml',
@@ -77,6 +80,33 @@ export async function fetchRecipeHtml(url: URL) {
     throw error;
   } finally {
     clearTimeout(timeout);
+  }
+}
+
+async function assertPublicHostname(hostname: string) {
+  let addresses: Array<{ address: string; family: number }>;
+
+  try {
+    addresses = await lookup(hostname, { all: true, verbatim: true });
+  } catch {
+    throw new Error('Unable to resolve this recipe URL.');
+  }
+
+  if (
+    addresses.length === 0 ||
+    addresses.some(({ address }) => isPrivateOrReservedIp(address))
+  ) {
+    throw new Error(
+      'Recipe imports cannot fetch private or reserved network addresses.',
+    );
+  }
+}
+
+function isPrivateOrReservedIp(address: string) {
+  try {
+    return ipaddr.process(address).range() !== 'unicast';
+  } catch {
+    return true;
   }
 }
 

@@ -18,15 +18,15 @@ export const listPantryItems = createServerFn({ method: 'GET' }).handler(
 );
 
 export const getPantryItem = createServerFn({ method: 'GET' })
-  .inputValidator(pantryItemIdSchema)
+  .validator(pantryItemIdSchema)
   .handler(async ({ data }) => getPantryItemForUser(data.pantryItemId));
 
 export const createPantryItem = createServerFn({ method: 'POST' })
-  .inputValidator(pantryItemInputSchema)
+  .validator(pantryItemInputSchema)
   .handler(async ({ data }) => createPantryItemForUser(data));
 
 export const updatePantryItem = createServerFn({ method: 'POST' })
-  .inputValidator(updatePantryItemInputSchema)
+  .validator(updatePantryItemInputSchema)
   .handler(async ({ data }) => {
     const { pantryItemId, ...input } = data;
 
@@ -34,5 +34,5 @@ export const updatePantryItem = createServerFn({ method: 'POST' })
   });
 
 export const deletePantryItem = createServerFn({ method: 'POST' })
-  .inputValidator(pantryItemIdSchema)
+  .validator(pantryItemIdSchema)
   .handler(async ({ data }) => deletePantryItemForUser(data.pantryItemId));

@@ -25,7 +25,7 @@ function getSafeAuthError(error: unknown) {
 }
 
 export const loginWithPassword = createServerFn({ method: 'POST' })
-  .inputValidator(authCredentialsSchema)
+  .validator(authCredentialsSchema)
   .handler(async ({ data }) => {
     const supabase = createSupabaseServerClient();
 
@@ -78,7 +78,7 @@ export const loginWithDemoAccount = createServerFn({ method: 'POST' }).handler(
 );
 
 export const signupWithPassword = createServerFn({ method: 'POST' })
-  .inputValidator(signupCredentialsSchema)
+  .validator(signupCredentialsSchema)
   .handler(async ({ data }) => {
     const supabase = createSupabaseServerClient();
     const requestUrl = getRequestUrl({ xForwardedHost: true });
@@ -107,7 +107,7 @@ export const signupWithPassword = createServerFn({ method: 'POST' })
   });
 
 export const confirmEmail = createServerFn({ method: 'POST' })
-  .inputValidator(emailConfirmationSchema)
+  .validator(emailConfirmationSchema)
   .handler(async ({ data }) => {
     if (!data.token_hash || !data.type) {
       throw new Error('Confirmation link is missing required information.');

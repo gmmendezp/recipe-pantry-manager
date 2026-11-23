@@ -1,9 +1,12 @@
 import { z } from 'zod';
 
-export const optionalTextSchema = z
-  .string()
-  .trim()
-  .transform((value) => value || null);
+export function createOptionalTextSchema(maxLength: number, message: string) {
+  return z
+    .string()
+    .trim()
+    .max(maxLength, message)
+    .transform((value) => value || null);
+}
 
 export const optionalPositiveIntegerSchema = z
   .union([z.string(), z.number(), z.null(), z.undefined()])
