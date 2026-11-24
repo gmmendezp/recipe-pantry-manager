@@ -23,6 +23,69 @@ export const Route = createRootRoute({
       {
         title: 'Recipe Pantry Manager',
       },
+      {
+        name: 'description',
+        content:
+          'Full-stack application for saving and importing recipes, managing pantry items, and generating pantry-aware grocery lists.',
+      },
+      {
+        property: 'og:type',
+        content: 'website',
+      },
+      {
+        property: 'og:url',
+        content: 'https://recipes.gmmendezp.dev/',
+      },
+      {
+        property: 'og:title',
+        content: 'Recipe Pantry Manager',
+      },
+      {
+        property: 'og:description',
+        content:
+          'Save and import recipes, manage pantry items, and generate grocery lists based on ingredients already on hand.',
+      },
+      {
+        property: 'og:image',
+        content: 'https://recipes.gmmendezp.dev/og-image.webp',
+      },
+      {
+        property: 'og:image:type',
+        content: 'image/webp',
+      },
+      {
+        property: 'og:image:width',
+        content: '712',
+      },
+      {
+        property: 'og:image:height',
+        content: '400',
+      },
+      {
+        property: 'og:image:alt',
+        content: 'Recipe Pantry Manager application',
+      },
+      {
+        name: 'twitter:card',
+        content: 'summary_large_image',
+      },
+      {
+        name: 'twitter:title',
+        content: 'Recipe Pantry Manager',
+      },
+      {
+        name: 'twitter:description',
+        content:
+          'Save and import recipes, manage pantry items, and generate pantry-aware grocery lists.',
+      },
+      {
+        name: 'twitter:image',
+        content: 'https://recipes.gmmendezp.dev/og-image.webp',
+      },
+      {
+        name: 'twitter:image:alt',
+        content: 'Recipe Pantry Manager application',
+      },
     ],
     links: [
       {
@@ -33,6 +96,10 @@ export const Route = createRootRoute({
         rel: 'icon',
         type: 'image/svg+xml',
         href: '/favicon.svg',
+      },
+      {
+        rel: 'canonical',
+        href: 'https://recipes.gmmendezp.dev/',
       },
     ],
   }),
